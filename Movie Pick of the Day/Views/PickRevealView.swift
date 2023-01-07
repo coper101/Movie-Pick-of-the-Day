@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  PickRevealView.swift
 //  Movie Pick of the Day
 //
 //  Created by Wind Versi on 7/1/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct PickRevealView: View {
     // MARK: - Props
     
     // MARK: - UI
@@ -21,9 +21,10 @@ struct HomeView: View {
 }
 
 // MARK: - Preview
-struct HomeView_Previews: PreviewProvider {
+struct PickRevealView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        PickRevealView()
             .previewLayout(.sizeThatFits)
+            // .background(Colors.Background)
     }
 }
