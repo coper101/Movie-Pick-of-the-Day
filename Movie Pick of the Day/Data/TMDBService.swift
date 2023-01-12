@@ -28,11 +28,25 @@ extension TMDBRequest {
 }
 
 protocol TMDBService {
+    
     func getGenres() -> Void
+    
     func getLanguages() -> Void
+    
     func getMovie(with id: Int) -> AnyPublisher<Movie?, Never>
+    
     func getSimilarMovies(of id: Int) -> Void
-    func discoverMovies(with genres: [String]) -> Void
+    
+    func discoverMovies(
+        includeAdult: Bool,
+        language: String,
+        with genres: [String]
+    ) -> Void
+    
     func searchMovie(with query: String) -> Void
-    func getUIImage(of path: String, with resolution: ImageResolution) -> AnyPublisher<UIImage, Error>
+    
+    func getUIImage(
+        of path: String,
+        with resolution: ImageResolution
+    ) -> AnyPublisher<UIImage, Error>
 }

@@ -12,22 +12,27 @@ import UIKit
 // MARK: Protocol
 protocol MovieRepositoryType {
     
-    var genres: [Genre] { get }
+    /// Data
+    var genres: [Genre] { get set }
     var genresPublisher: Published<[Genre]>.Publisher { get }
+    func clearGenres() -> Void
     
-    var languages: [Language] { get }
+    var languages: [Language] { get set }
     var languagesPublisher: Published<[Language]>.Publisher { get }
+    func clearLanguages() -> Void
     
-    var similarMovies: [Movie] { get }
+    var similarMovies: [Movie] { get set }
     var similarMoviesPublisher: Published<[Movie]>.Publisher { get }
+    func clearSimilarMovies() -> Void
     
-    var preferredMovies: [Movie] { get }
+    var preferredMovies: [Movie] { get set }
     var preferredMoviesPublisher: Published<[Movie]>.Publisher { get }
     
-    var searchedMovies: [Movie] { get }
+    var searchedMovies: [Movie] { get set }
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { get }
     
 }
+
 
 // MARK: App Implementation
 class MovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
@@ -142,8 +147,18 @@ class MovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
             .store(in: &subscriptions)
     }
     
-    func discoverMovies(with genres: [String]) {
-        Networking.request(request: GetDiscoverMovies(withGenres: genres))
+    func discoverMovies(
+        includeAdult: Bool,
+        language: String,
+        with genres: [String]
+    ) {
+        Networking.request(
+            request: GetDiscoverMovies(
+                language: language,
+                includeAdult: includeAdult,
+                withGenres: genres
+            )
+        )
             .sink { completion in
                 switch completion {
                 case .failure(let error):
@@ -207,5 +222,94 @@ class MovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
                 posterPath: path
             )
         )
+    }
+    
+}
+
+extension MovieRepository {
+    
+    func clearGenres() {
+        genres.removeAll()
+    }
+    
+    func clearLanguages() {
+        languages.removeAll()
+    }
+    
+    func clearSimilarMovies() {
+        similarMovies.removeAll()
+    }
+}
+
+
+// MARK: Test Implementation
+class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
+    
+    var subscriptions = Set<AnyCancellable>()
+
+    /// Data
+    @Published var genres: [Genre] = []
+    var genresPublisher: Published<[Genre]>.Publisher { $genres }
+    
+    @Published var languages: [Language] = []
+    var languagesPublisher: Published<[Language]>.Publisher { $languages }
+    
+    @Published var similarMovies: [Movie] = []
+    var similarMoviesPublisher: Published<[Movie]>.Publisher { $similarMovies }
+    
+    @Published var preferredMovies: [Movie] = []
+    var preferredMoviesPublisher: Published<[Movie]>.Publisher { $preferredMovies }
+    
+    @Published var searchedMovies: [Movie] = []
+    var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
+    
+    func getGenres() {}
+    
+    func getLanguages() {}
+    
+    func getMovie(with id: Int) -> AnyPublisher<Movie?, Never> {
+        Just(TestData.createMovie(id: id))
+            .eraseToAnyPublisher()
+    }
+    
+    func getSimilarMovies(of id: Int) {}
+    
+    func discoverMovies(
+        includeAdult: Bool,
+        language: String,
+        with genres: [String]
+    ) {
+        preferredMovies = [
+            TestData.createMovie(id: 101),
+            TestData.createMovie(id: 102),
+            TestData.createMovie(id: 103)
+        ]
+    }
+    
+    func searchMovie(with query: String) {}
+    
+    func getUIImage(
+        of path: String,
+        with resolution: ImageResolution
+    ) -> AnyPublisher<UIImage, Error> {
+        Just(TestData.createImage())
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+    
+}
+
+extension MockMovieRepository {
+    
+    func clearGenres() {
+        genres.removeAll()
+    }
+    
+    func clearLanguages() {
+        languages.removeAll()
+    }
+    
+    func clearSimilarMovies() {
+        similarMovies.removeAll()
     }
 }

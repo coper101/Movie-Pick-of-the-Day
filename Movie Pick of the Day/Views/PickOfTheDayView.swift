@@ -15,10 +15,10 @@ struct PickOfTheDayView: View {
     var body: some View {
         VStack(spacing: 10) {
             
-            ForEach(appViewModel.moviePickIDsOfTheWeek, id: \.day) { pick in
+            ForEach(appViewModel.moviePicks, id: \.day) { pick in
                 
                 VStack(spacing: 0) {
-                    Text("day: \(pick.day)")
+//                    Text("day: \(pick.day)")
                     Text("movie title \(pick.movie?.title ?? "none")")
                 }
                
