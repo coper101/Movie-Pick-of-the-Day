@@ -75,7 +75,7 @@ final class Date_Tests: XCTestCase {
         let count = date.getRemainingWeekDaysCount()
         
         // (3) Then
-        XCTAssertNotEqual(count, 3)
+        XCTAssertEqual(count, 2)
     }
     
     func test_get_remaining_weekday_count_left_one_day() throws {
@@ -86,7 +86,7 @@ final class Date_Tests: XCTestCase {
         let count = date.getRemainingWeekDaysCount()
         
         // (3) Then
-        XCTAssertNotEqual(count, 1)
+        XCTAssertEqual(count, 0)
     }
     
     func test_get_remaining_weekday_count_complete_week() throws {
@@ -97,7 +97,7 @@ final class Date_Tests: XCTestCase {
         let count = date.getRemainingWeekDaysCount()
         
         // (3) Then
-        XCTAssertNotEqual(count, 7)
+        XCTAssertEqual(count, 6)
     }
 
 }

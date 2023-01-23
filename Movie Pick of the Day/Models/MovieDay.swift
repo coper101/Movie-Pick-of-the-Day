@@ -49,6 +49,7 @@ struct MovieDay: CustomStringConvertible {
             movie: \(String(describing: movie))
             """
     }
+    
 }
 
 extension Array where Element == MovieDay {

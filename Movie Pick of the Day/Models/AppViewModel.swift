@@ -164,17 +164,24 @@ extension AppViewModel {
         )
     }
     
-    func reSelectMoviePickIDsOfTheWeek(_ movies: [Movie]) {
+    func reSelectMoviePickIDsOfTheWeek(_ movies: [Movie], todaysDate: Date = .init()) {
         guard !movies.isEmpty else {
             return
         }
         
-        let remainingWeekdaysRange = Date().getRemainingWeekDaysRange()
-        let remainingWeekdaysCount = Date().getRemainingWeekDaysCount()
-        guard remainingWeekdaysCount > 0 else {
+        let remainingWeekdaysRange = todaysDate.getRemainingWeekDaysRange()
+        let remainingWeekdaysCount = todaysDate.getRemainingWeekDaysCount()
+        
+        guard
+            remainingWeekdaysCount > 0,
+            movies.count >= remainingWeekdaysCount
+        else {
+            /// don't change todays movie pick if today is last day of week
+            /// or not sufficient movies to re assign to all remaining days
             return
         }
                 
+        /// no movies to add if today is Sunday (start of the week)
         guard
             let moviePicksOfTheWeek = movies.shuffle(keep: remainingWeekdaysCount)
         else {
@@ -182,11 +189,25 @@ extension AppViewModel {
         }
         
         var moviePicks = [MovieDay]()
+        
         for (index, weekday) in remainingWeekdaysRange.enumerated() {
+            
+            /// skip today
+            if
+                let todayWeekday = remainingWeekdaysRange.first,
+                weekday == todayWeekday
+            {
+                continue
+            }
+            
+            let movieIndex = index - 1
+            print("movieIndex: ", movieIndex)
             let day = Day(rawValue: weekday) ?? .sunday
-            let movie = moviePicksOfTheWeek[index]
+            let movie = moviePicksOfTheWeek[movieIndex]
             moviePicks.append(.init(day: day, id: movie.id ?? -1)) /// id: -1 invalid
         }
+        
+        print("moviePicks", moviePicks)
         
         appDataRepository.setMoviePicksIDsOfTheWeek(moviePicks)
     }

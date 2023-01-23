@@ -282,7 +282,11 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
         preferredMovies = [
             TestData.createMovie(id: 101),
             TestData.createMovie(id: 102),
-            TestData.createMovie(id: 103)
+            TestData.createMovie(id: 103),
+            TestData.createMovie(id: 104),
+            TestData.createMovie(id: 105),
+            TestData.createMovie(id: 106),
+            TestData.createMovie(id: 107)
         ]
     }
     

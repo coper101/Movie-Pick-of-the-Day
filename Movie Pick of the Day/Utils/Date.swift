@@ -28,7 +28,7 @@ extension Date {
     }
     
     /// Returns the n weekday starting from todays weekday to last weekday
-    /// E.g. Thu (Today) ...Sat == 5...7
+    /// E.g. Sun (Today) ...Sat  =  1...7
     func getRemainingWeekDaysRange() -> ClosedRange<Int> {
         let lastWeekday = 7
         let todaysWeekday = self.toDateComp().weekday!
@@ -36,8 +36,9 @@ extension Date {
     }
     
     /// Returns the remaining days till the last weekday
+    /// E.g. Sun (Today)  =  6
     func getRemainingWeekDaysCount() -> Int {
-        return getRemainingWeekDaysRange().count + 1
+        getRemainingWeekDaysRange().count - 1
     }
     
 }
