@@ -39,7 +39,7 @@ enum Day: Int {
 
 struct MovieDay: CustomStringConvertible {
     let day: Day
-    let id: Int
+    var id: Int
     var movie: Movie? = nil
     
     var description: String {

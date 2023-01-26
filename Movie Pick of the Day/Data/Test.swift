@@ -10,10 +10,13 @@ import UIKit
 
 class TestData {
     
-    static func createMovie(id: Int) -> Movie {
+    static func createMovie(
+        id: Int,
+        title: String? = nil
+    ) -> Movie {
         .init(
             id: id,
-            title: nil,
+            title: title,
             originalTitle: nil,
             overview: nil,
             releaseDate: nil,

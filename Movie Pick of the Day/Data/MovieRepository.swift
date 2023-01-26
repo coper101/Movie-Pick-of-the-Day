@@ -263,16 +263,39 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
     
-    func getGenres() {}
+    func getGenres() {
+        genres = [
+            .init(id: 1, name: "Action"),
+            .init(id: 2, name: "Adventure")
+        ]
+    }
     
-    func getLanguages() {}
+    func getLanguages() {
+        languages = [
+            .init(
+                iso6391: "en",
+                englishName: "English",
+                name: ""
+            ),
+            .init(
+                iso6391: "de",
+                englishName: "German",
+                name: "Deutsch"
+            )
+        ]
+    }
     
     func getMovie(with id: Int) -> AnyPublisher<Movie?, Never> {
         Just(TestData.createMovie(id: id))
             .eraseToAnyPublisher()
     }
     
-    func getSimilarMovies(of id: Int) {}
+    func getSimilarMovies(of id: Int) {
+        similarMovies = [
+            TestData.createMovie(id: 101, title: "Toy Story 1"),
+            TestData.createMovie(id: 102, title: "Toy Story 2")
+        ]
+    }
     
     func discoverMovies(
         includeAdult: Bool,
@@ -290,7 +313,12 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
         ]
     }
     
-    func searchMovie(with query: String) {}
+    func searchMovie(with query: String) {
+        searchedMovies = [
+            TestData.createMovie(id: 101, title: "Toy Story 1"),
+            TestData.createMovie(id: 102, title: "Toy Story 2")
+        ]
+    }
     
     func getUIImage(
         of path: String,

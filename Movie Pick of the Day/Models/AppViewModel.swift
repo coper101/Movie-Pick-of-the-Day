@@ -76,6 +76,7 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
+            .print("Similar Movies")
             .sink { [weak self] in self?.similarMovies = $0 }
             .store(in: &subscriptions)
         
@@ -172,27 +173,32 @@ extension AppViewModel {
         let remainingWeekdaysRange = todaysDate.getRemainingWeekDaysRange()
         let remainingWeekdaysCount = todaysDate.getRemainingWeekDaysCount()
         
+        /**
+            No Change in Movie Pick
+            (1) today is last day of week
+            (2) insufficient movies to assign all to remaining days in week
+         */
+        
         guard
             remainingWeekdaysCount > 0,
             movies.count >= remainingWeekdaysCount
         else {
-            /// don't change todays movie pick if today is last day of week
-            /// or not sufficient movies to re assign to all remaining days
             return
         }
                 
-        /// no movies to add if today is Sunday (start of the week)
         guard
             let moviePicksOfTheWeek = movies.shuffle(keep: remainingWeekdaysCount)
         else {
             return
         }
         
+        /// existing movie days in week
         var moviePicks = [MovieDay]()
-        
+        moviePicks.append(contentsOf: self.moviePicks)
+                
         for (index, weekday) in remainingWeekdaysRange.enumerated() {
             
-            /// skip today
+            /// skip today's movie day
             if
                 let todayWeekday = remainingWeekdaysRange.first,
                 weekday == todayWeekday
@@ -201,13 +207,41 @@ extension AppViewModel {
             }
             
             let movieIndex = index - 1
-            print("movieIndex: ", movieIndex)
             let day = Day(rawValue: weekday) ?? .sunday
-            let movie = moviePicksOfTheWeek[movieIndex]
-            moviePicks.append(.init(day: day, id: movie.id ?? -1)) /// id: -1 invalid
+            let newMovie = moviePicksOfTheWeek[movieIndex]
+            let id = newMovie.id ?? -1
+            
+            print(
+                """
+                    --------------
+                    movieIndex: \(movieIndex)
+                    day: \(day)
+                    new movie id: \(id)
+                    
+                    """
+            )
+            
+            /// re-assign movie day if set
+            if
+                let foundDayIndex = moviePicks.firstIndex(
+                    where: { $0.day == day }
+                )
+            {
+                moviePicks[foundDayIndex].id = id
+                moviePicks[foundDayIndex].movie = nil
+                continue
+            }
+            /// add movie day if not set
+            moviePicks.append(
+                .init(day: day, id: id, movie: nil)
+            )
         }
         
-        print("moviePicks", moviePicks)
+        print("New Movie Picks")
+        moviePicks.forEach {
+            print("--------------")
+            print($0)
+        }
         
         appDataRepository.setMoviePicksIDsOfTheWeek(moviePicks)
     }
@@ -225,10 +259,10 @@ extension AppViewModel {
     }
     
     // MARK: Pick of the Day Detail
-    func didPickOfTheDayDetailScreen() {
+    func didTapPickOfTheDayDetailScreen(todaysDate: Date = .init()) {
         screen = .pickOfTheDayDetail
         
-        let todaysWeekday = Date().toDateComp().weekday!
+        let todaysWeekday = todaysDate.toDateComp().weekday!
         guard let day = Day(rawValue: todaysWeekday) else {
             /// can't load todays movie pick error
             return
@@ -245,7 +279,7 @@ extension AppViewModel {
         movieRepository.getSimilarMovies(of: todaysMoviePick.id)
     }
     
-    func didTapClosePickOfTheDayDetail() {
+    func didTapClosePickOfTheDayDetailScreen() {
         screen = .pickOfTheDay
         todaysMoviePick = nil
         movieRepository.clearSimilarMovies()
