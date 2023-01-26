@@ -13,7 +13,7 @@ final class AppViewModel: ObservableObject {
     var subscriptions = Set<AnyCancellable>()
     
     let appDataRepository: AppDataRepositoryType
-    let movieRepository: MovieRepositoryType & TMDBService
+    let movieRepository: MovieRepositoryType
     
     // MARK: Data
     /// [A] App Data
@@ -33,7 +33,7 @@ final class AppViewModel: ObservableObject {
 
     init(
         _ appDataRepository: AppDataRepositoryType = AppDataRepository(),
-        _ movieRepository: MovieRepositoryType & TMDBService = MovieRepository(),
+        _ movieRepository: MovieRepositoryType = MovieRepository(),
         republishData: Bool = true
     ) {
         self.appDataRepository = appDataRepository
@@ -76,7 +76,6 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
-            .print("Similar Movies")
             .sink { [weak self] in self?.similarMovies = $0 }
             .store(in: &subscriptions)
         
@@ -158,7 +157,7 @@ extension AppViewModel {
             return
         }
         
-        movieRepository.discoverMovies(
+        movieRepository.getPreferredMovies(
             includeAdult: preference.includeAdult,
             language: preference.language,
             with: preference.genres

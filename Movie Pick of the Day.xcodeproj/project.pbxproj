@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		276309B7298261BE009392F8 /* Movie_Repository_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276309B6298261BE009392F8 /* Movie_Repository_Tests.swift */; };
 		27BB19D5296FC67700851E14 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D4296FC67700851E14 /* Preference.swift */; };
 		27BB19D7296FC83400851E14 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D6296FC83400851E14 /* Date.swift */; };
 		27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D8296FCC0F00851E14 /* MovieDay.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		276309B6298261BE009392F8 /* Movie_Repository_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie_Repository_Tests.swift; sourceTree = "<group>"; };
 		27BB19D4296FC67700851E14 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		27BB19D6296FC83400851E14 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		27BB19D8296FCC0F00851E14 /* MovieDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDay.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 		27FDBD8929696776008FA32E /* Movie Pick of the DayTests */ = {
 			isa = PBXGroup;
 			children = (
+				276309B6298261BE009392F8 /* Movie_Repository_Tests.swift */,
 				27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */,
 				27BB19E62970166E00851E14 /* Date_Tests.swift */,
 				27BB19E0296FFB3600851E14 /* Array_Tests.swift */,
@@ -446,6 +449,7 @@
 				27FDBD8B29696776008FA32E /* Dictionary_Coder_Tests.swift in Sources */,
 				27BB19DD296FE76A00851E14 /* App_Data_Repository_Tests.swift in Sources */,
 				27BB19E1296FFB3600851E14 /* Array_Tests.swift in Sources */,
+				276309B7298261BE009392F8 /* Movie_Repository_Tests.swift in Sources */,
 				27BB19E72970166E00851E14 /* Date_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

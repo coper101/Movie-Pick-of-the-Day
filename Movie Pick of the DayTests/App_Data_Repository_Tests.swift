@@ -31,9 +31,10 @@ final class App_Data_Repository_Tests: XCTestCase {
          */
         
         // (2) When
-        let theMoviePickIDs = repository.getMoviePicksIDsOfTheWeek()
         
         // (3) Then
+        let theMoviePickIDs = repository.getMoviePicksIDsOfTheWeek()
+
         XCTAssertEqual(theMoviePickIDs[0].day, .wednesday)
         XCTAssertEqual(theMoviePickIDs[1].day, .thursday)
         XCTAssertEqual(theMoviePickIDs[2].day, .friday)
@@ -49,9 +50,10 @@ final class App_Data_Repository_Tests: XCTestCase {
         
         // (2) When
         repository.setMoviePicksIDsOfTheWeek(moviePickIDs)
-        let updatedMoviePickIDs = repository.moviePickIDsOfTheWeek
         
         // (3) Then
+        let updatedMoviePickIDs = repository.moviePickIDsOfTheWeek
+
         XCTAssertEqual(updatedMoviePickIDs[0].day, .friday)
         XCTAssertEqual(updatedMoviePickIDs[1].day, .saturday)
     }
@@ -68,9 +70,10 @@ final class App_Data_Repository_Tests: XCTestCase {
          */
         
         // (2) When
-        let preference = repository.getPreference()
         
         // (3) Then
+        let preference = repository.getPreference()
+
         XCTAssertNotNil(preference)
         XCTAssertEqual(preference!.language, "EN")
         XCTAssertEqual(preference!.includeAdult, false)
@@ -87,9 +90,10 @@ final class App_Data_Repository_Tests: XCTestCase {
         
         // (2) When
         repository.setPreference(preference)
-        let updatedPreference = repository.preference
         
         // (3) Then
+        let updatedPreference = repository.preference
+
         XCTAssertNotNil(updatedPreference)
         XCTAssertEqual(updatedPreference!.language, "EN")
         XCTAssertEqual(updatedPreference!.includeAdult, true)

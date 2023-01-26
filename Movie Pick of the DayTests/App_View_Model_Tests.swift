@@ -513,7 +513,6 @@ final class App_View_Model_Tests: XCTestCase {
     /// User Event - didPickOfTheDayDetailScreen()
     func test_did_tap_pick_of_the_day_detail_screen() throws {
         // (1) Given
-        let currentScreen = Screen.pickOfTheDay
         let existingMoviePicks: [MovieDay] = [
             .init(
                 day: .sunday, id: 100,
@@ -530,8 +529,8 @@ final class App_View_Model_Tests: XCTestCase {
         // (2) When
         appViewModel.moviePicks = existingMoviePicks
         
-        XCTAssertEqual(appViewModel.moviePicks.count, 7)
         XCTAssertEqual(appViewModel.screen, .pickOfTheDay)
+        XCTAssertEqual(appViewModel.moviePicks.count, 7)
         
         appViewModel.didTapPickOfTheDayDetailScreen(
             todaysDate: "2023-01-22T00:00:00+00:00".toDate()
@@ -575,7 +574,6 @@ final class App_View_Model_Tests: XCTestCase {
     /// User Event - didTapClosePickOfTheDayDetailScreen()
     func test_did_tap_close_pick_of_the_day_detail_screen() throws {
         // (1) Given
-        let currentScreen = Screen.pickOfTheDayDetail
     
         // (2) When
         appViewModel.didTapPickOfTheDayDetailScreen(
