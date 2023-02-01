@@ -10,7 +10,7 @@ import SwiftUI
 enum Screen {
     case pickOfTheDay
     case search
-    case pickReveal
+    case pickOfTheDayDetail
 }
 
 struct AppView: View {
@@ -25,7 +25,7 @@ struct AppView: View {
                 PickOfTheDayView()
             case .search:
                 SearchView()
-            case .pickReveal:
+            case .pickOfTheDayDetail:
                 PickRevealView()
             }
         }

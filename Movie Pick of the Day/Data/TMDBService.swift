@@ -27,12 +27,80 @@ extension TMDBRequest {
     var parameters: [String: String] { .init() }
 }
 
-protocol TMDBService {
-    func getGenres() -> Void
-    func getLanguages() -> Void
-    func getMovie(with id: Int) -> AnyPublisher<Movie?, Never>
-    func getSimilarMovies(of id: Int) -> Void
-    func discoverMovies(with genres: [String]) -> Void
-    func searchMovie(with query: String) -> Void
-    func getUIImage(of path: String, with resolution: ImageResolution) -> AnyPublisher<UIImage, Error>
+protocol TMDBServiceType {
+    
+    static func getGenres() -> AnyPublisher<GetGenres.Response, Error>
+    
+    static func getLanguages() -> AnyPublisher<GetLanguages.Response, Error>
+    
+    static func getMovie(with id: Int) -> AnyPublisher<Movie?, Never>
+    
+    static func getSimilarMovies(of id: Int) -> AnyPublisher<GetSimilarMovies.Response, Error>
+    
+    static func discoverMovies(
+        includeAdult: Bool,
+        language: String,
+        with genres: [String]
+    ) -> AnyPublisher<GetDiscoverMovies.Response, Error>
+    
+    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error>
+    
+    static func getUIImage(
+        of path: String,
+        with resolution: ImageResolution
+    ) -> AnyPublisher<UIImage, Error>
+}
+
+
+// MARK: App Implementation
+class TMDBService: TMDBServiceType {
+    
+    static func getGenres() -> AnyPublisher<GetGenres.Response, Error> {
+        Networking.request(request: GetGenres())
+    }
+    
+    static func getLanguages() -> AnyPublisher<GetLanguages.Response, Error> {
+        Networking.request(request: GetLanguages())
+    }
+    
+    static func getMovie(with id: Int) -> AnyPublisher<Movie?, Never> {
+        Networking.request(request: GetMovie(id: id))
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
+    }
+    
+    static func getSimilarMovies(of id: Int) -> AnyPublisher<GetSimilarMovies.Response, Error> {
+        Networking.request(request: GetSimilarMovies(movieId: id))
+    }
+    
+    static func discoverMovies(
+        includeAdult: Bool,
+        language: String,
+        with genres: [String]
+    ) -> AnyPublisher<GetDiscoverMovies.Response, Error>{
+        Networking.request(
+            request: GetDiscoverMovies(
+                language: language,
+                includeAdult: includeAdult,
+                withGenres: genres
+            )
+        )
+    }
+    
+    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error> {
+        Networking.request(request: GetSearchMovies(query: query))
+    }
+    
+    static func getUIImage(
+        of path: String,
+        with resolution: ImageResolution
+    ) -> AnyPublisher<UIImage, Error> {
+        Networking.requestImage(
+            request: GetImage(
+                imageResolution: resolution,
+                posterPath: path
+            )
+        )
+    }    
+    
 }

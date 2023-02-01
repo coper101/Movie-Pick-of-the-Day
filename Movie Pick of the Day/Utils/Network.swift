@@ -9,11 +9,13 @@ import Foundation
 import Combine
 import UIKit
 
-enum NetworkError: Error {
+enum NetworkError: Error, Equatable {
+    
     case request(String)
     case decode(String)
     case server(String)
     case image(String)
+    
     var description: String {
         switch self {
         case .request(let message):

@@ -7,88 +7,58 @@
 
 import Foundation
 
-enum Day: String {
-    case sunday = "Sunday"
-    case monday = "Monday"
-    case tuesday = "Tuesday"
-    case wednesday = "Wednesday"
-    case thursday = "Thursday"
-    case friday = "Friday"
-    case saturday = "Saturday"
-}
-
-extension Int {
+// MARK: Protocol
+protocol AppDataRepositoryType {
     
-    func toDay() -> Day {
-        if self == 1 {
-            return .sunday
-        } else if self == 2 {
-            return .monday
-        } else if self == 3 {
-            return .tuesday
-        } else if self == 4 {
-            return .wednesday
-        } else if self == 5 {
-            return .thursday
-        } else if self == 6 {
-            return .friday
-        } else if self == 7 {
-            return .saturday
-        } else {
-            return .sunday
-        }
-    }
+    /// Data
+    var moviePickIDsOfTheWeek: [MovieDay] { get set }
+    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { get }
     
-}
-
-
-struct MovieDay: CustomStringConvertible {
-    let day: String
-    let id: Int
-    var movie: Movie? = nil
+    var preference: Preference? { get set }
+    var preferencePublisher: Published<Preference?>.Publisher { get }
     
-    var theDay: Day {
-        Day(rawValue: day) ?? .sunday
-    }
+    /// Setters and Getters
+    func getMoviePicksIDsOfTheWeek() -> [MovieDay]
+    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay])
     
-    var description: String {
-        """
-            day: \(theDay.rawValue)
-            id: \(id)
-            movie: \(String(describing: movie))
-            """
-    }
+    func getPreference() -> Preference?
+    func setPreference(_ preference: Preference) -> Void
 }
 
 enum Keys: String {
     case moviePickIDsOfTheWeek = "Movie_Pick_IDs_Of_The_Week"
+    case preference = "Preference"
 }
 
-protocol AppDataRepositoryType {
-    
-    var moviePickIDsOfTheWeek: [MovieDay] { get }
-    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { get }
-    
-    func getMoviePicksIDsOfTheWeek() -> [MovieDay]
-    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay])
-}
 
+// MARK: App Implementation
 final class AppDataRepository: ObservableObject, AppDataRepositoryType {
     
+    /// Data
     @Published var moviePickIDsOfTheWeek: [MovieDay] = []
     var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePickIDsOfTheWeek }
     
+    @Published var preference: Preference?
+    var preferencePublisher: Published<Preference?>.Publisher { $preference }
+    
     init() {
         moviePickIDsOfTheWeek = getMoviePicksIDsOfTheWeek()
+        preference = getPreference()
     }
     
-    /// getters
+    /// Setters and Getters
+    /// - Movie Picks
     func getMoviePicksIDsOfTheWeek() -> [MovieDay] {
-        let dictionary = LocalStorage.getDictionary(forKey: .moviePickIDsOfTheWeek)
-        return dictionary.map { MovieDay(day: $0, id: $1) }
+        let dictionary: [Int: Int]? = LocalStorage.getDictionary(forKey: .moviePickIDsOfTheWeek)
+        guard let dictionary else {
+            print("getMoviePicksIDsOfTheWeek error: movie picks dictionary nil")
+            return []
+        }
+        let movieDays: [MovieDay] = dictionary
+            .map { .init(day: .init(rawValue: $0) ?? .sunday, id: $1) }
+        return movieDays
     }
     
-    /// setters
     func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay]) {
         LocalStorage.setItem(
             movieDays.toDictionary(),
@@ -96,14 +66,71 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
         )
         moviePickIDsOfTheWeek = getMoviePicksIDsOfTheWeek()
     }
+    
+    /// - Preference
+    func getPreference() -> Preference? {
+        let dictionary: [String: Any]? = LocalStorage.getDictionary(forKey: .preference)
+        guard let dictionary else {
+            print("getPreference error: preference dictionary nil")
+            return nil
+        }
+        let preference: Preference? = DictionaryCoder.getType(of: dictionary)
+        guard let preference else {
+            print("getPreference error: preference is nil")
+            return nil
+        }
+        return preference
+    }
+    
+    func setPreference(_ preference: Preference) {
+        let dictionary = DictionaryCoder.getDictionary(of: preference)
+        guard let dictionary else {
+            print("setPreference error: preference dictionary nil")
+            return
+        }
+        LocalStorage.setItem(dictionary, forKey: .preference)
+        self.preference = getPreference()
+    }
 }
 
-extension Array where Element == MovieDay {
+
+// MARK: Test Implementation
+class MockAppDataRepository: AppDataRepositoryType {
     
-    func toDictionary() -> [String: Int] {
-        self.reduce(into: [String: Int]()) { dictionary, movieDay in
-            dictionary[movieDay.day] = movieDay.id
-        }
+    /// Data
+    @Published var moviePickIDsOfTheWeek: [MovieDay] = []
+    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePickIDsOfTheWeek }
+    
+    @Published var preference: Preference?
+    var preferencePublisher: Published<Preference?>.Publisher { $preference }
+    
+    /// Setters and Getters
+    /// - Movie Picks
+    func getMoviePicksIDsOfTheWeek() -> [MovieDay] {
+        [
+            TestData.createMovieDay(movieID: 104, day: .wednesday),
+            TestData.createMovieDay(movieID: 105, day: .thursday),
+            TestData.createMovieDay(movieID: 106, day: .friday),
+            TestData.createMovieDay(movieID: 107, day: .saturday),
+        ]
+    }
+    
+    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay]) {
+        moviePickIDsOfTheWeek = movieDays
+    }
+    
+    /// - Preference
+    func getPreference() -> Preference? {
+        .init(
+            language: "EN",
+            includeAdult: false,
+            genres: ["Action", "Adventure"]
+        )
+    }
+    
+    func setPreference(_ preference: Preference) {
+        self.preference = preference
     }
     
 }
+
