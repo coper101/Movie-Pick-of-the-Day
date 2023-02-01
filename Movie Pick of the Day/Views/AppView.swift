@@ -16,19 +16,35 @@ enum Screen {
 struct AppView: View {
     // MARK: - Props
     @EnvironmentObject var appViewModel: AppViewModel
+    @Environment(\.dimensions) var dimensions: Dimensions
+    
+    var selectedScreen: Screen {
+        appViewModel.screen
+    }
     
     // MARK: - UI
     var body: some View {
-        VStack(spacing: 0) {
-            switch appViewModel.screen {
-            case .pickOfTheDay:
-                PickOfTheDayView()
-            case .search:
-                SearchView()
-            case .pickOfTheDayDetail:
+        Group {
+            if
+                (selectedScreen == .pickOfTheDay) ||
+                (selectedScreen == .search)
+            {
+                
+                PagerView(
+                    item1Action: appViewModel.didTapPickOfTheDayMovieScreen,
+                    item2Action: appViewModel.didTapSearchScreen,
+                    bottomPadding: dimensions.insets.bottom,
+                    item1Content: { PickOfTheDayView() },
+                    item2Content: { SearchView() }
+                )
+                
+            } else {
+                
                 PickRevealView()
-            }
-        }
+                
+            } //: if-else
+        } //: Group
+        .ignoresSafeArea()
     }
     
     // MARK: - Actions

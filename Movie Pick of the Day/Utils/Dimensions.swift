@@ -7,40 +7,39 @@
 
 import SwiftUI
 
+// MARK: - Dimensions
 struct Dimensions {
-    static let TopBarHeight: CGFloat = 76
-    static let BottomBarHeight: CGFloat = 62
-    static let HorizontalPadding: CGFloat = 21
-    static let Screen: CGSize = UIScreen.main.bounds.size
-}
-
-struct EdgeInsets {
     
-    func getKeyWindows() -> UIWindow? {
-        // Get connected scenes
-        return UIApplication.shared.connectedScenes
-            // Keep only active scenes, onscreen and visible to the user
-            .filter { $0.activationState == .foregroundActive }
-            // Keep only the first `UIWindowScene`
-            .first(where: { $0 is UIWindowScene })
-            // Get its associated windows
-            .flatMap({ $0 as? UIWindowScene })?.windows
-            // Finally, keep only the key window
-            .first(where: \.isKeyWindow)
-    }
+    let screen: CGSize = UIScreen.main.bounds.size
     
-    var insets: (
-        top: CGFloat,
-        bottom: CGFloat,
-        leading: CGFloat,
-        trailing: CGFloat
-    ) {
-        let insets = getKeyWindows()?.safeAreaInsets ?? .zero
+    @available(iOSApplicationExtension, unavailable)
+    let insets: EdgeInset = theInsets
+    
+    static var theInsets: EdgeInset {
+        let insets = UIApplication.shared.windows.first?.safeAreaInsets
         return (
-            insets.top,
-            insets.bottom,
-            insets.left,
-            insets.right
+            insets?.top ?? 0,
+            insets?.bottom ?? 0,
+            insets?.left ?? 0,
+            insets?.right ?? 0
         )
     }
 }
+
+struct DimensionsKey: EnvironmentKey {
+    static var defaultValue: Dimensions = .init()
+}
+
+extension EnvironmentValues {
+    var dimensions: Dimensions {
+        get { self[DimensionsKey.self] }
+        set { }
+    }
+}
+
+typealias EdgeInset = (
+    top: CGFloat,
+    bottom: CGFloat,
+    leading: CGFloat,
+    trailing: CGFloat
+)

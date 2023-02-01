@@ -12,13 +12,14 @@ class TestData {
     
     static func createMovie(
         id: Int,
-        title: String? = nil
+        title: String? = nil,
+        overview: String? = nil
     ) -> Movie {
         .init(
             id: id,
             title: title,
             originalTitle: nil,
-            overview: nil,
+            overview: overview,
             releaseDate: nil,
             voteAverage: nil,
             voteCount: nil,
@@ -46,6 +47,20 @@ class TestData {
             size: .init(width: width, height: height)
         )!
     }
+    
+    static let sampleMovie = createMovie(
+        id: 101,
+        title: "Avatar: The Way of Water",
+        overview: """
+                Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.
+                """
+    )
+    
+    static let sampleMovieDay = MovieDay(
+        day: .monday,
+        id: sampleMovie.id ?? 1,
+        movie: sampleMovie
+    )
 }
 
 extension UIImage {

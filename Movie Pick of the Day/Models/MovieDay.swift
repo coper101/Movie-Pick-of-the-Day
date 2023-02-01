@@ -37,7 +37,7 @@ enum Day: Int {
 }
 
 
-struct MovieDay: CustomStringConvertible {
+struct MovieDay: CustomStringConvertible, Identifiable {
     let day: Day
     var id: Int
     var movie: Movie? = nil
