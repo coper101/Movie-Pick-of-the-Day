@@ -174,19 +174,16 @@ class MockFailTMDBService: TMDBServiceType {
 
 
 // MARK: Test
-final class Movie_Repository_Tests: XCTestCase {
+final class TMDB_Service_Tests: XCTestCase {
     
     var subscriptions: Set<AnyCancellable>!
-    var repository: (MovieRepositoryType & TMDBService)!
 
     override func setUpWithError() throws {
         subscriptions = .init()
-        repository = MockMovieRepository()
     }
 
     override func tearDownWithError() throws {
         subscriptions = nil
-        repository = nil
     }
 
     /// getGenres()
@@ -297,17 +294,11 @@ final class Movie_Repository_Tests: XCTestCase {
         let expectation = expectation(description: "Get Movie")
         
         MockTMDBService.getMovie(with: 101)
-            .sink { completion in
-                switch completion {
-                case .failure(_):
-                    break
-                case .finished:
-                    expectation.fulfill()
-                }
-            } receiveValue: { movie in
+            .sink { movie in
                 
                 // (3) Then
                 XCTAssertNotNil(movie)
+                expectation.fulfill()
             }
             .store(in: &subscriptions)
         
@@ -321,6 +312,25 @@ final class Movie_Repository_Tests: XCTestCase {
         let expectation = expectation(description: "Get Movie")
 
         MockFailTMDBService.getMovie(with: 101)
+            .sink { movie in
+                
+                // (3) Then
+                XCTAssertNil(movie)
+                expectation.fulfill()
+            }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    /// getSimilarMovies()
+    func test_get_similar_movies_success() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Get Similar Movies")
+        
+        MockTMDBService.getSimilarMovies(of: 101)
             .sink { completion in
                 switch completion {
                 case .failure(_):
@@ -328,11 +338,197 @@ final class Movie_Repository_Tests: XCTestCase {
                 case .finished:
                     expectation.fulfill()
                 }
-            } receiveValue: { movie in
+            } receiveValue: { response in
                 
                 // (3) Then
-                XCTAssertNil(movie)
+                let movies = response.results
+                XCTAssertNotNil(movies)
+                XCTAssertEqual(movies!.count, 2)
             }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    func test_get_similar_movies_server_fails() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Get Similar Movies")
+
+        MockFailTMDBService.getSimilarMovies(of: 101)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    
+                    // (3) Then
+                    XCTAssertEqual(error as! NetworkError, .server("Server Error"))
+                    expectation.fulfill()
+                    
+                case .finished:
+                    break
+                }
+            } receiveValue: { _ in }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+
+    /// discoverMovies()
+    func test_discover_movies_success() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Discover Movies")
+        
+        MockTMDBService.discoverMovies(
+            includeAdult: false,
+            language: "EN",
+            with: ["Action", "Adventure"]
+        )
+            .sink { completion in
+                switch completion {
+                case .failure(_):
+                    break
+                case .finished:
+                    expectation.fulfill()
+                }
+            } receiveValue: { response in
+                
+                // (3) Then
+                let movies = response.results
+                XCTAssertNotNil(movies)
+                XCTAssertEqual(movies!.count, 2)
+            }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    func test_discover_movies_fails() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Discover Movies")
+
+        MockFailTMDBService.discoverMovies(
+            includeAdult: false,
+            language: "EN",
+            with: ["Action", "Adventure"]
+        )
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    
+                    // (3) Then
+                    XCTAssertEqual(error as! NetworkError, .server("Server Error"))
+                    expectation.fulfill()
+                    
+                case .finished:
+                    break
+                }
+            } receiveValue: { _ in }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    /// searchMovie()
+    func test_search_movie_success() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Search Movie")
+        
+        MockTMDBService.searchMovie(with: "Toy")
+            .sink { completion in
+                switch completion {
+                case .failure(_):
+                    break
+                case .finished:
+                    expectation.fulfill()
+                }
+            } receiveValue: { response in
+                
+                // (3) Then
+                let movies = response.results
+                XCTAssertNotNil(movies)
+                XCTAssertEqual(movies!.count, 2)
+            }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    func test_search_movie_fails() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Search Movie")
+
+        MockFailTMDBService.searchMovie(with: "Toy")
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    
+                    // (3) Then
+                    XCTAssertEqual(error as! NetworkError, .server("Server Error"))
+                    expectation.fulfill()
+                    
+                case .finished:
+                    break
+                }
+            } receiveValue: { _ in }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    /// getUIImage()
+    func test_get_ui_image_success() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Get UI Image")
+        
+        MockTMDBService.getUIImage(of: "101", with: .original)
+            .sink { completion in
+                switch completion {
+                case .failure(_):
+                    break
+                case .finished:
+                    expectation.fulfill()
+                }
+            } receiveValue: { uiImage in
+                
+                // (3) Then
+                XCTAssertGreaterThan(uiImage.size.width, 0)
+                XCTAssertGreaterThan(uiImage.size.height, 0)
+            }
+            .store(in: &subscriptions)
+        
+        waitForExpectations(timeout: 2.0)
+    }
+    
+    func test_get_ui_image_fails() throws {
+        // (1) Given
+        
+        // (2) When
+        let expectation = expectation(description: "Get UI Image")
+
+        MockFailTMDBService.getUIImage(of: "101", with: .original)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    
+                    // (3) Then
+                    XCTAssertEqual(error as! NetworkError, .server("Server Error"))
+                    expectation.fulfill()
+                    
+                case .finished:
+                    break
+                }
+            } receiveValue: { _ in }
             .store(in: &subscriptions)
         
         waitForExpectations(timeout: 2.0)
