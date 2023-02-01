@@ -8,7 +8,10 @@
 import Foundation
 
 enum Types: String {
-    case DMSansBold = "DMSans-Bold"
+    case amaranthBold = "Amaranth-Bold"
+    case interBold = "Inter-Bold"
+    case interExtraBold = "Inter-ExtraBold"
+    case interSemiBold = "Inter-SemiBold"
     var value: String {
         self.rawValue
     }

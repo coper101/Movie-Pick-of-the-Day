@@ -19,6 +19,10 @@
 		27BB19E5297007BC00851E14 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E4297007BC00851E14 /* Validation.swift */; };
 		27BB19E72970166E00851E14 /* Date_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E62970166E00851E14 /* Date_Tests.swift */; };
 		27BB19E929701DC000851E14 /* App_View_Model_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */; };
+		27FAD23D298A58F20069DE72 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */; };
+		27FAD23E298A58F20069DE72 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */; };
+		27FAD23F298A58F20069DE72 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */; };
+		27FAD241298A58FA0069DE72 /* Amaranth-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD240298A58FA0069DE72 /* Amaranth-Bold.ttf */; };
 		27FDBD6E29696773008FA32E /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBD6D29696773008FA32E /* Icon.swift */; };
 		27FDBD7029696773008FA32E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */; };
 		27FDBD7429696773008FA32E /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBD7329696773008FA32E /* Type.swift */; };
@@ -80,6 +84,11 @@
 		27BB19E4297007BC00851E14 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		27BB19E62970166E00851E14 /* Date_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_Tests.swift; sourceTree = "<group>"; };
 		27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App_View_Model_Tests.swift; sourceTree = "<group>"; };
+		27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Movie-Pick-of-the-Day-Info.plist"; sourceTree = SOURCE_ROOT; };
+		27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		27FAD240298A58FA0069DE72 /* Amaranth-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Amaranth-Bold.ttf"; sourceTree = "<group>"; };
 		27FDBD5D29696773008FA32E /* Movie Pick of the Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Pick of the Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27FDBD6D29696773008FA32E /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -139,11 +148,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27FAD237298A53DD0069DE72 /* Resouces */ = {
+			isa = PBXGroup;
+			children = (
+				27FAD239298A58BA0069DE72 /* Fonts */,
+				27FDBD7D29696775008FA32E /* Assets.xcassets */,
+			);
+			path = Resouces;
+			sourceTree = "<group>";
+		};
+		27FAD239298A58BA0069DE72 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				27FAD240298A58FA0069DE72 /* Amaranth-Bold.ttf */,
+				27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */,
+				27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */,
+				27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		27FDBD5429696773008FA32E = {
 			isa = PBXGroup;
 			children = (
 				27FDBD5F29696773008FA32E /* Movie Pick of the Day */,
-				27FDBD7D29696775008FA32E /* Assets.xcassets */,
 				27FDBD8929696776008FA32E /* Movie Pick of the DayTests */,
 				27FDBD9329696776008FA32E /* Movie Pick of the DayUITests */,
 				27FDBD5E29696773008FA32E /* Products */,
@@ -163,6 +191,7 @@
 		27FDBD5F29696773008FA32E /* Movie Pick of the Day */ = {
 			isa = PBXGroup;
 			children = (
+				27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */,
 				27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */,
 				27FDBDA329696869008FA32E /* App */,
 				27FDBD6029696773008FA32E /* Views */,
@@ -170,6 +199,7 @@
 				27FDBDCD296969BA008FA32E /* Models */,
 				27FDBDD4296969BA008FA32E /* Utils */,
 				27FDBD6C29696773008FA32E /* Theme */,
+				27FAD237298A53DD0069DE72 /* Resouces */,
 				27FDBD7F29696776008FA32E /* Preview Content */,
 			);
 			path = "Movie Pick of the Day";
@@ -381,6 +411,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27FAD241298A58FA0069DE72 /* Amaranth-Bold.ttf in Resources */,
+				27FAD23F298A58F20069DE72 /* Inter-Bold.ttf in Resources */,
+				27FAD23E298A58F20069DE72 /* Inter-ExtraBold.ttf in Resources */,
+				27FAD23D298A58F20069DE72 /* Inter-SemiBold.ttf in Resources */,
 				27FDBD7E29696775008FA32E /* Assets.xcassets in Resources */,
 				27FDBD8129696776008FA32E /* Preview Assets.xcassets in Resources */,
 				27FDBD7029696773008FA32E /* LaunchScreen.storyboard in Resources */,
@@ -604,12 +638,13 @@
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Movie-Pick-of-the-Day-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -638,12 +673,13 @@
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Movie-Pick-of-the-Day-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

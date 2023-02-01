@@ -8,8 +8,10 @@
 import SwiftUI
 
 enum Colors: String {
-    case background = "Black"
-    case primary = "White"
+    case secondary = "secondary"
+    case background = "background"
+    case backgroundLight = "background-light"
+    case onBackground = "on-background"
     var color: Color {
         Color(self.rawValue)
     }

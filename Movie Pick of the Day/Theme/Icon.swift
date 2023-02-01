@@ -8,7 +8,9 @@
 import SwiftUI
 
 enum Icons: String {
-    case icon = "iconName"
+    case player = "player-icon"
+    case search = "search-icon"
+    case close = "close-icon"
     var image: Image {
         Image(self.rawValue)
     }
