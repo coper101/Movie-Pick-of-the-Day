@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		276309B7298261BE009392F8 /* TMDB_Service_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */; };
+		2763BF492992455E008D609A /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF482992455E008D609A /* SearchBarView.swift */; };
+		2763BF4B29924860008D609A /* Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF4A29924860008D609A /* Modifier.swift */; };
+		2763BF4D2992646F008D609A /* PreferenesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF4C2992646F008D609A /* PreferenesSheet.swift */; };
+		2763BF4F2992666B008D609A /* FilledButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF4E2992666B008D609A /* FilledButtonView.swift */; };
+		2763BF5129926751008D609A /* CloseButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF5029926751008D609A /* CloseButtonView.swift */; };
+		2763BF5329926899008D609A /* SelectionChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF5229926899008D609A /* SelectionChipsView.swift */; };
 		27BB19D5296FC67700851E14 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D4296FC67700851E14 /* Preference.swift */; };
 		27BB19D7296FC83400851E14 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D6296FC83400851E14 /* Date.swift */; };
 		27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D8296FCC0F00851E14 /* MovieDay.swift */; };
@@ -81,6 +87,12 @@
 
 /* Begin PBXFileReference section */
 		276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB_Service_Tests.swift; sourceTree = "<group>"; };
+		2763BF482992455E008D609A /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
+		2763BF4A29924860008D609A /* Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifier.swift; sourceTree = "<group>"; };
+		2763BF4C2992646F008D609A /* PreferenesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenesSheet.swift; sourceTree = "<group>"; };
+		2763BF4E2992666B008D609A /* FilledButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButtonView.swift; sourceTree = "<group>"; };
+		2763BF5029926751008D609A /* CloseButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButtonView.swift; sourceTree = "<group>"; };
+		2763BF5229926899008D609A /* SelectionChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChipsView.swift; sourceTree = "<group>"; };
 		27BB19D4296FC67700851E14 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		27BB19D6296FC83400851E14 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		27BB19D8296FCC0F00851E14 /* MovieDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDay.swift; sourceTree = "<group>"; };
@@ -190,6 +202,9 @@
 				27FDBDC6296968AF008FA32E /* PickOfTheDayView.swift */,
 				27FAD246298A5C900069DE72 /* TopBarView.swift */,
 				27FAD24B298A627F0069DE72 /* PickCardView.swift */,
+				2763BF4C2992646F008D609A /* PreferenesSheet.swift */,
+				2763BF4E2992666B008D609A /* FilledButtonView.swift */,
+				2763BF5029926751008D609A /* CloseButtonView.swift */,
 				27FAD244298A5C0E0069DE72 /* (3) Detail View */,
 			);
 			path = "(1) Pick of the Day";
@@ -207,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDBDC5296968AF008FA32E /* SearchView.swift */,
+				2763BF482992455E008D609A /* SearchBarView.swift */,
 			);
 			path = "(2) Search";
 			sourceTree = "<group>";
@@ -219,6 +235,7 @@
 				27FAD252298A7D490069DE72 /* PagerTabView.swift */,
 				27FAD256298A82070069DE72 /* PagerView.swift */,
 				27FAD254298A7DEB0069DE72 /* CircledButtonView.swift */,
+				2763BF5229926899008D609A /* SelectionChipsView.swift */,
 			);
 			path = "Reusable Comp";
 			sourceTree = "<group>";
@@ -227,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				27FAD24D298A6F080069DE72 /* Shadow.swift */,
+				2763BF4A29924860008D609A /* Modifier.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -506,6 +524,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2763BF4F2992666B008D609A /* FilledButtonView.swift in Sources */,
 				27FDBDCB296968B0008FA32E /* AppView.swift in Sources */,
 				27FDBDBD29696887008FA32E /* MovieRepository.swift in Sources */,
 				27FDBDDE296969BA008FA32E /* AppViewModel.swift in Sources */,
@@ -528,17 +547,22 @@
 				27BB19D5296FC67700851E14 /* Preference.swift in Sources */,
 				27FDBDC9296968B0008FA32E /* SearchView.swift in Sources */,
 				27FDBDDF296969BA008FA32E /* Network.swift in Sources */,
+				2763BF492992455E008D609A /* SearchBarView.swift in Sources */,
 				27FDBDDB296969BA008FA32E /* Genre.swift in Sources */,
+				2763BF4B29924860008D609A /* Modifier.swift in Sources */,
 				27FDBDE2296969BA008FA32E /* Text.swift in Sources */,
 				27FDBD7429696773008FA32E /* Type.swift in Sources */,
 				27FDBDCC296968B0008FA32E /* PickRevealView.swift in Sources */,
 				27FDBDBC29696887008FA32E /* LocalStorage.swift in Sources */,
 				27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */,
+				2763BF5329926899008D609A /* SelectionChipsView.swift in Sources */,
 				27FDBDBB29696887008FA32E /* AppDataRepository.swift in Sources */,
 				27FAD251298A77230069DE72 /* MovieCardView.swift in Sources */,
 				27FDBD7829696773008FA32E /* Color.swift in Sources */,
 				27FDBDBE29696887008FA32E /* TMDBService.swift in Sources */,
 				27FDBDCA296968B0008FA32E /* PickOfTheDayView.swift in Sources */,
+				2763BF5129926751008D609A /* CloseButtonView.swift in Sources */,
+				2763BF4D2992646F008D609A /* PreferenesSheet.swift in Sources */,
 				27FDBDDA296969BA008FA32E /* Movie.swift in Sources */,
 				27BB19E5297007BC00851E14 /* Validation.swift in Sources */,
 				27FDBDE1296969BA008FA32E /* Frame.swift in Sources */,

@@ -33,8 +33,8 @@ class TestData {
         )
     }
     
-    static func createMovieDay(movieID: Int, day: Day) -> MovieDay {
-        .init(day: day, id: movieID)
+    static func createMovieDay(movieID: Int, day: Day, movie: Movie? = nil) -> MovieDay {
+        .init(day: day, id: movieID, movie: movie)
     }
     
     static func createImage(
@@ -56,11 +56,63 @@ class TestData {
                 """
     )
     
+    static let sampleMovies: [Movie] = [
+        createMovie(id: 101, title: "Toy Story"),
+        createMovie(id: 102, title: "Toy Story 2"),
+        createMovie(id: 103, title: "Toy Story 3"),
+        createMovie(id: 104, title: "Toy Story 4"),
+        createMovie(id: 105, title: "Toy Story Soldiers"),
+        createMovie(id: 106, title: "Toy Story That Time Forgot")
+    ]
+    
     static let sampleMovieDay = MovieDay(
         day: .monday,
         id: sampleMovie.id ?? 1,
         movie: sampleMovie
     )
+    
+    static var sampleMoviePicks: [MovieDay] = [
+        TestData.createMovieDay(
+            movieID: 100, day: .sunday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 101, day: .monday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 102, day: .tuesday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 103, day: .wednesday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 104, day: .thursday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 105, day: .friday,
+            movie: TestData.sampleMovie
+        ),
+        TestData.createMovieDay(
+            movieID: 106, day: .saturday,
+            movie: TestData.sampleMovie
+        )
+    ]
+
+}
+
+extension TestData {
+
+    static var appViewModel: AppViewModel {
+        let appViewModel = AppViewModel(republishData: false)
+        appViewModel.moviePicks = sampleMoviePicks
+        appViewModel.searchedMovies = sampleMovies
+        return appViewModel
+    }
+    
 }
 
 extension UIImage {

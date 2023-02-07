@@ -13,12 +13,34 @@ struct PickOfTheDayView: View {
     @Environment(\.dimensions) var dimensions: Dimensions
     
     let movie = TestData.sampleMovie
-    let picks: [MovieDay] = [
-        TestData.sampleMovieDay,
-        TestData.createMovieDay(movieID: 102, day: .friday),
-        TestData.createMovieDay(movieID: 103, day: .saturday)
-    ]
     
+    var todaysMovieDay: MovieDay? {
+        guard
+            let todaysWeekDay = Date().toDateComp().weekday
+        else {
+            return nil
+        }
+        return appViewModel.moviePicks.first(
+            where: { $0.day.rawValue == todaysWeekDay }
+        )
+    }
+
+    var nextMovieDays: [MovieDay] {
+        guard
+            let todaysWeekDay = Date().toDateComp().weekday
+        else {
+            return []
+        }
+        guard
+            let todaysMovieDayIndex = appViewModel.moviePicks.firstIndex(
+                where: { $0.day.rawValue == todaysWeekDay }
+            )
+        else {
+            return []
+        }
+        return Array(appViewModel.moviePicks[(todaysMovieDayIndex + 1)...])
+    }
+
     // MARK: - UI
     var body: some View {
         ZStack(alignment: .top) {
@@ -38,61 +60,73 @@ struct PickOfTheDayView: View {
                         RoundButtonView(
                             title: "Action, Adventure, EN, Non-",
                             subtitle: "Preferences",
-                            action: {}
+                            action: preferenceAction
                         )
                         
                         RoundButtonView(
                             subtitle: "powered by",
                             icon: .tmdbLogo,
                             fillSpace: false,
-                            action: {}
+                            action: sourceAction
                         )
                         
                     } //: HStack
                     .padding(.horizontal, 21)
                     
                     // Row 2: PICK OF THE DAY
-                    Button(action: {}) {
-                        
-                        PickCardView(
-                            title: movie.title ?? "",
-                            description: movie.overview ?? "",
-                            uiImage: UIImage(named: Icons.samplePoster.rawValue)!
-                        )
-                        .cardShadow()
-                        
+                    Button(action: pickOfTheDayAction) {
+
+                        if
+                            let todaysMovieDay,
+                            let todaysMovie = todaysMovieDay.movie
+                        {
+
+                            PickCardView(
+                                title: todaysMovie.title ?? "",
+                                description: todaysMovie.overview ?? "",
+                                uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+                            )
+                            .cardShadow()
+
+                        } else {
+
+                            EmptyView()
+
+                        } //: if-else
+
                     } //: Button
                     .padding(.horizontal, 21)
                     
                     // Row 3: PICKS
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
-                        
-                        LazyHGrid(rows: [.init(.flexible())], spacing: 22) {
-                            
-                            ForEach(picks) { pick in
-                                
+
+                        LazyHGrid(
+                            rows: [.init(.flexible())],
+                            spacing: 22
+                        ) {
+
+                            ForEach(nextMovieDays) { pick in
+
                                 Button(action: {}) {
-                                    
+
                                     MovieCardView(
                                         movieDay: pick,
                                         uiImage: UIImage(named: Icons.samplePoster.rawValue)!
                                     )
-                                    
+
                                 } //: Button
-                               
+
                             } //: ForEach
-                            
+
                         } //: LazyHGrid
                         .frame(height: 164)
-                        .padding(.leading, 21)
+                        .padding(.horizontal, 21)
                         .padding(.bottom, 50)
-                        
+
                     } //: ScrollView
-                   
                     
                 } //: VStack
-                .padding(.top, 54 + dimensions.insets.top)
+                .padding(.top, 74 + dimensions.insets.top)
                 .fillMaxSize(alignment: .top)
                 
             } //: ScrollView
@@ -102,6 +136,17 @@ struct PickOfTheDayView: View {
     }
     
     // MARK: - Actions
+    func pickOfTheDayAction() {
+        appViewModel.didTapPickOfTheDayDetailScreen()
+    }
+    
+    func preferenceAction() {
+        appViewModel.didTapPreferences()
+    }
+    
+    func sourceAction() {
+        
+    }
 }
 
 // MARK: - Preview
@@ -109,6 +154,6 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         PickOfTheDayView()
             .previewLayout(.sizeThatFits)
-            .environmentObject(AppViewModel())
+            .environmentObject(TestData.appViewModel)
     }
 }

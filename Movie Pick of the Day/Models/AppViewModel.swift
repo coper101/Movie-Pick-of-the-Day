@@ -39,6 +39,9 @@ final class AppViewModel: ObservableObject {
         self.appDataRepository = appDataRepository
         self.movieRepository = movieRepository
         
+        guard republishData else {
+            return
+        }
         republishAppData()
         republishMovieData()
     }

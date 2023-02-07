@@ -50,8 +50,10 @@ struct PickCardView: View {
                 )
 
         } //: VStack
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .fillMaxWidth(alignment: .leading)
+        .multilineTextAlignment(.leading)
+        .padding(.horizontal, 22)
+        .padding(.bottom, 20)
         .frame(height: 304, alignment: .bottom)
         .background(background)
         .clipped()
@@ -75,5 +77,6 @@ struct PickCardView_Previews: PreviewProvider {
         )
         .previewLayout(.fixed(width: 355, height: 350))
         .padding()
+        .background(Colors.background.color)
     }
 }
