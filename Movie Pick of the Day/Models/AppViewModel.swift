@@ -89,6 +89,7 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.searchedMoviesPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.searchedMovies = $0 }
             .store(in: &subscriptions)
         

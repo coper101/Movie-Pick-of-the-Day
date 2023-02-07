@@ -11,6 +11,7 @@ struct PickOfTheDayView: View {
     // MARK: - Props
     @EnvironmentObject private var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
+    @Environment(\.openURL) var openURL
     
     let movie = TestData.sampleMovie
     
@@ -46,7 +47,11 @@ struct PickOfTheDayView: View {
         ZStack(alignment: .top) {
             
             // MARK: Layer 1: Top Bar
+            StatusBarBackgroundView()
+                .zIndex(2)
+
             TopBarView(title: "Movie Pick of the Day")
+                .zIndex(1)
                 .padding(.top, dimensions.insets.top)
             
             // MARK: Layer 2 Content
@@ -130,9 +135,11 @@ struct PickOfTheDayView: View {
                 .fillMaxSize(alignment: .top)
                 
             } //: ScrollView
+            .zIndex(0)
             
         } //: ZStack
         .background(Colors.background.color)
+        .edgesIgnoringSafeArea(.top)
     }
     
     // MARK: - Actions
@@ -145,7 +152,8 @@ struct PickOfTheDayView: View {
     }
     
     func sourceAction() {
-        
+        let tmdbURL = URL(string: "https://www.themoviedb.org")!
+        openURL(tmdbURL)
     }
 }
 

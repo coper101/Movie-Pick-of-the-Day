@@ -44,7 +44,7 @@ struct AppView: View {
                 
             } //: if-else
         } //: Group
-        .ignoresSafeArea()
+        .edgesIgnoringSafeArea(.all)
     }
     
     // MARK: - Actions

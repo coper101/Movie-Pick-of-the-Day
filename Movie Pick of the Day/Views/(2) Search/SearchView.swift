@@ -18,7 +18,11 @@ struct SearchView: View {
         ZStack(alignment: .top) {
             
             // MARK: Layer 1 - Top Bar
+            StatusBarBackgroundView()
+                .zIndex(2)
+            
             TopBarView(title: "Search")
+                .zIndex(1)
                 .padding(.top, dimensions.insets.top)
             
             // MARK: Layer 2 - Search
@@ -38,6 +42,7 @@ struct SearchView: View {
                                 movieTitle: movie.title,
                                 uiImage: UIImage(named: Icons.samplePoster.rawValue)!
                             )
+                            .transition(.opacity)
 
                         } //: ForEach
                         
@@ -55,17 +60,21 @@ struct SearchView: View {
                     onCommit: commitAction
                 )
                 .padding(.horizontal, 24)
-                .padding(.bottom, 84)
+                .padding(.bottom, dimensions.insets.bottom + 84)
                 
             } //: ScrollView
+            .zIndex(0)
             
         } //: ZStack
         .background(Colors.background.color)
+        .edgesIgnoringSafeArea(.top)
     }
     
     // MARK: - Actions
     func commitAction() {
-        appViewModel.didTapSearchOnCommitMovie(searchText)
+        withAnimation {
+            appViewModel.didTapSearchOnCommitMovie(searchText)
+        }
     }
 }
 
