@@ -12,7 +12,7 @@ struct PickOfTheDayView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
     @Environment(\.openURL) var openURL
-    
+        
     let movie = TestData.sampleMovie
     
     var todaysMovieDay: MovieDay? {
@@ -43,7 +43,7 @@ struct PickOfTheDayView: View {
     }
 
     // MARK: - UI
-    var body: some View {
+    var content: some View {
         ZStack(alignment: .top) {
             
             // MARK: Layer 1: Top Bar
@@ -65,7 +65,7 @@ struct PickOfTheDayView: View {
                         RoundButtonView(
                             title: "Action, Adventure, EN, Non-",
                             subtitle: "Preferences",
-                            action: preferenceAction
+                            action: openPreferenceAction
                         )
                         
                         RoundButtonView(
@@ -142,13 +142,71 @@ struct PickOfTheDayView: View {
         .edgesIgnoringSafeArea(.top)
     }
     
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            
+            // Layer 1: MOVIE OF THE DAY CONTENT
+            content
+                .zIndex(0)
+            
+            // Layer 2: PREFERENCES SHEET
+            if appViewModel.isPreferencesSheetShown {
+                
+                Group {
+
+                    // Backdrop
+                    Color.black.opacity(0.5)
+                        .transition(.opacity)
+                        .animation(
+                            .easeOut(duration: 0.5),
+                            value: appViewModel.isPreferencesSheetShown
+                        )
+                        .zIndex(1)
+
+                    // Sheet
+                    PreferencesSheetView(
+                        genresSelection: $appViewModel.genresSelection,
+                        languageSelected: $appViewModel.languageSelected,
+                        isAdultSelected: $appViewModel.isAdultSelected,
+                        genresOptions: appViewModel.genres.compactMap(\.name),
+                        languagesOptions: appViewModel.languages.compactMap(\.englishName),
+                        closeAction: closePreferenceAction,
+                        doneAction: donePreferenceAction
+                    )
+                    .transition(.move(edge: .bottom))
+                    .animation(
+                        .easeOut(duration: 0.5),
+                        value: appViewModel.isPreferencesSheetShown
+                    )
+                    .zIndex(2)
+                    
+                } //: Group
+                
+            } //: if
+        }
+    }
+    
     // MARK: - Actions
     func pickOfTheDayAction() {
         appViewModel.didTapPickOfTheDayDetailScreen()
     }
     
-    func preferenceAction() {
-        appViewModel.didTapPreferences()
+    func openPreferenceAction() {
+        withAnimation {
+            appViewModel.didTapPreferences()
+        }
+    }
+    
+    func closePreferenceAction() {
+        withAnimation {
+            appViewModel.didTapClosePreferences()
+        }
+    }
+    
+    func donePreferenceAction() {
+        withAnimation {
+            appViewModel.didTapSavePreferences()
+        }
     }
     
     func sourceAction() {

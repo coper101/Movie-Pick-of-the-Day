@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import OSLog
 
 final class AppViewModel: ObservableObject {
     
@@ -26,6 +27,11 @@ final class AppViewModel: ObservableObject {
     
     // MARK: UI
     @Published var screen: Screen = .pickOfTheDay
+    @Published var isPreferencesSheetShown: Bool = false
+    
+    @Published var genresSelection: [String] = []
+    @Published var languageSelected: String = ""
+    @Published var isAdultSelected: Bool = false
     
     @Published var moviePicks: [MovieDay] = []
     @Published var preferenceInput: Preference?
@@ -55,6 +61,7 @@ extension AppViewModel {
     func republishAppData() {
         
         appDataRepository.moviePickIDsOfTheWeekPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.loadMoviePicks($0) }
             .store(in: &subscriptions)
         
@@ -114,10 +121,11 @@ extension AppViewModel {
         for (index, movieDay) in movieDays.enumerated() {
             movieRepository.getMovie(with: movieDay.id)
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] in
+                .sink { [weak self] movie in
                     /// optional if movie can't be found using id - invalid id -1
                     /// display error image on ui
-                    self?.moviePicks[index].movie = $0
+                    self?.moviePicks[index].movie = movie
+                    Logger.appModel.debug("getMovie - success: \(movie?.title ?? "nil")")
                 }
                 .store(in: &subscriptions)
         }
@@ -125,26 +133,44 @@ extension AppViewModel {
 
     /// Preferences
     func didTapPreferences() {
-        movieRepository.getGenres()
-        movieRepository.getLanguages()
+        isPreferencesSheetShown = true
+
+        DispatchQueue.global().async {
+            self.movieRepository.getGenres()
+            self.movieRepository.getLanguages()
+        }
         
         preferenceInput = .init(
             language: "EN",
             includeAdult: false,
             genres: []
         )
+        
     }
     
     func didTapSavePreferences() {
+        isPreferencesSheetShown = false
+        
+        self.preferenceInput?.genres = genresSelection
+        self.preferenceInput?.includeAdult = isAdultSelected
+        
+        // TODO: Derive name from english name
+        self.preferenceInput?.language = languageSelected.isEmpty ? "EN" : languageSelected
+        
         guard let preferenceInput else {
             return
         }
         
+        dump(preferenceInput)
+        
         appDataRepository.setPreference(preferenceInput)
+        
         self.preferenceInput = nil
     }
     
     func didTapClosePreferences() {
+        isPreferencesSheetShown = false
+        
         movieRepository.clearGenres()
         movieRepository.clearLanguages()
         

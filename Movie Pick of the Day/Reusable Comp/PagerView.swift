@@ -13,6 +13,7 @@ struct PagerView<Content, Content2>: View where Content: View, Content2: View {
     var item1Action: Action
     var item2Action: Action
     var bottomPadding: CGFloat = 0
+    var isSelectionShown: Bool
     @ViewBuilder var item1Content: Content
     @ViewBuilder var item2Content: Content2
     
@@ -30,16 +31,20 @@ struct PagerView<Content, Content2>: View where Content: View, Content2: View {
             }
             
             // Layer 2: PAGER SELECTION
-            PagerTabView(selectedItem: $selectedItem)
-                .onChange(of: selectedItem) { item in
-                    switch item {
-                    case .item1:
-                        item1Action()
-                    case .item2:
-                        item2Action()
+            if isSelectionShown {
+                PagerTabView(selectedItem: $selectedItem)
+                    .onChange(of: selectedItem) { item in
+                        switch item {
+                        case .item1:
+                            item1Action()
+                        case .item2:
+                            item2Action()
+                        }
                     }
-                }
-                .padding(.bottom, bottomPadding)
+                    .padding(.bottom, bottomPadding)
+                    .transition(.opacity)
+                    .animation(.linear(duration: 0.1), value: isSelectionShown)
+            }
             
         } //: ZStack
     }
@@ -53,10 +58,10 @@ struct PagerView_Previews: PreviewProvider {
         PagerView(
             item1Action: {},
             item2Action: {},
+            isSelectionShown: true,
             item1Content: { Text("Content 1") },
             item2Content: { Text("Content 2") }
         )
             .previewLayout(.sizeThatFits)
-            // .background(Colors.Background)
     }
 }

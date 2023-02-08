@@ -54,10 +54,11 @@ struct MovieDay: CustomStringConvertible, Identifiable {
 
 extension Array where Element == MovieDay {
     
-    func toDictionary() -> [Int: Int] {
-        self.reduce(into: [Int: Int]()) { dictionary, movieDay in
-            /// 1 (Sunday) : 101 (Movie ID)
-            dictionary[movieDay.day.rawValue] = movieDay.id
+    func toDictionary() -> [String: Int] {
+        self.reduce(into: [String: Int]()) { dictionary, movieDay in
+            /// "1" (Sunday) : 101 (Movie ID)
+            let weekdayNo = "\(movieDay.day.rawValue)"
+            dictionary[weekdayNo] = movieDay.id
         }
     }
     

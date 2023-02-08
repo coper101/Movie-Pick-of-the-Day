@@ -8,9 +8,9 @@
 import Foundation
 
 struct Preference: Codable, CustomStringConvertible {
-    let language: String
-    let includeAdult: Bool
-    let genres: [String]
+    var language: String
+    var includeAdult: Bool
+    var genres: [String]
     
     var description: String {
         """

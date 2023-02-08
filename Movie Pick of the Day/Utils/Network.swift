@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import UIKit
+import OSLog
 
 enum NetworkError: Error, Equatable {
     
@@ -70,16 +71,11 @@ class Networking {
         urlComponents.scheme = request.scheme
         urlComponents.host = request.host
         urlComponents.path = request.path
-        print("Scheme: ", request.scheme)
-        print("Host: ", request.host)
-        print("Path: ", request.path)
-        
         /// url
         guard let url = urlComponents.url else {
             return Fail(error: NetworkError.request("Invalid URL"))
                 .eraseToAnyPublisher()
         }
-        print("Request URL: ", url.absoluteURL)
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { (data: Data, response: URLResponse) in
@@ -87,7 +83,6 @@ class Networking {
                     throw NetworkError.request("Invalid URL Response")
                 }
                 guard (200..<400).contains(response.statusCode) else {
-                    print("server error")
                     throw NetworkError.server("Server Error")
                 }
                 return data
@@ -110,20 +105,12 @@ class Networking {
         urlComponents.queryItems = request.parameters.map {
             URLQueryItem(name: $0.key, value: $0.value)
         }
-        print("Scheme: ", request.scheme)
-        print("Host: ", request.host)
-        print("Path: ", request.path)
-        print("Parameters: ", request.parameters)
-        if let queryItems = urlComponents.queryItems {
-            print("Query Items: ", queryItems)
-        }
-                
         /// url
         guard let url = urlComponents.url else {
             return Fail(error: NetworkError.request("Invalid URL"))
                 .eraseToAnyPublisher()
         }
-        print("Request URL: ", url.absoluteURL)
+        Logger.network.debug("request - request url: \(url.absoluteURL)")
         
         /// request
         var urlRequest = URLRequest(url: url)
@@ -134,7 +121,6 @@ class Networking {
                 guard let response = response as? HTTPURLResponse else {
                     throw NetworkError.request("Invalid URL Response")
                 }
-                print("Status Code: ", response.statusCode)
                 guard (200..<400).contains(response.statusCode) else {
                     throw NetworkError.server("Server Error")
                 }

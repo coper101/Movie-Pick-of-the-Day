@@ -10,6 +10,7 @@ import UIKit
 
 class TestData {
     
+    // MARK: Movie
     static func createMovie(
         id: Int,
         title: String? = nil,
@@ -101,15 +102,51 @@ class TestData {
             movie: TestData.sampleMovie
         )
     ]
-
+    
+    // MARK: Preferences
+    static func createLanguage(englishName: String) -> Language {
+        .init(iso6391: nil, englishName: englishName, name: nil)
+    }
+    
+    static func createGenre(name: String) -> Genre {
+        .init(id: 1, name: name)
+    }
+    
+    static var sampleLanguages: [Language] = [
+        createLanguage(englishName: "English"),
+        createLanguage(englishName: "Chinese"),
+        createLanguage(englishName: "German")
+    ]
+    
+    static var sampleGenres: [Genre] = [
+        createGenre(name: "Action"),
+        createGenre(name: "Adventure"),
+        createGenre(name: "Animation"),
+        createGenre(name: "Comedy"),
+        createGenre(name: "Crime"),
+        createGenre(name: "Documentary"),
+        createGenre(name: "Drama"),
+        createGenre(name: "Family"),
+        createGenre(name: "Fantasy"),
+        createGenre(name: "History"),
+        createGenre(name: "Music"),
+        createGenre(name: "Mystery")
+    ]
+    
 }
 
 extension TestData {
 
     static var appViewModel: AppViewModel {
         let appViewModel = AppViewModel(republishData: false)
+        
         appViewModel.moviePicks = sampleMoviePicks
         appViewModel.searchedMovies = sampleMovies
+        
+        appViewModel.languages = sampleLanguages
+        appViewModel.genres = sampleGenres
+        appViewModel.isAdultSelected = false
+        
         return appViewModel
     }
     

@@ -34,6 +34,7 @@ struct AppView: View {
                     item1Action: appViewModel.didTapPickOfTheDayMovieScreen,
                     item2Action: appViewModel.didTapSearchScreen,
                     bottomPadding: dimensions.insets.bottom,
+                    isSelectionShown: !appViewModel.isPreferencesSheetShown,
                     item1Content: { PickOfTheDayView() },
                     item2Content: { SearchView() }
                 )

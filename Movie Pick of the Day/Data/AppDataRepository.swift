@@ -49,13 +49,13 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
     /// Setters and Getters
     /// - Movie Picks
     func getMoviePicksIDsOfTheWeek() -> [MovieDay] {
-        let dictionary: [Int: Int]? = LocalStorage.getDictionary(forKey: .moviePickIDsOfTheWeek)
+        let dictionary: [String: Int]? = LocalStorage.getDictionary(forKey: .moviePickIDsOfTheWeek)
         guard let dictionary else {
             print("getMoviePicksIDsOfTheWeek error: movie picks dictionary nil")
             return []
         }
         let movieDays: [MovieDay] = dictionary
-            .map { .init(day: .init(rawValue: $0) ?? .sunday, id: $1) }
+            .map { .init(day: .init(rawValue: Int($0) ?? 1) ?? .sunday, id: $1) }
         return movieDays
     }
     

@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import UIKit
+import OSLog
 
 // MARK: Protocol
 protocol MovieRepositoryType {
@@ -81,21 +82,21 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                         let networkError = error as! NetworkError
                         switch networkError {
                         case .server(let message):
-                            print("Failure - error: ", message)
+                            Logger.movieRepository.debug("getGenres - server error: \(message)")
                             break
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getGenres - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let genres = response.genres else {
                     return
                 }
                 self.genres = genres
-                print("Success - genres: ", genres)
+                Logger.movieRepository.debug("getGenres - success: \(genres.map(\.name))")
             }
             .store(in: &subscriptions)
     }
@@ -109,21 +110,21 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                         let networkError = error as! NetworkError
                         switch networkError {
                         case .server(let message):
-                            print("Failure - error: ", message)
+                            Logger.movieRepository.debug("getLanguages - server error: \(message)")
                             break
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getLanguages - finished")
                 }
             } receiveValue: { [weak self] languages in
                 guard let self else {
                     return
                 }
                 self.languages = languages
-                print("Success - languages: ", languages)
+                Logger.movieRepository.debug("getLanguages - success: \(languages.map(\.name))")
             }
             .store(in: &subscriptions)
     }
@@ -141,22 +142,22 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                         let networkError = error as! NetworkError
                         switch networkError {
                         case .server(let message):
-                            print("Failure - server error: ", message)
+                            Logger.movieRepository.debug("getSimilarMovies - server error: \(message)")
                         case .request(let message):
-                            print("Failure - request error: ", message)
+                            Logger.movieRepository.debug("getSimilarMovies - error: \(message)")
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getSimilarMovies - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let results = response.results else {
                     return
                 }
                 self.similarMovies = results
-                print("Success - similar movies: ", results)
+                Logger.movieRepository.debug("getSimilarMovies - success: \(results.map(\.title))")
             }
             .store(in: &subscriptions)
     }
@@ -178,22 +179,22 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     let networkError = error as! NetworkError
                     switch networkError {
                     case .server(let message):
-                        print("Failure - server error: ", message)
+                        Logger.movieRepository.debug("getPreferredMovies - server error: \(message)")
                     case .request(let message):
-                        print("Failure - request error: ", message)
+                        Logger.movieRepository.debug("getPreferredMovies - request error: \(message)")
                     default:
                         break
                     }
                 }
             case .finished:
-                print("Finished")
+                Logger.movieRepository.debug("getPreferredMovies - finished")
             }
         } receiveValue: { [weak self] response in
             guard let self, let results = response.results else {
                 return
             }
             self.preferredMovies = results
-            print("Success - preferredMovies movies: ", results)
+            Logger.movieRepository.debug("getPreferredMovies - success: \(results.map(\.title))")
         }
         .store(in: &subscriptions)
     }
@@ -207,22 +208,22 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                         let networkError = error as! NetworkError
                         switch networkError {
                         case .server(let message):
-                            print("Failure - server error: ", message)
+                            Logger.movieRepository.debug("searchMovie - server error: \(message)")
                         case .request(let message):
-                            print("Failure - request error: ", message)
+                            Logger.movieRepository.debug("searchMovie - request error: \(message)")
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("searchMovie - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let results = response.results else {
                     return
                 }
                 self.searchedMovies = results
-                print("Success - searched movies: ", results)
+                Logger.movieRepository.debug("searchMovie - success: \(results.map(\.title))")
             }
             .store(in: &subscriptions)
     }
