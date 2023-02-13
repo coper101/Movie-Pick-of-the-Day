@@ -9,17 +9,36 @@ import SwiftUI
 
 struct PickCardView: View {
     // MARK: - Props
+    @EnvironmentObject var imageCache: ImageCacheRepository
+
     var title: String
     var description: String
-    var uiImage: UIImage
+    
+    var uiImage: UIImage?
+    var posterPath: String?
+    var posterResolution: ImageResolution
     
     // MARK: - UI
     var background: some View {
         ZStack {
             
             // Layer 1: BACKGROUND IMAGE
-            Image(uiImage: uiImage)
-                .padding(.top, uiImage.size.height / 3)
+            Group {
+                
+                // POSTER
+                AsyncImageView(
+                    imageCache: imageCache,
+                    path: posterPath,
+                    resolution: posterResolution
+                ) { $0.height / 3 }
+                
+                // TESTING
+                if let uiImage {
+                    Image(uiImage: uiImage)
+                        .padding(.top, uiImage.size.height / 3)
+                }
+            }
+            .scaleEffect(1.1)
             
             // Layer 2: BACKDROP
             LinearGradient(
@@ -73,10 +92,13 @@ struct PickCardView_Previews: PreviewProvider {
         PickCardView(
             title: movie.title ?? "",
             description: movie.overview ?? "",
-            uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+            uiImage: UIImage(named: Icons.samplePoster.rawValue)!,
+            posterResolution: .original
         )
         .previewLayout(.fixed(width: 355, height: 350))
         .padding()
         .background(Colors.background.color)
+        .environmentObject(ImageCacheRepository())
     }
 }
+

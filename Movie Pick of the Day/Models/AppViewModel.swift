@@ -18,10 +18,12 @@ final class AppViewModel: ObservableObject {
     
     // MARK: Data
     /// [A] App Data
+    @Published var preference: Preference?
     
     /// [B] Movie Data
     @Published var genres: [Genre] = []
     @Published var languages: [Language] = []
+    @Published var preferredMovies: [Movie] = []
     @Published var similarMovies: [Movie] = []
     @Published var searchedMovies: [Movie] = []
     
@@ -60,14 +62,24 @@ extension AppViewModel {
     /// [A]
     func republishAppData() {
         
-        appDataRepository.moviePickIDsOfTheWeekPublisher
+        appDataRepository.moviePicksOfTheWeekPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.loadMoviePicks($0) }
+            .sink { [weak self] in
+                guard let self else {
+                    return
+                }
+                self.moviePicks = $0
+                print("new movie pick ids: ", self.moviePicks.map { "\($0.day), \($0.id)" })
+            }
             .store(in: &subscriptions)
         
         appDataRepository.preferencePublisher
             .dropFirst()
             .sink { [weak self] in self?.selectMoviePickIDsOfTheWeek($0) }
+            .store(in: &subscriptions)
+        
+        appDataRepository.preferencePublisher
+            .sink { [weak self] in self?.preference = $0 }
             .store(in: &subscriptions)
         
     }
@@ -90,6 +102,7 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.preferredMoviesPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.reSelectMoviePickIDsOfTheWeek($0)
             }
@@ -113,23 +126,42 @@ extension AppViewModel {
         screen = .pickOfTheDay
     }
     
-    func loadMoviePicks(_ movieDays: [MovieDay]) {
-        /// for displaying movie picks
-        moviePicks = movieDays
-        
-        /// get the movie description for each pick - async
-        for (index, movieDay) in movieDays.enumerated() {
-            movieRepository.getMovie(with: movieDay.id)
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] movie in
-                    /// optional if movie can't be found using id - invalid id -1
-                    /// display error image on ui
-                    self?.moviePicks[index].movie = movie
-                    Logger.appModel.debug("getMovie - success: \(movie?.title ?? "nil")")
-                }
-                .store(in: &subscriptions)
-        }
-    }
+    // func loadMoviePicks(_ movieDays: [MovieDay]) {
+    //     print(#function)
+    //
+    //     /// for displaying movie picks
+    //     self.moviePicks = movieDays
+    //
+    //     guard !self.preferredMovies.isEmpty else {
+    //         return
+    //     }
+    //
+    //     /// get movie from the discovered movies as get movie description
+    //     /// doesn't return a movie as movies are mostly deleted
+    //     for (index, movieDay) in movieDays.enumerated() {
+    //         guard
+    //             let movie = self.preferredMovies.first(where: { $0.id == movieDay.id })
+    //         else {
+    //             continue
+    //         }
+    //         self.moviePicks[index].movie = movie
+    //     }
+    //
+    //     print("moviePicks: ", moviePicks.compactMap(\.movie?.title))
+    //
+    //     /// get the movie description for each pick - async
+    //     // for (index, movieDay) in movieDays.enumerated() {
+    //     //     movieRepository.getMovie(with: movieDay.id)
+    //     //         .receive(on: DispatchQueue.main)
+    //     //         .sink { [weak self] movie in
+    //     //             /// optional if movie can't be found using id - invalid id -1
+    //     //             /// display error image on ui
+    //     //             self?.moviePicks[index].movie = movie
+    //     //             Logger.appModel.debug("getMovie - success: \(movie?.title ?? "nil")")
+    //     //         }
+    //     //         .store(in: &subscriptions)
+    //     // }
+    // }
 
     /// Preferences
     func didTapPreferences() {
@@ -194,8 +226,8 @@ extension AppViewModel {
         )
     }
     
-    func reSelectMoviePickIDsOfTheWeek(_ movies: [Movie], todaysDate: Date = .init()) {
-        guard !movies.isEmpty else {
+    func reSelectMoviePickIDsOfTheWeek(_ prefferedMovies: [Movie], todaysDate: Date = .init()) {
+        guard !prefferedMovies.isEmpty else {
             return
         }
         
@@ -210,13 +242,13 @@ extension AppViewModel {
         
         guard
             remainingWeekdaysCount > 0,
-            movies.count >= remainingWeekdaysCount
+            prefferedMovies.count >= remainingWeekdaysCount
         else {
             return
         }
                 
         guard
-            let moviePicksOfTheWeek = movies.shuffle(keep: remainingWeekdaysCount)
+            let shufflePreferredMovies = prefferedMovies.shuffle(keep: remainingWeekdaysCount)
         else {
             return
         }
@@ -224,55 +256,56 @@ extension AppViewModel {
         /// existing movie days in week
         var moviePicks = [MovieDay]()
         moviePicks.append(contentsOf: self.moviePicks)
-                
+        
+        print("existing movie picks: ", moviePicks.map(\.day.rawValue))
+                    
+        // rest of the week
         for (index, weekday) in remainingWeekdaysRange.enumerated() {
             
-            /// skip today's movie day
+            let movieIndex = index
+            let newMovie = shufflePreferredMovies[safe: movieIndex]
+            let id = newMovie?.id ?? -1
+            let day = Day(rawValue: weekday) ?? .sunday
+
             if
                 let todayWeekday = remainingWeekdaysRange.first,
                 weekday == todayWeekday
             {
+                /// add movie of today
+                if moviePicks.first(where: { $0.day.rawValue == todayWeekday }) == nil {
+                    moviePicks.append(
+                        .init(
+                            day: day,
+                            id: id,
+                            movie: newMovie
+                        )
+                    )
+                }
+                /// skip today's movie day if set
                 continue
             }
-            
-            let movieIndex = index - 1
-            let day = Day(rawValue: weekday) ?? .sunday
-            let newMovie = moviePicksOfTheWeek[movieIndex]
-            let id = newMovie.id ?? -1
-            
-            print(
-                """
-                    --------------
-                    movieIndex: \(movieIndex)
-                    day: \(day)
-                    new movie id: \(id)
-                    
-                    """
-            )
             
             /// re-assign movie day if set
-            if
-                let foundDayIndex = moviePicks.firstIndex(
-                    where: { $0.day == day }
-                )
-            {
+            if let foundDayIndex = moviePicks.firstIndex(where: { $0.day == day }) {
                 moviePicks[foundDayIndex].id = id
-                moviePicks[foundDayIndex].movie = nil
+                moviePicks[foundDayIndex].movie = newMovie
                 continue
             }
+            
             /// add movie day if not set
             moviePicks.append(
-                .init(day: day, id: id, movie: nil)
+                .init(
+                    day: day,
+                    id: id,
+                    movie: newMovie
+                )
             )
         }
         
-        print("New Movie Picks")
-        moviePicks.forEach {
-            print("--------------")
-            print($0)
-        }
+        print("new movie pick ids: ", moviePicks.map { "\($0.day), \($0.id)" })
+        print("new movie pick movie title: ", moviePicks.compactMap { $0.movie?.title })
         
-        appDataRepository.setMoviePicksIDsOfTheWeek(moviePicks)
+        appDataRepository.setMoviePicksOfTheWeek(moviePicks)
     }
 
     // MARK: Search

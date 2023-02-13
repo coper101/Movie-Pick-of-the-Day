@@ -9,10 +9,14 @@ import SwiftUI
 
 struct MovieCardView: View {
     // MARK: - Props
+    @EnvironmentObject var imageCache: ImageCacheRepository
+
     var movieDay: MovieDay?
     var movieTitle: String?
     
-    var uiImage: UIImage
+    var uiImage: UIImage?
+    var posterPath: String?
+    var posterResolution: ImageResolution
     
     var isBlurred: Bool {
         movieDay != nil
@@ -23,12 +27,25 @@ struct MovieCardView: View {
         ZStack {
             
             // Layer 1: BACKGROUND IMAGE
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .blur(radius: isBlurred ? 5 : 0)
+            AsyncImageView(
+                imageCache: imageCache,
+                path: posterPath,
+                resolution: posterResolution,
+                isResizable: true,
+                isScaledToFill: true,
+                scaleEffect: 1.1
+            )
+            
+            // TESTING
+            if let uiImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .scaleEffect(1.1)
+            }
             
         } //: ZStack
+        .blur(radius: isBlurred ? 5 : 0)
     }
     
     var poster: some View {
@@ -99,20 +116,24 @@ struct MovieCardView_Previews: PreviewProvider {
     static var previews: some View {
         MovieCardView(
             movieDay: movieDay,
-            uiImage: .init(named: Icons.samplePoster.rawValue)!
+            uiImage: .init(named: Icons.samplePoster.rawValue)!,
+            posterResolution: .original
         )
             .previewLayout(.sizeThatFits)
             .padding()
             .background(Colors.background.color)
             .previewDisplayName("Movie Day")
+            .environmentObject(ImageCacheRepository())
         
         MovieCardView(
             movieTitle: movie.title,
-            uiImage: .init(named: Icons.samplePoster.rawValue)!
+            uiImage: .init(named: Icons.samplePoster.rawValue)!,
+            posterResolution: .original
         )
             .previewLayout(.sizeThatFits)
             .padding()
             .background(Colors.background.color)
             .previewDisplayName("Movie")
+            .environmentObject(ImageCacheRepository())
     }
 }

@@ -13,6 +13,20 @@ class LocalStorage {
         .standard
     }
     
+    static func setData(_ data: Data, forKey key: Keys) {
+        guard let defaults = getUserDefaults() else {
+            return
+        }
+        defaults.set(data, forKey: key.rawValue)
+    }
+    
+    static func getData(forKey key: Keys) -> Data? {
+        guard let defaults = getUserDefaults() else {
+            return nil
+        }
+        return defaults.data(forKey: key.rawValue)
+    }
+    
     static func setItem(_ value: Any?, forKey key: Keys) {
         guard let defaults = getUserDefaults() else {
             return

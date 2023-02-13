@@ -43,7 +43,7 @@ struct PreferencesSheetView: View {
                 
                 ScrollView(showsIndicators: false) {
 
-                    VStack(spacing: 34) {
+                    LazyVStack(spacing: 34) {
                         
                         // SELECTION 1: GENRE
                         SelectionChipsView(

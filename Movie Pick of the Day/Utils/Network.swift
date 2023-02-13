@@ -78,6 +78,7 @@ class Networking {
         }
         
         return URLSession.shared.dataTaskPublisher(for: url)
+            .receive(on: DispatchQueue.global())
             .tryMap { (data: Data, response: URLResponse) in
                 guard let response = response as? HTTPURLResponse else {
                     throw NetworkError.request("Invalid URL Response")

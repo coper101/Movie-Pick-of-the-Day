@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Day: Int {
+enum Day: Int, Codable {
     case sunday = 1
     case monday
     case tuesday
@@ -37,7 +37,7 @@ enum Day: Int {
 }
 
 
-struct MovieDay: CustomStringConvertible, Identifiable {
+struct MovieDay: CustomStringConvertible, Identifiable, Codable {
     let day: Day
     var id: Int
     var movie: Movie? = nil
@@ -49,7 +49,6 @@ struct MovieDay: CustomStringConvertible, Identifiable {
             movie: \(String(describing: movie))
             """
     }
-    
 }
 
 extension Array where Element == MovieDay {

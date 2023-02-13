@@ -5,7 +5,7 @@
 //  Created by Wind Versi on 6/1/23.
 //
 
-struct Movie: Decodable, CustomDebugStringConvertible, Identifiable {
+struct Movie: Codable, CustomDebugStringConvertible, Identifiable {
     let id: Int?
     let title: String?
     let originalTitle: String?

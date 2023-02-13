@@ -142,10 +142,18 @@ extension TestData {
         
         appViewModel.moviePicks = sampleMoviePicks
         appViewModel.searchedMovies = sampleMovies
+        appViewModel.similarMovies = sampleMovies
         
         appViewModel.languages = sampleLanguages
         appViewModel.genres = sampleGenres
         appViewModel.isAdultSelected = false
+        
+        
+        appViewModel.preference = .init(
+            language: "English",
+            includeAdult: true,
+            genres: Array(sampleGenres[..<4]).compactMap(\.name)
+        )
         
         return appViewModel
     }

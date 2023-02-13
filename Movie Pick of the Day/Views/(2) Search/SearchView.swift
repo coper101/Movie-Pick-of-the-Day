@@ -40,7 +40,9 @@ struct SearchView: View {
 
                             MovieCardView(
                                 movieTitle: movie.title,
-                                uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+                                uiImage: nil,
+                                posterPath: movie.posterPath,
+                                posterResolution: .w500
                             )
                             .transition(.opacity)
 

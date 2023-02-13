@@ -24,31 +24,58 @@ struct AppView: View {
     
     // MARK: - UI
     var body: some View {
-        Group {
+        ZStack {
+            
+            // MARK: Layer 1 - Picks or Search
             if
                 (selectedScreen == .pickOfTheDay) ||
                 (selectedScreen == .search)
             {
                 
                 PagerView(
-                    item1Action: appViewModel.didTapPickOfTheDayMovieScreen,
-                    item2Action: appViewModel.didTapSearchScreen,
+                    item1Action: toPickOfTheDayAction,
+                    item2Action: toSearchAction,
                     bottomPadding: dimensions.insets.bottom,
                     isSelectionShown: !appViewModel.isPreferencesSheetShown,
-                    item1Content: { PickOfTheDayView() },
-                    item2Content: { SearchView() }
+                    item1Content: {
+                        PickOfTheDayView()
+                            .transition(.opacity.animation(.easeIn(duration: 0.3)))
+                    },
+                    item2Content: {
+                        SearchView()
+                            .transition(.opacity.animation(.easeIn(duration: 0.3)))
+                    }
                 )
+                .background(Colors.background.color)
                 
-            } else {
+            }
+            
+            // MARK: Layer 2 - Detail
+            if
+                let todaysPick = appViewModel.todaysMoviePick,
+                let movie = todaysPick.movie
+            {
                 
-                PickRevealView()
+                PickRevealView(movie: movie)
                 
-            } //: if-else
+            }
+            
         } //: Group
         .edgesIgnoringSafeArea(.all)
     }
     
     // MARK: - Actions
+    func toPickOfTheDayAction() {
+        withAnimation {
+            appViewModel.didTapPickOfTheDayMovieScreen()
+        }
+    }
+    
+    func toSearchAction() {
+        withAnimation {
+            appViewModel.didTapSearchScreen()
+        }
+    }
 }
 
 // MARK: - Preview
@@ -57,5 +84,6 @@ struct AppView_Previews: PreviewProvider {
         AppView()
             .previewLayout(.sizeThatFits)
             .environmentObject(TestData.appViewModel)
+            .environmentObject(ImageCacheRepository())
     }
 }

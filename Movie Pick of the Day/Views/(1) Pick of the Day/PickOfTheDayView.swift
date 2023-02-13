@@ -21,9 +21,10 @@ struct PickOfTheDayView: View {
         else {
             return nil
         }
-        return appViewModel.moviePicks.first(
+        let movieDay = appViewModel.moviePicks.first(
             where: { $0.day.rawValue == todaysWeekDay }
         )
+        return movieDay
     }
 
     var nextMovieDays: [MovieDay] {
@@ -41,12 +42,19 @@ struct PickOfTheDayView: View {
         }
         return Array(appViewModel.moviePicks[(todaysMovieDayIndex + 1)...])
     }
-
+    
+    var preferenceSummary: String {
+        guard let preference = appViewModel.preference else {
+            return ""
+        }
+        return preference.summary
+    }
+    
     // MARK: - UI
     var content: some View {
         ZStack(alignment: .top) {
             
-            // MARK: Layer 1: Top Bar
+            // MARK: Layer 1 - Top Bar
             StatusBarBackgroundView()
                 .zIndex(2)
 
@@ -54,7 +62,7 @@ struct PickOfTheDayView: View {
                 .zIndex(1)
                 .padding(.top, dimensions.insets.top)
             
-            // MARK: Layer 2 Content
+            // MARK: Layer 2 - Content
             ScrollView {
                 
                 VStack(spacing: 30) {
@@ -63,7 +71,7 @@ struct PickOfTheDayView: View {
                     HStack(spacing: 12) {
                     
                         RoundButtonView(
-                            title: "Action, Adventure, EN, Non-",
+                            title: preferenceSummary,
                             subtitle: "Preferences",
                             action: openPreferenceAction
                         )
@@ -89,7 +97,9 @@ struct PickOfTheDayView: View {
                             PickCardView(
                                 title: todaysMovie.title ?? "",
                                 description: todaysMovie.overview ?? "",
-                                uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+                                uiImage: nil,
+                                posterPath: todaysMovie.posterPath,
+                                posterResolution: .original
                             )
                             .cardShadow()
 
@@ -110,13 +120,17 @@ struct PickOfTheDayView: View {
                             spacing: 22
                         ) {
 
-                            ForEach(nextMovieDays) { pick in
-
+                            ForEach(nextMovieDays) { movieDay in
+                                
+                                let movie = movieDay.movie
+                                
                                 Button(action: {}) {
 
                                     MovieCardView(
-                                        movieDay: pick,
-                                        uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+                                        movieDay: movieDay,
+                                        uiImage: nil,
+                                        posterPath: movie?.posterPath,
+                                        posterResolution: .w500
                                     )
 
                                 } //: Button
@@ -145,16 +159,16 @@ struct PickOfTheDayView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             
-            // Layer 1: MOVIE OF THE DAY CONTENT
+            // MARK: Layer 1 - Movie Picks
             content
                 .zIndex(0)
             
-            // Layer 2: PREFERENCES SHEET
+            // MARK: Layer 2 - Preference Sheet
             if appViewModel.isPreferencesSheetShown {
                 
                 Group {
 
-                    // Backdrop
+                    // BACKDROP
                     Color.black.opacity(0.5)
                         .transition(.opacity)
                         .animation(
@@ -163,7 +177,7 @@ struct PickOfTheDayView: View {
                         )
                         .zIndex(1)
 
-                    // Sheet
+                    // SHEET
                     PreferencesSheetView(
                         genresSelection: $appViewModel.genresSelection,
                         languageSelected: $appViewModel.languageSelected,
@@ -183,12 +197,14 @@ struct PickOfTheDayView: View {
                 } //: Group
                 
             } //: if
-        }
+        } //: ZStack
     }
     
     // MARK: - Actions
     func pickOfTheDayAction() {
-        appViewModel.didTapPickOfTheDayDetailScreen()
+        withAnimation {
+            appViewModel.didTapPickOfTheDayDetailScreen()
+        }
     }
     
     func openPreferenceAction() {
@@ -221,5 +237,6 @@ struct HomeView_Previews: PreviewProvider {
         PickOfTheDayView()
             .previewLayout(.sizeThatFits)
             .environmentObject(TestData.appViewModel)
+            .environmentObject(ImageCacheRepository())
     }
 }

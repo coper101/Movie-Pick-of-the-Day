@@ -14,7 +14,7 @@ enum ImageResolution: String {
 
 struct GetImage: TMDBImageRequest {
     var path: String {
-        "/t/p/\(imageResolution.rawValue)/\(posterPath)"
+        "/t/p/\(imageResolution.rawValue)\(posterPath)"
     }
     
     var imageResolution: ImageResolution

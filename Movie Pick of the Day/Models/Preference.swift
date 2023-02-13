@@ -13,10 +13,17 @@ struct Preference: Codable, CustomStringConvertible {
     var genres: [String]
     
     var description: String {
-        """
+            """
             language: \(language)
             includeAdult: \(includeAdult)
             genres: \(genres)
             """
+    }
+    
+    var summary: String {
+        var summary = "\(language)"
+        summary += ", \(includeAdult ? "Adult" : "Non-Adult")"
+        summary += ", " +  genres.joined(separator: ", ")
+        return summary
     }
 }

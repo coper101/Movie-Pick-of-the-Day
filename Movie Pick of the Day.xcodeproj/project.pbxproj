@@ -18,7 +18,10 @@
 		2763BF9329938A47008D609A /* ChipOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF9229938A47008D609A /* ChipOptionView.swift */; };
 		2763BF952993A367008D609A /* ChipToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF942993A367008D609A /* ChipToggleView.swift */; };
 		2763BF972993A633008D609A /* ChipButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF962993A633008D609A /* ChipButtonView.swift */; };
-		2763BF992993D4D3008D609A /* Loggging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF982993D4D3008D609A /* Loggging.swift */; };
+		2763BF992993D4D3008D609A /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF982993D4D3008D609A /* Logging.swift */; };
+		277F84692999FDC500109CD3 /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277F84682999FDC500109CD3 /* ImageRepository.swift */; };
+		277F846D2999FFBF00109CD3 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277F846C2999FFBF00109CD3 /* AsyncImageView.swift */; };
+		277F846F299A2B1500109CD3 /* ImageCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277F846E299A2B1500109CD3 /* ImageCacheRepository.swift */; };
 		27BB19D5296FC67700851E14 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D4296FC67700851E14 /* Preference.swift */; };
 		27BB19D7296FC83400851E14 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D6296FC83400851E14 /* Date.swift */; };
 		27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D8296FCC0F00851E14 /* MovieDay.swift */; };
@@ -102,7 +105,10 @@
 		2763BF9229938A47008D609A /* ChipOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipOptionView.swift; sourceTree = "<group>"; };
 		2763BF942993A367008D609A /* ChipToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipToggleView.swift; sourceTree = "<group>"; };
 		2763BF962993A633008D609A /* ChipButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipButtonView.swift; sourceTree = "<group>"; };
-		2763BF982993D4D3008D609A /* Loggging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loggging.swift; sourceTree = "<group>"; };
+		2763BF982993D4D3008D609A /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		277F84682999FDC500109CD3 /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
+		277F846C2999FFBF00109CD3 /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		277F846E299A2B1500109CD3 /* ImageCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheRepository.swift; sourceTree = "<group>"; };
 		27BB19D4296FC67700851E14 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		27BB19D6296FC83400851E14 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		27BB19D8296FCC0F00851E14 /* MovieDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDay.swift; sourceTree = "<group>"; };
@@ -250,6 +256,7 @@
 				2763BF9229938A47008D609A /* ChipOptionView.swift */,
 				2763BF942993A367008D609A /* ChipToggleView.swift */,
 				2763BF5229926899008D609A /* SelectionChipsView.swift */,
+				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
 			);
 			path = "Reusable Comp";
 			sourceTree = "<group>";
@@ -365,6 +372,8 @@
 			children = (
 				27FDBDAB29696887008FA32E /* AppDataRepository.swift */,
 				27FDBDAD29696887008FA32E /* MovieRepository.swift */,
+				277F846E299A2B1500109CD3 /* ImageCacheRepository.swift */,
+				277F84682999FDC500109CD3 /* ImageRepository.swift */,
 				27FDBDAC29696887008FA32E /* LocalStorage.swift */,
 				27FDBDAE29696887008FA32E /* TMDBService.swift */,
 				27FDBDAA29696887008FA32E /* Keys.swift */,
@@ -399,7 +408,7 @@
 				27BB19DA296FE18700851E14 /* Coder.swift */,
 				27BB19DE296FF41B00851E14 /* Shuffle.swift */,
 				27BB19E4297007BC00851E14 /* Validation.swift */,
-				2763BF982993D4D3008D609A /* Loggging.swift */,
+				2763BF982993D4D3008D609A /* Logging.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -547,6 +556,7 @@
 				27FDBDBA29696887008FA32E /* Keys.swift in Sources */,
 				27BB19DB296FE18700851E14 /* Coder.swift in Sources */,
 				27FDBDDC296969BA008FA32E /* Response.swift in Sources */,
+				277F846F299A2B1500109CD3 /* ImageCacheRepository.swift in Sources */,
 				27FDBDE0296969BA008FA32E /* Dimensions.swift in Sources */,
 				27BB19D7296FC83400851E14 /* Date.swift in Sources */,
 				2763BF952993A367008D609A /* ChipToggleView.swift in Sources */,
@@ -568,7 +578,7 @@
 				2763BF492992455E008D609A /* SearchBarView.swift in Sources */,
 				27FDBDDB296969BA008FA32E /* Genre.swift in Sources */,
 				2763BF4B29924860008D609A /* Modifier.swift in Sources */,
-				2763BF992993D4D3008D609A /* Loggging.swift in Sources */,
+				2763BF992993D4D3008D609A /* Logging.swift in Sources */,
 				27FDBDE2296969BA008FA32E /* Text.swift in Sources */,
 				27FDBD7429696773008FA32E /* Type.swift in Sources */,
 				27FDBDCC296968B0008FA32E /* PickRevealView.swift in Sources */,
@@ -576,6 +586,7 @@
 				27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */,
 				2763BF5329926899008D609A /* SelectionChipsView.swift in Sources */,
 				27FDBDBB29696887008FA32E /* AppDataRepository.swift in Sources */,
+				277F84692999FDC500109CD3 /* ImageRepository.swift in Sources */,
 				27FAD251298A77230069DE72 /* MovieCardView.swift in Sources */,
 				27FDBD7829696773008FA32E /* Color.swift in Sources */,
 				27FDBDBE29696887008FA32E /* TMDBService.swift in Sources */,
@@ -585,6 +596,7 @@
 				2763BF552992793B008D609A /* StatusBarBackgroundView.swift in Sources */,
 				27FDBDDA296969BA008FA32E /* Movie.swift in Sources */,
 				27BB19E5297007BC00851E14 /* Validation.swift in Sources */,
+				277F846D2999FFBF00109CD3 /* AsyncImageView.swift in Sources */,
 				27FDBDE1296969BA008FA32E /* Frame.swift in Sources */,
 				27FAD24C298A627F0069DE72 /* PickCardView.swift in Sources */,
 				27FAD24E298A6F080069DE72 /* Shadow.swift in Sources */,
