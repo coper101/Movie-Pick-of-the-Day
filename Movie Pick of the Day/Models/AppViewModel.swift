@@ -98,6 +98,7 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.similarMovies = $0 }
             .store(in: &subscriptions)
         
@@ -173,28 +174,43 @@ extension AppViewModel {
         }
         
         preferenceInput = .init(
-            language: "EN",
+            language: "en",
+            originalLanguage: "en",
             includeAdult: false,
             genres: []
         )
-        
     }
     
     func didTapSavePreferences() {
         isPreferencesSheetShown = false
         
-        self.preferenceInput?.genres = genresSelection
-        self.preferenceInput?.includeAdult = isAdultSelected
+        let selectedGenreIDs: [String] = genres
+            .filter { genre in
+                genresSelection.reduce(false) { isSelected, genreName in
+                    isSelected || genreName == genre.name
+                }
+            }
+            .compactMap(\.id)
+            .map { "\($0)" }
+            
+        var selectedISOLanguage = "en"
         
-        // TODO: Derive name from english name
-        self.preferenceInput?.language = languageSelected.isEmpty ? "EN" : languageSelected
+        if
+            let selectedLanguage = languages.first(where: { $0.englishName == languageSelected }),
+            let isoLanguage = selectedLanguage.iso6391
+        {
+            selectedISOLanguage = isoLanguage
+        }
+                    
+        self.preferenceInput?.language = "en"
+        self.preferenceInput?.originalLanguage = selectedISOLanguage
+        self.preferenceInput?.includeAdult = isAdultSelected
+        self.preferenceInput?.genres = selectedGenreIDs
         
         guard let preferenceInput else {
             return
         }
-        
-        dump(preferenceInput)
-        
+                
         appDataRepository.setPreference(preferenceInput)
         
         self.preferenceInput = nil
@@ -222,6 +238,7 @@ extension AppViewModel {
         movieRepository.getPreferredMovies(
             includeAdult: preference.includeAdult,
             language: preference.language,
+            originalLanguage: preference.originalLanguage,
             with: preference.genres
         )
     }

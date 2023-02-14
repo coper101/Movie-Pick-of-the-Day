@@ -8,27 +8,55 @@
 import Foundation
 import UIKit
 
+/*
+ Avatar - The Way of Water (Sample Movie)
+{
+     "adult": false,
+     "backdrop_path": "/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
+     "genre_ids": [
+       878,
+       12,
+       28
+     ],
+     "id": 76600,
+     "original_language": "en",
+     "original_title": "Avatar: The Way of Water",
+     "overview": "Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.",
+     "popularity": 1601.327,
+     "poster_path": "/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
+     "release_date": "2022-12-14",
+     "title": "Avatar: The Way of Water",
+     "video": false,
+     "vote_average": 7.737,
+     "vote_count": 5243
+}
+ */
+
 class TestData {
     
     // MARK: Movie
     static func createMovie(
         id: Int,
         title: String? = nil,
-        overview: String? = nil
+        overview: String? = nil,
+        releasedDate: String? = nil,
+        originalLanguage: String? = nil,
+        adult: Bool? = nil,
+        voteAverage: Double? = nil
     ) -> Movie {
         .init(
             id: id,
             title: title,
             originalTitle: nil,
             overview: overview,
-            releaseDate: nil,
-            voteAverage: nil,
+            releaseDate: releasedDate,
+            voteAverage: voteAverage,
             voteCount: nil,
             popularity: nil,
             genreIDs: nil,
-            adult: nil,
+            adult: adult,
             video: nil,
-            originalLanguage: nil,
+            originalLanguage: originalLanguage,
             posterPath: nil,
             backdropPath: nil
         )
@@ -50,11 +78,15 @@ class TestData {
     }
     
     static let sampleMovie = createMovie(
-        id: 101,
+        id: 76600,
         title: "Avatar: The Way of Water",
         overview: """
                 Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.
-                """
+                """,
+        releasedDate: "2022-12-14",
+        originalLanguage: "en",
+        adult: false,
+        voteAverage: 7.737
     )
     
     static let sampleMovies: [Movie] = [
@@ -148,11 +180,11 @@ extension TestData {
         appViewModel.genres = sampleGenres
         appViewModel.isAdultSelected = false
         
-        
         appViewModel.preference = .init(
-            language: "English",
+            language: "en",
+            originalLanguage: "en",
             includeAdult: true,
-            genres: Array(sampleGenres[..<4]).compactMap(\.name)
+            genres: Array(sampleGenres[..<4]).compactMap(\.id).map { "\($0)" }
         )
         
         return appViewModel

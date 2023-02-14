@@ -40,6 +40,7 @@ protocol TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error>
     
@@ -76,13 +77,15 @@ class TMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error>{
         Networking.request(
             request: GetDiscoverMovies(
                 language: language,
                 includeAdult: includeAdult,
-                withGenres: genres
+                withGenres: genres,
+                withOriginalLanguage: originalLanguage
             )
         )
     }

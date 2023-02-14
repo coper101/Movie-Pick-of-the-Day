@@ -75,6 +75,7 @@ class MockTMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error> {
         Just(
@@ -151,6 +152,7 @@ class MockFailTMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error> {
         Fail(error: NetworkError.server("Server Error"))
@@ -383,7 +385,8 @@ final class TMDB_Service_Tests: XCTestCase {
         
         MockTMDBService.discoverMovies(
             includeAdult: false,
-            language: "EN",
+            language: "en",
+            originalLanguage: "en",
             with: ["Action", "Adventure"]
         )
             .sink { completion in
@@ -413,7 +416,8 @@ final class TMDB_Service_Tests: XCTestCase {
 
         MockFailTMDBService.discoverMovies(
             includeAdult: false,
-            language: "EN",
+            language: "en",
+            originalLanguage: "en",
             with: ["Action", "Adventure"]
         )
             .sink { completion in

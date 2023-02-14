@@ -15,9 +15,25 @@ extension String {
         return dateFormatter.date(from: self) ?? Date()
     }
     
+    /// Coverts Formatted String Date to Date
+    /// e.g. 2022-12-14
+    func toDate(format: String = "yyyy-MM-dd") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: self)
+    }
+    
 }
 
 extension Date {
+    
+    /// Formats the Date to `dd mm yy`
+    /// e.g. 1 Jan 22
+    func toDayMonthYearFormat() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM yy"
+        return dateFormatter.string(from: self)
+    }
     
     /// Returns the Date Components
     func toDateComp() -> DateComponents {

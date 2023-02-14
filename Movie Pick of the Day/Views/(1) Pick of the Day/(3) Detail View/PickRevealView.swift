@@ -45,6 +45,9 @@ struct PickRevealView: View {
         ZStack(alignment: .top) {
             
             // MARK: Layer 1 - Background Image
+            Colors.background.color
+            Colors.backgroundLight.color
+            
             background
                 .padding(.bottom, 300)
             
@@ -79,7 +82,7 @@ struct PickRevealView: View {
                             
                             // VOTE AVERAGE
                             MovieInfoBoxView(
-                                title: "\((movie.voteAverage ?? 0)) / 10",
+                                title: movie.displayedVoteAverage,
                                 subtitle: "Vote Average"
                             )
                             
@@ -88,7 +91,7 @@ struct PickRevealView: View {
                             
                             // RELEASE DATE
                             MovieInfoBoxView(
-                                title: movie.releaseDate ?? "",
+                                title: movie.displayedReleasedDate,
                                 subtitle: "Release Date"
                             )
                             
@@ -97,7 +100,7 @@ struct PickRevealView: View {
                             
                             // LANGUAGE
                             MovieInfoBoxView(
-                                title: movie.originalLanguage ?? "",
+                                title: movie.displayedLanguage,
                                 subtitle: "Language"
                             )
                         }
@@ -129,7 +132,8 @@ struct PickRevealView: View {
                             } //: ForEach
 
                         } //: LazyHGrid
-                        .frame(height: 164)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 26)
                         .padding(.horizontal, 21)
                         .padding(.bottom, 50)
                         
@@ -178,7 +182,7 @@ struct PickRevealView_Previews: PreviewProvider {
             uiImage: UIImage(named: Icons.samplePoster.rawValue)!
         )
             .previewLayout(.sizeThatFits)
-            .environmentObject(AppViewModel())
+            .environmentObject(TestData.appViewModel)
             .environmentObject(ImageCacheRepository())
     }
 }

@@ -133,7 +133,8 @@ class MockAppDataRepository: AppDataRepositoryType {
     /// - Preference
     func getPreference() -> Preference? {
         .init(
-            language: "EN",
+            language: "en",
+            originalLanguage: "en",
             includeAdult: false,
             genres: ["Action", "Adventure"]
         )

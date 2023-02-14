@@ -40,6 +40,7 @@ protocol MovieRepositoryType {
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) -> Void
     
@@ -165,11 +166,13 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) {
         TMDBService.discoverMovies(
             includeAdult: includeAdult,
             language: language,
+            originalLanguage: originalLanguage,
             with: genres
         )
         .sink { completion in
@@ -313,6 +316,7 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
+        originalLanguage: String,
         with genres: [String]
     ) {
         preferredMovies = [

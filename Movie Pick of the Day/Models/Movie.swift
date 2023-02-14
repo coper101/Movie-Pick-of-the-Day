@@ -46,4 +46,25 @@ struct Movie: Codable, CustomDebugStringConvertible, Identifiable {
             
             """
     }
+    
+    var displayedVoteAverage: String {
+        guard let voteAverage else {
+            return "NA"
+        }
+        return "\(voteAverage.toDp()) / 10"
+    }
+    
+    var displayedReleasedDate: String {
+        guard
+            let releaseDate,
+            let date = releaseDate.toDate()
+        else {
+            return "NA"
+        }
+        return date.toDayMonthYearFormat()
+    }
+    
+    var displayedLanguage: String {
+        originalLanguage?.uppercased() ?? "NA"
+    }
 }
