@@ -48,9 +48,11 @@ extension View {
 
 // MARK: Custom Corner Modifier
 struct CornerRadiusStyle: ViewModifier {
+    // MARK: - Props
     var radius: CGFloat
     var corners: UIRectCorner
 
+    // MARK: - UI
     struct CornerRadiusShape: Shape {
 
         var radius = CGFloat.infinity
@@ -71,5 +73,60 @@ struct CornerRadiusStyle: ViewModifier {
 extension View {
     func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
         ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
+    }
+}
+
+// MARK: Dynamic Overlay Modifier
+struct DynamicOverlayModifier<TheContent>: ViewModifier where TheContent: View {
+    // MARK: - Props
+    var alignment: Alignment
+    var theContent: () -> TheContent
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        Group {
+            if #available(iOS 15.0, *) {
+                content.overlay(alignment: alignment, content: theContent)
+            } else {
+                content.overlay(theContent(), alignment: alignment)
+            }
+        }
+    }
+}
+
+extension View {
+    
+    func dynamicOverlay(alignment: Alignment, _ theContent: @escaping () -> some View) -> some View {
+        self.modifier(
+            DynamicOverlayModifier(
+                alignment: alignment,
+                theContent: theContent
+            )
+        )
+    }
+}
+
+// MARK: - Slow Pop Animation
+struct SlowPopAnimationModifier: ViewModifier {
+    // MARK: - Props
+    @State private var isAnimating: Bool = false
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        content
+            .opacity(isAnimating ? 1 : 0)
+            .scaleEffect(isAnimating ? 1 : 0.8)
+            .onAppear {
+                withAnimation(.slowPop()) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
+extension View {
+    
+    func withSlowPopAnimation() -> some View {
+        self.modifier(SlowPopAnimationModifier())
     }
 }

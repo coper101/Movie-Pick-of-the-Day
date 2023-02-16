@@ -52,6 +52,7 @@ struct MovieCardView: View {
         ZStack(alignment: .top) {
             
             if let movieDay {
+                
                 // Layer 1: DAY
                 Text(movieDay.day.name)
                     .textStyle(
@@ -70,7 +71,8 @@ struct MovieCardView: View {
                     )
                     .offset(y: -30)
                     .zIndex(1)
-            }
+                
+            } //: if
             
         } //: VStack
         .padding(.horizontal, 16)
@@ -82,7 +84,7 @@ struct MovieCardView: View {
         .clipShape(
             RoundedRectangle(cornerRadius: 15)
         )
-        .cardShadow()
+        .cardShadow(y: 5, opacity: 0.5)
     }
     
     var body: some View {
@@ -103,9 +105,9 @@ struct MovieCardView: View {
             
         } //: VStack
         .frame(width: 127)
+        .withSlowPopAnimation()
     }
-    
-    // MARK: - Actions
+
 }
 
 // MARK: - Preview

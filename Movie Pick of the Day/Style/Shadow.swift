@@ -9,12 +9,14 @@ import SwiftUI
 
 struct ShadowModifier: ViewModifier {
     var y: CGFloat
+    var opacity: CGFloat
+    var radius: CGFloat
     
     func body(content: Content) -> some View {
         content
             .shadow(
-                color: .black.opacity(0.25),
-                radius: 8,
+                color: .black.opacity(opacity),
+                radius: radius,
                 x: 0,
                 y: y
             )
@@ -23,8 +25,18 @@ struct ShadowModifier: ViewModifier {
 
 extension View {
     
-    func cardShadow(y: CGFloat = 10) -> some View {
-        modifier(ShadowModifier(y: y))
+    func cardShadow(
+        y: CGFloat = 5,
+        opacity: CGFloat = 0.5,
+        radius: CGFloat = 5
+    ) -> some View {
+        modifier(
+            ShadowModifier(
+                y: y,
+                opacity: opacity,
+                radius: radius
+            )
+        )
     }
     
 }

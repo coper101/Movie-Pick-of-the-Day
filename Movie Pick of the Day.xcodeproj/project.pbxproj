@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270FC6FF299E3A25004226CD /* MoviePicksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270FC6FE299E3A25004226CD /* MoviePicksView.swift */; };
+		270FC701299E3BB8004226CD /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270FC700299E3BB8004226CD /* Animation.swift */; };
+		272C3A4C299E1BAC00316768 /* DividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C3A4B299E1BAC00316768 /* DividerView.swift */; };
+		272C3A50299E1EF700316768 /* SimilarMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C3A4F299E1EF700316768 /* SimilarMoviesView.swift */; };
+		272C3A52299E22B200316768 /* DisappearingGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C3A51299E22B200316768 /* DisappearingGradientView.swift */; };
+		272C3A54299E2BA100316768 /* ResultMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C3A53299E2BA100316768 /* ResultMoviesView.swift */; };
+		275D09EF299E18B6000F6169 /* MovieInfoBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */; };
 		276309B7298261BE009392F8 /* TMDB_Service_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */; };
 		2763BF492992455E008D609A /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF482992455E008D609A /* SearchBarView.swift */; };
 		2763BF4B29924860008D609A /* Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF4A29924860008D609A /* Modifier.swift */; };
@@ -95,6 +102,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		270FC6FE299E3A25004226CD /* MoviePicksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviePicksView.swift; sourceTree = "<group>"; };
+		270FC700299E3BB8004226CD /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
+		272C3A4B299E1BAC00316768 /* DividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerView.swift; sourceTree = "<group>"; };
+		272C3A4F299E1EF700316768 /* SimilarMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMoviesView.swift; sourceTree = "<group>"; };
+		272C3A51299E22B200316768 /* DisappearingGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisappearingGradientView.swift; sourceTree = "<group>"; };
+		272C3A53299E2BA100316768 /* ResultMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMoviesView.swift; sourceTree = "<group>"; };
+		275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfoBoxView.swift; sourceTree = "<group>"; };
 		276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB_Service_Tests.swift; sourceTree = "<group>"; };
 		2763BF482992455E008D609A /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		2763BF4A29924860008D609A /* Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifier.swift; sourceTree = "<group>"; };
@@ -218,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDBDC6296968AF008FA32E /* PickOfTheDayView.swift */,
+				270FC6FE299E3A25004226CD /* MoviePicksView.swift */,
 				27FAD246298A5C900069DE72 /* TopBarView.swift */,
 				27FAD24B298A627F0069DE72 /* PickCardView.swift */,
 				2763BF4C2992646F008D609A /* PreferencesSheetView.swift */,
@@ -232,6 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				27FDBDC8296968AF008FA32E /* PickRevealView.swift */,
+				275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */,
+				272C3A4F299E1EF700316768 /* SimilarMoviesView.swift */,
 			);
 			path = "(3) Detail View";
 			sourceTree = "<group>";
@@ -241,6 +258,7 @@
 			children = (
 				27FDBDC5296968AF008FA32E /* SearchView.swift */,
 				2763BF482992455E008D609A /* SearchBarView.swift */,
+				272C3A53299E2BA100316768 /* ResultMoviesView.swift */,
 			);
 			path = "(2) Search";
 			sourceTree = "<group>";
@@ -249,16 +267,18 @@
 			isa = PBXGroup;
 			children = (
 				27FAD249298A5E380069DE72 /* RoundButtonView.swift */,
-				27FAD250298A77230069DE72 /* MovieCardView.swift */,
+				27FAD254298A7DEB0069DE72 /* CircledButtonView.swift */,
 				27FAD252298A7D490069DE72 /* PagerTabView.swift */,
 				27FAD256298A82070069DE72 /* PagerView.swift */,
-				27FAD254298A7DEB0069DE72 /* CircledButtonView.swift */,
-				2763BF542992793B008D609A /* StatusBarBackgroundView.swift */,
 				2763BF962993A633008D609A /* ChipButtonView.swift */,
 				2763BF9229938A47008D609A /* ChipOptionView.swift */,
 				2763BF942993A367008D609A /* ChipToggleView.swift */,
 				2763BF5229926899008D609A /* SelectionChipsView.swift */,
+				272C3A4B299E1BAC00316768 /* DividerView.swift */,
+				2763BF542992793B008D609A /* StatusBarBackgroundView.swift */,
+				272C3A51299E22B200316768 /* DisappearingGradientView.swift */,
 				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
+				27FAD250298A77230069DE72 /* MovieCardView.swift */,
 			);
 			path = "Reusable Comp";
 			sourceTree = "<group>";
@@ -268,6 +288,7 @@
 			children = (
 				27FAD24D298A6F080069DE72 /* Shadow.swift */,
 				2763BF4A29924860008D609A /* Modifier.swift */,
+				270FC700299E3BB8004226CD /* Animation.swift */,
 			);
 			path = Style;
 			sourceTree = "<group>";
@@ -556,13 +577,17 @@
 				27FDBDBD29696887008FA32E /* MovieRepository.swift in Sources */,
 				27FDBDDE296969BA008FA32E /* AppViewModel.swift in Sources */,
 				277F84A1299BA64000109CD3 /* Numbers.swift in Sources */,
+				275D09EF299E18B6000F6169 /* MovieInfoBoxView.swift in Sources */,
 				2763BF9329938A47008D609A /* ChipOptionView.swift in Sources */,
 				27FDBDBA29696887008FA32E /* Keys.swift in Sources */,
+				272C3A54299E2BA100316768 /* ResultMoviesView.swift in Sources */,
 				27BB19DB296FE18700851E14 /* Coder.swift in Sources */,
+				272C3A50299E1EF700316768 /* SimilarMoviesView.swift in Sources */,
 				27FDBDDC296969BA008FA32E /* Response.swift in Sources */,
 				277F846F299A2B1500109CD3 /* ImageCacheRepository.swift in Sources */,
 				27FDBDE0296969BA008FA32E /* Dimensions.swift in Sources */,
 				27BB19D7296FC83400851E14 /* Date.swift in Sources */,
+				270FC6FF299E3A25004226CD /* MoviePicksView.swift in Sources */,
 				2763BF952993A367008D609A /* ChipToggleView.swift in Sources */,
 				27BB19E3296FFBBC00851E14 /* Test.swift in Sources */,
 				2763BF972993A633008D609A /* ChipButtonView.swift in Sources */,
@@ -594,6 +619,7 @@
 				27FAD251298A77230069DE72 /* MovieCardView.swift in Sources */,
 				27FDBD7829696773008FA32E /* Color.swift in Sources */,
 				27FDBDBE29696887008FA32E /* TMDBService.swift in Sources */,
+				272C3A4C299E1BAC00316768 /* DividerView.swift in Sources */,
 				27FDBDCA296968B0008FA32E /* PickOfTheDayView.swift in Sources */,
 				2763BF5129926751008D609A /* CloseButtonView.swift in Sources */,
 				2763BF4D2992646F008D609A /* PreferencesSheetView.swift in Sources */,
@@ -604,6 +630,8 @@
 				27FDBDE1296969BA008FA32E /* Frame.swift in Sources */,
 				27FAD24C298A627F0069DE72 /* PickCardView.swift in Sources */,
 				27FAD24E298A6F080069DE72 /* Shadow.swift in Sources */,
+				270FC701299E3BB8004226CD /* Animation.swift in Sources */,
+				272C3A52299E22B200316768 /* DisappearingGradientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,8 +802,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -809,8 +837,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (

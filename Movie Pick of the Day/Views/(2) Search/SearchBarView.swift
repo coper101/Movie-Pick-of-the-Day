@@ -20,15 +20,19 @@ struct SearchBarView: View {
             text: $text,
             onCommit: onCommit
         )
-            .textStyle(size: 24)
-            .frame(height: 79)
-            .padding(.horizontal, 28)
-            .background(
-                RoundedRectangle(cornerRadius: 22)
-                    .fill(Colors.onBackground.color)
-                    .opacity(0.2)
-            )
-            .cardShadow(y: 5)
+        .textStyle(
+            font: .interSemiBold,
+            size: 24
+        )
+        .frame(height: 79)
+        .padding(.horizontal, 28)
+        .background(
+            RoundedRectangle(cornerRadius: 22)
+                .fill(Colors.onBackground.color)
+                .opacity(0.2)
+        )
+        .clipped()
+        .cardShadow()
     }
     
     // MARK: - Actions

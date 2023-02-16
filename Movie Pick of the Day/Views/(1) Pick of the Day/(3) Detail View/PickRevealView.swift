@@ -16,6 +16,8 @@ struct PickRevealView: View {
     var movie: Movie
     var uiImage: UIImage?
     
+    let paddingHorizontal: CGFloat = 24
+    
     // MARK: - UI
     var background: some View {
         ZStack {
@@ -58,14 +60,17 @@ struct PickRevealView: View {
                     
                     // TITLE
                     Text(movie.title ?? "")
+                        .kerning(1)
                         .textStyle(
                             font: .interExtraBold,
                             size: 24
                         )
-                        .padding(.horizontal, 22)
+                        .padding(.horizontal, paddingHorizontal)
+                        .padding(.top, 30)
                     
                     // DESCRIPTION
                     Text(movie.overview  ?? "")
+                        .kerning(0.5)
                         .textStyle(
                             font: .interSemiBold,
                             size: 17,
@@ -73,7 +78,7 @@ struct PickRevealView: View {
                         )
                         .opacity(0.5)
                         .padding(.top, 24)
-                        .padding(.horizontal, 22)
+                        .padding(.horizontal, paddingHorizontal)
                     
                     // MORE INFO
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -86,8 +91,7 @@ struct PickRevealView: View {
                                 subtitle: "Vote Average"
                             )
                             
-                            Divider()
-                                .padding(.vertical, 8)
+                            DividerView()
                             
                             // RELEASE DATE
                             MovieInfoBoxView(
@@ -95,8 +99,7 @@ struct PickRevealView: View {
                                 subtitle: "Release Date"
                             )
                             
-                            Divider()
-                                .padding(.vertical, 8)
+                            DividerView()
                             
                             // LANGUAGE
                             MovieInfoBoxView(
@@ -105,47 +108,18 @@ struct PickRevealView: View {
                             )
                         }
                         .padding(.top, 28)
-                        .frame(height: 80)
-                        .padding(.horizontal, 22)
+                        .padding(.bottom, 6)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, paddingHorizontal)
 
                     } //: ScrollView
                     
                     // SIMILAR MOVIES
-                    ScrollView(.horizontal, showsIndicators: false) {
-
-                        LazyHStack(spacing: 22) {
-
-                            ForEach(appViewModel.similarMovies) { movie in
-                                                            
-                                Button(action: {}) {
-
-                                    MovieCardView(
-                                        movieDay: nil,
-                                        movieTitle: movie.title ?? "",
-                                        uiImage: nil,
-                                        posterPath: movie.posterPath,
-                                        posterResolution: .w500
-                                    )
-
-                                } //: Button
-
-                            } //: ForEach
-
-                        } //: LazyHGrid
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, 26)
-                        .padding(.horizontal, 21)
-                        .padding(.bottom, 50)
-                        
-                        Spacer()
-                        
-                    } //: ScrollView
-                    .background(Colors.backgroundLight.color)
-                    .padding(.top, 44)
+                    SimilarMoviesView(movies: appViewModel.similarMovies)
+                        .padding(.top, 44)
                     
                 } //: VStack
-                .frame(height: UIScreen.main.bounds.height, alignment: .top)
-                .padding(.top, 24)
+                .frame(minHeight: dimensions.screen.height * 0.75, alignment: .top)
                 .background(Colors.background.color)
                 .cornerRadius(radius: 22, corners: [.topLeft, .topRight])
                 .padding(.top, 280)
@@ -160,6 +134,13 @@ struct PickRevealView: View {
                 },
                 alignment: .topTrailing
             )
+            .dynamicOverlay(alignment: .bottom) {
+                DisappearingGradientView(
+                    contentDirection: .bottom,
+                    color: .background
+                )
+                .frame(height: 74)
+            }
             
         } //: ZStack
     }
@@ -184,34 +165,5 @@ struct PickRevealView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .environmentObject(TestData.appViewModel)
             .environmentObject(ImageCacheRepository())
-    }
-}
-
-struct MovieInfoBoxView: View {
-    // MARK: - Props
-    var title: String
-    var subtitle: String
-    
-    // MARK: - UI
-    var body: some View {
-        VStack(spacing: 4) {
-                
-            // TITLE
-            Spacer()
-            Text(title)
-                .textStyle(
-                    font: .interExtraBold,
-                    size: 18
-                )
-            
-            // SUBTITLE
-            Text(subtitle)
-                .textStyle(
-                    font: .interBold,
-                    size: 12
-                )
-                .opacity(0.5)
-            
-        } //: VStack
     }
 }

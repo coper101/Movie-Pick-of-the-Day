@@ -1,0 +1,57 @@
+//
+//  MoviePicksView.swift
+//  Movie Pick of the Day
+//
+//  Created by Wind Versi on 16/2/23.
+//
+
+import SwiftUI
+
+struct MoviePicksView: View {
+    // MARK: - Props
+    var movies: [MovieDay]
+    
+    // MARK: - UI
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            
+            LazyHGrid(
+                rows: [.init(.flexible())],
+                spacing: 22
+            ) {
+                
+                ForEach(movies) { movieDay in
+                    
+                    let movie = movieDay.movie
+                    
+                    Button(action: {}) {
+                        
+                        MovieCardView(
+                            movieDay: movieDay,
+                            uiImage: nil,
+                            posterPath: movie?.posterPath,
+                            posterResolution: .w500
+                        )
+                        
+                    } //: Button
+                    
+                } //: ForEach
+                
+            } //: LazyHGrid
+            .frame(height: 164)
+            .padding(.horizontal, 21)
+            
+        } //: ScrollView
+    }
+    
+    // MARK: - Actions
+}
+
+// MARK: - Preview
+struct MoviePicksView_Previews: PreviewProvider {
+    static var previews: some View {
+        MoviePicksView(movies: TestData.sampleMoviePicks)
+            .previewLayout(.sizeThatFits)
+            .environmentObject(ImageCacheRepository())
+    }
+}

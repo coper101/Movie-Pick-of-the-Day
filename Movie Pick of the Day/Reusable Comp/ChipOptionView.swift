@@ -37,6 +37,7 @@ struct ChipOptionView: View {
             action: toggleSelection
         )
         .transition(.opacity)
+        .withSlowPopAnimation()
     }
     
     // MARK: - Actions

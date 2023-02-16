@@ -41,7 +41,7 @@ struct SelectionChipsView: View {
             
             if !options.isEmpty {
                 
-                VStack(alignment: .leading, spacing: 12) {
+                LazyVStack(alignment: .leading, spacing: 12) {
                     
                     let maxOptionsPerRow = 3
                     let optionRowsCount = (Double(options.count) / Double(maxOptionsPerRow)).rounded(.up)
@@ -53,7 +53,7 @@ struct SelectionChipsView: View {
                         let maxRowCountIndex = maxRowCount - 1
                         let maxDif = optionsCount - maxRowCount
                         
-                        HStack(spacing: 12) {
+                        LazyHStack(spacing: 12) {
                             
                             let maxOptionIndex = (maxDif >= 0) ? maxRowCountIndex : optionsCount - 1
                             let firstOptionIndex = maxRowCountIndex - 2

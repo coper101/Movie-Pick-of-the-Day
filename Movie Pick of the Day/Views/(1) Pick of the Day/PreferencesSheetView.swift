@@ -79,21 +79,30 @@ struct PreferencesSheetView: View {
                     
                 } //: ScrollView
 
-                                    
             } //: VStack
             .padding(.leading, 21)
             .padding(.trailing, 12)
             .fillMaxSize()
                             
             // MARK: Layer 2 - Save
-            HStack {
-                FilledButtonView(
-                    title: "Done",
-                    action: doneAction
+            VStack(spacing: 0) {
+                
+                DisappearingGradientView(
+                    contentDirection: .bottom,
+                    color: .background
                 )
-            }
-            .padding(.bottom, dimensions.insets.bottom)
-            .background(Colors.background.color)
+                .frame(height: 114)
+                
+                HStack {
+                    FilledButtonView(
+                        title: "Done",
+                        action: doneAction
+                    )
+                }
+                .padding(.bottom, dimensions.insets.bottom)
+                .background(Colors.background.color)
+                
+            } //: VStack
             
         } //: ZStack
         .frame(height: dimensions.screen.height * 0.85)

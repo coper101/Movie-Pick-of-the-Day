@@ -81,7 +81,7 @@ class TestData {
         id: 76600,
         title: "Avatar: The Way of Water",
         overview: """
-                Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure.
+                Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure. Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure
                 """,
         releasedDate: "2022-12-14",
         originalLanguage: "en",
@@ -184,7 +184,7 @@ extension TestData {
             language: "en",
             originalLanguage: "en",
             includeAdult: true,
-            genres: Array(sampleGenres[..<4]).compactMap(\.id).map { "\($0)" }
+            genres: Array(sampleGenres[..<4])
         )
         
         return appViewModel

@@ -41,10 +41,10 @@ struct AsyncImageView: View {
         switch imageRepository.phase {
         case .successful:
             image
-        case .failed:
+                .transition(.opacity.animation(.easeIn(duration: 1.0)))
+        case .failed, .loading:
             Color.black
-        case .loading:
-            Color.black
+                .transition(.opacity.animation(.easeIn(duration: 1.0)))
         }
     }
     

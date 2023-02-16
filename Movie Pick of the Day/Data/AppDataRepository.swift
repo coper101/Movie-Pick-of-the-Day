@@ -136,7 +136,10 @@ class MockAppDataRepository: AppDataRepositoryType {
             language: "en",
             originalLanguage: "en",
             includeAdult: false,
-            genres: ["Action", "Adventure"]
+            genres: [
+                .init(id: 1, name: "Action"),
+                .init(id: 2, name:  "Adventure")
+            ]
         )
     }
     

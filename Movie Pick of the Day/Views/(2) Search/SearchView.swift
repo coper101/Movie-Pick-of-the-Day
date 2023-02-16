@@ -11,6 +11,7 @@ struct SearchView: View {
     // MARK: - Props
     @EnvironmentObject private var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
+    
     @State private var searchText: String = ""
     
     // MARK: - UI
@@ -25,37 +26,14 @@ struct SearchView: View {
                 .zIndex(1)
                 .padding(.top, dimensions.insets.top)
             
-            // MARK: Layer 2 - Search
-            VStack(spacing: 0) {
+            // MARK: Layer 2 - Results
+            ResultMoviesView(movies: appViewModel.searchedMovies)
+                .padding(.bottom, 79 + dimensions.insets.bottom + 84)
+                .zIndex(0)
                 
-                // RESULTS
-                ScrollView {
-                        
-                    LazyVGrid(
-                        columns: [.init(.flexible()), .init(.flexible())],
-                        spacing: 30
-                    ) {
-                        
-                        ForEach(appViewModel.searchedMovies) { movie in
-
-                            MovieCardView(
-                                movieTitle: movie.title,
-                                uiImage: nil,
-                                posterPath: movie.posterPath,
-                                posterResolution: .w500
-                            )
-                            .transition(.opacity)
-
-                        } //: ForEach
-                        
-                    } //: LazyVGrid
-                    .padding(.top, 74 + dimensions.insets.top)
-                    .fillMaxSize(alignment: .top)
-                    .padding(.horizontal, 24)
-                    
-                } //: ScrollView
-                
-                // SEARCH
+            // MARK: Layer 3 - Search
+            VStack {
+                Spacer()
                 SearchBarView(
                     text: $searchText,
                     placeholder: "Search Movie",
@@ -63,13 +41,12 @@ struct SearchView: View {
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, dimensions.insets.bottom + 84)
-                
-            } //: ScrollView
-            .zIndex(0)
+            }
+            .zIndex(1)
             
         } //: ZStack
         .background(Colors.background.color)
-        .edgesIgnoringSafeArea(.top)
+        .ignoresSafeArea(.container, edges: .top)
     }
     
     // MARK: - Actions
@@ -86,5 +63,6 @@ struct SearchView_Previews: PreviewProvider {
         SearchView()
             .previewLayout(.sizeThatFits)
             .environmentObject(TestData.appViewModel)
+            .environmentObject(ImageCacheRepository())
     }
 }

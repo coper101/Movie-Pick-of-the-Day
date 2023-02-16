@@ -38,7 +38,7 @@ final class AppViewModel: ObservableObject {
     @Published var moviePicks: [MovieDay] = []
     @Published var preferenceInput: Preference?
     @Published var todaysMoviePick: MovieDay?
-
+    
     init(
         _ appDataRepository: AppDataRepositoryType = AppDataRepository(),
         _ movieRepository: MovieRepositoryType = MovieRepository(),
@@ -89,12 +89,12 @@ extension AppViewModel {
         
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.genres = $0 }
+            .sink { [weak self] in self?.genres = $0.sorted() }
             .store(in: &subscriptions)
         
         movieRepository.languagesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.languages = $0 }
+            .sink { [weak self] in self?.languages = $0.sorted() }
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
@@ -168,9 +168,11 @@ extension AppViewModel {
     func didTapPreferences() {
         isPreferencesSheetShown = true
 
-        DispatchQueue.global().async {
-            self.movieRepository.getGenres()
-            self.movieRepository.getLanguages()
+        if genres.isEmpty || languages.isEmpty {
+            DispatchQueue.global().async {
+                self.movieRepository.getGenres()
+                self.movieRepository.getLanguages()
+            }
         }
         
         preferenceInput = .init(
@@ -184,14 +186,12 @@ extension AppViewModel {
     func didTapSavePreferences() {
         isPreferencesSheetShown = false
         
-        let selectedGenreIDs: [String] = genres
+        let selectedGenres: [Genre] = genres
             .filter { genre in
                 genresSelection.reduce(false) { isSelected, genreName in
                     isSelected || genreName == genre.name
                 }
             }
-            .compactMap(\.id)
-            .map { "\($0)" }
             
         var selectedISOLanguage = "en"
         
@@ -205,7 +205,7 @@ extension AppViewModel {
         self.preferenceInput?.language = "en"
         self.preferenceInput?.originalLanguage = selectedISOLanguage
         self.preferenceInput?.includeAdult = isAdultSelected
-        self.preferenceInput?.genres = selectedGenreIDs
+        self.preferenceInput?.genres = selectedGenres
         
         guard let preferenceInput else {
             return
@@ -219,8 +219,8 @@ extension AppViewModel {
     func didTapClosePreferences() {
         isPreferencesSheetShown = false
         
-        movieRepository.clearGenres()
-        movieRepository.clearLanguages()
+        // movieRepository.clearGenres()
+        // movieRepository.clearLanguages()
         
         preferenceInput = nil
     }
@@ -239,7 +239,7 @@ extension AppViewModel {
             includeAdult: preference.includeAdult,
             language: preference.language,
             originalLanguage: preference.originalLanguage,
-            with: preference.genres
+            with: preference.genres.compactMap(\.id).map { "\($0)" }
         )
     }
     

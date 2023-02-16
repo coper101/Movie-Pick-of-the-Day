@@ -15,15 +15,13 @@ struct TopBarView: View {
     var body: some View {
         ZStack {
             
-            LinearGradient(
-                colors: [
-                    Colors.background.color,
-                    Colors.background.color.opacity(0)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
+            // Layer 1: BACKGROUND
+            DisappearingGradientView(
+                contentDirection: .top,
+                color: .background
             )
             
+            // Layer 2: TITLE
             Text(title)
                 .textStyle(
                     foregroundColor: .secondary,

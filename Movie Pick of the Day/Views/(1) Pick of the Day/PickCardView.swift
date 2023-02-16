@@ -79,6 +79,8 @@ struct PickCardView: View {
         .clipShape(
             RoundedRectangle(cornerRadius: 15)
         )
+        .cardShadow()
+        .withSlowPopAnimation()
     }
     
     // MARK: - Actions

@@ -5,7 +5,7 @@
 //  Created by Wind Versi on 7/1/23.
 //
 
-struct Language: Decodable, CustomDebugStringConvertible {
+struct Language: Decodable {
     let iso6391: String?
     let englishName: String?
     let name: String?
@@ -15,14 +15,16 @@ struct Language: Decodable, CustomDebugStringConvertible {
         case englishName = "english_name"
         case name
     }
-    
-    var debugDescription: String {
-        """
-            
-            iso6391: \(iso6391 ?? "")
-            english name: \(englishName ?? "")
-            name: \(name ?? "")
-            
-            """
+}
+
+extension Language: Comparable {
+    static func < (lhs: Language, rhs: Language) -> Bool {
+        guard
+            let name1 = lhs.englishName,
+            let name2 = rhs.englishName
+        else {
+            return false
+        }
+        return name1 < name2
     }
 }

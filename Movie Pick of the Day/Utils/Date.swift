@@ -31,7 +31,7 @@ extension Date {
     /// e.g. 1 Jan 22
     func toDayMonthYearFormat() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMM yy"
+        dateFormatter.dateFormat = "d MMM yyyy"
         return dateFormatter.string(from: self)
     }
     

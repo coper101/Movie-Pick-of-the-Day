@@ -67,7 +67,7 @@ struct PickOfTheDayView: View {
                 
                 VStack(spacing: 30) {
                     
-                    // Row 1: PREFERENCES + CREDIT SOURCE
+                    // MARK: Row 1 - Preferences + Source
                     HStack(spacing: 12) {
                     
                         RoundButtonView(
@@ -86,7 +86,7 @@ struct PickOfTheDayView: View {
                     } //: HStack
                     .padding(.horizontal, 21)
                     
-                    // Row 2: PICK OF THE DAY
+                    // MARK: Row 2 - Pick of the Day
                     Button(action: pickOfTheDayAction) {
 
                         if
@@ -101,7 +101,6 @@ struct PickOfTheDayView: View {
                                 posterPath: todaysMovie.posterPath,
                                 posterResolution: .original
                             )
-                            .cardShadow()
 
                         } else {
 
@@ -112,37 +111,9 @@ struct PickOfTheDayView: View {
                     } //: Button
                     .padding(.horizontal, 21)
                     
-                    // Row 3: PICKS
-                    ScrollView(.horizontal, showsIndicators: false) {
-
-                        LazyHGrid(
-                            rows: [.init(.flexible())],
-                            spacing: 22
-                        ) {
-
-                            ForEach(nextMovieDays) { movieDay in
-                                
-                                let movie = movieDay.movie
-                                
-                                Button(action: {}) {
-
-                                    MovieCardView(
-                                        movieDay: movieDay,
-                                        uiImage: nil,
-                                        posterPath: movie?.posterPath,
-                                        posterResolution: .w500
-                                    )
-
-                                } //: Button
-
-                            } //: ForEach
-
-                        } //: LazyHGrid
-                        .frame(height: 164)
-                        .padding(.horizontal, 21)
+                    // MARK: Row 3 - Picks for the Week
+                    MoviePicksView(movies: nextMovieDays)
                         .padding(.bottom, 50)
-
-                    } //: ScrollView
                     
                 } //: VStack
                 .padding(.top, 74 + dimensions.insets.top)

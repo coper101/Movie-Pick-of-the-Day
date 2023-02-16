@@ -47,6 +47,7 @@ struct AppView: View {
                     }
                 )
                 .background(Colors.background.color)
+                .statusBarHidden(false)
                 
             }
             
@@ -57,11 +58,12 @@ struct AppView: View {
             {
                 
                 PickRevealView(movie: movie)
+                    .statusBarHidden(true)
                 
             }
             
         } //: Group
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea(.container, edges: .all)
     }
     
     // MARK: - Actions

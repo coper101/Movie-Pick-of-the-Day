@@ -7,25 +7,18 @@
 
 import Foundation
 
-struct Preference: Codable, CustomStringConvertible {
+struct Preference: Codable {
     var language: String
     var originalLanguage: String
     var includeAdult: Bool
-    var genres: [String]
-    
-    var description: String {
-            """
-            language: \(language)
-            originalLanguage: \(originalLanguage)
-            includeAdult: \(includeAdult)
-            genres: \(genres)
-            """
-    }
+    var genres: [Genre]
     
     var summary: String {
         var summary = "\(originalLanguage.uppercased())"
-        summary += ", \(includeAdult ? "Adult" : "Non-Adult")"
-        summary += ", " +  genres.joined(separator: ", ")
+        summary += ", \(includeAdult ? "Include Adult" : "Exclude Adult")"
+        if !genres.isEmpty {
+            summary += ", " +  genres.compactMap(\.name).joined(separator: ", ")
+        }
         return summary
     }
 }
