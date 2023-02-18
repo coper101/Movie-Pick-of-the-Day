@@ -33,26 +33,36 @@ struct SearchView: View {
                 
             // MARK: Layer 3 - Search
             VStack {
+                
                 Spacer()
+                
                 SearchBarView(
                     text: $searchText,
                     placeholder: "Search Movie",
                     onCommit: commitAction
                 )
                 .padding(.horizontal, 24)
-                .padding(.bottom, dimensions.insets.bottom + 84)
-            }
+                .padding(.bottom, dimensions.insets.bottom + 92)
+                
+            } //: VStack
             .zIndex(1)
             
         } //: ZStack
         .background(Colors.background.color)
         .ignoresSafeArea(.container, edges: .top)
+        .onChange(of: searchText) { newValue in
+            print("text: ", newValue)
+        }
     }
     
     // MARK: - Actions
     func commitAction() {
         withAnimation {
-            appViewModel.didTapSearchOnCommitMovie(searchText)
+            appViewModel.didTapSearchOnCommitMovie(searchText) { hasError in
+                if hasError {
+                    self.searchText.removeAll()
+                }
+            }
         }
     }
 }

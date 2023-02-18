@@ -35,6 +35,7 @@ struct DisappearingGradientView: View {
             startPoint: startPoint,
             endPoint: endPoint
         )
+        .allowsHitTesting(false)
     }
     
     // MARK: - Actions

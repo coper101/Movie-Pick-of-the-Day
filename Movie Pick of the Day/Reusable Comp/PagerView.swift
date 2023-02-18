@@ -21,7 +21,7 @@ struct PagerView<Content, Content2>: View where Content: View, Content2: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             
-            // Layer 1: CONTENT
+            // MARK: Layer 1 - Content
             if selectedItem == .item1 {
                 item1Content
                     .fillMaxSize()
@@ -30,8 +30,9 @@ struct PagerView<Content, Content2>: View where Content: View, Content2: View {
                     .fillMaxSize()
             }
             
-            // Layer 2: PAGER SELECTION
+            // MARK: Layer 2 - Pager Tabs
             if isSelectionShown {
+                
                 PagerTabView(selectedItem: $selectedItem)
                     .onChange(of: selectedItem) { item in
                         switch item {
@@ -41,10 +42,11 @@ struct PagerView<Content, Content2>: View where Content: View, Content2: View {
                             item2Action()
                         }
                     }
-                    .padding(.bottom, bottomPadding)
+                    .padding(.bottom, bottomPadding + 12)
                     .transition(.opacity)
                     .animation(.linear(duration: 0.1), value: isSelectionShown)
-            }
+                
+            } //: if
             
         } //: ZStack
     }

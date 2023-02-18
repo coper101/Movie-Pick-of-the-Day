@@ -52,7 +52,7 @@ struct ResultMoviesView: View {
                 contentDirection: .bottom,
                 color: .background
             )
-            .frame(height: 74)
+            .frame(height: 45)
         }
     }
     

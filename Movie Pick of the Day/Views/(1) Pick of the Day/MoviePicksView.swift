@@ -38,7 +38,8 @@ struct MoviePicksView: View {
                 } //: ForEach
                 
             } //: LazyHGrid
-            .frame(height: 164)
+            .padding(.vertical, 12)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 21)
             
         } //: ScrollView
@@ -51,7 +52,9 @@ struct MoviePicksView: View {
 struct MoviePicksView_Previews: PreviewProvider {
     static var previews: some View {
         MoviePicksView(movies: TestData.sampleMoviePicks)
-            .previewLayout(.sizeThatFits)
             .environmentObject(ImageCacheRepository())
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
     }
 }

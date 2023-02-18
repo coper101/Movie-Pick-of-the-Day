@@ -63,6 +63,7 @@ struct SelectionChipsView: View {
                                 let title = options[index]
                                 
                                 ChipOptionView(
+                                    isSelected: selections.first(where: { $0 == title }) != nil,
                                     title: title,
                                     isSingleSelected: isSingleSelection ? title == selected : nil,
                                     toggleAction: { isSelected in
@@ -122,12 +123,15 @@ struct SelectionChipsView: View {
 // MARK: - Preview
 struct SelectionChipsView_Previews: PreviewProvider {
     static var options = TestData.sampleGenres.compactMap(\.name)
+    static var selections: [String] {
+        [ options[0], options[1] ]
+    }
     
     static var previews: some View {
         SelectionChipsView(
             isYes: .constant(true),
             selected: .constant(""),
-            selections: .constant([]),
+            selections: .constant(selections),
             options: options,
             title: "Genres"
         )

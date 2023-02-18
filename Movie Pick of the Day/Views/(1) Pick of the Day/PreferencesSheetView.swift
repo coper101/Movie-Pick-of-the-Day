@@ -20,90 +20,119 @@ struct PreferencesSheetView: View {
     var closeAction: Action
     var doneAction: Action
         
+    let topBarHeight: CGFloat = 54
+    
     // MARK: - UI
+    var topBar: some View {
+        VStack(spacing: 0) {
+            
+            // Row 1: TITLE
+            HStack(spacing: 0) {
+                
+                Text("Preferences")
+                    .textStyle(font: .interBold, size: 24)
+                    .opacity(0.45)
+                
+                Spacer()
+                
+                CloseButtonView(action: closeAction)
+                
+            } //: HStack
+            .padding(.top, 16)
+            .background(Colors.background.color)
+            
+            // Row 2: BACKGROUND
+            DisappearingGradientView(
+                contentDirection: .top,
+                color: .background
+            )
+            .frame(height: 24)
+
+        } //: ZStack
+    }
+    
+    var selections: some View {
+        ScrollView(showsIndicators: false) {
+
+            LazyVStack(spacing: 34) {
+                
+                // OPTION 1: ADULT MOVIE
+                SelectionChipsView(
+                    isYes: $isAdultSelected,
+                    selected: .constant(""),
+                    selections: .constant([]),
+                    title: "Adult Movie"
+                )
+                .padding(.top, 54 + 24)
+                
+                // SELECTION 2: GENRE
+                SelectionChipsView(
+                    isYes: .constant(false),
+                    selected: .constant(""),
+                    selections: $genresSelection,
+                    options: genresOptions,
+                    title: "Genre"
+                )
+                
+                // SELECTION 3: LANGUAGE
+                SelectionChipsView(
+                    isYes: .constant(false),
+                    selected: $languageSelected,
+                    selections: .constant([]),
+                    options: languagesOptions,
+                    isSingleSelection: true,
+                    title: "Language"
+                )
+                
+                Spacer()
+
+            } //: VStack
+            .padding(.bottom, 100)
+            
+        } //: ScrollView
+    }
+    
+    var doneButton: some View {
+        VStack(spacing: 0) {
+            
+            DisappearingGradientView(
+                contentDirection: .bottom,
+                color: .background
+            )
+            .frame(height: 42)
+            
+            HStack {
+                
+                FilledButtonView(
+                    title: "Done",
+                    action: doneAction
+                )
+                
+            } //: HStack
+            .padding(.bottom, dimensions.insets.bottom + 12)
+            .background(Colors.background.color)
+            
+        } //: VStack
+    }
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             
-            // MARK: Layer 1 - Sheet Content
-            VStack(spacing: 12) {
+            // MARK: - L1: Sheet Content
+            ZStack(alignment: .top) {
+                                
+                selections
                 
-                // TITLE
-                HStack(spacing: 0) {
-                    
-                    Text("Preferences")
-                        .textStyle(font: .interBold, size: 24)
-                        .opacity(0.45)
-                    
-                    Spacer()
-                    
-                    CloseButtonView(action: closeAction)
-                    
-                } //: HStack
-                .padding(.top, 16)
+                topBar
                 
-                ScrollView(showsIndicators: false) {
-
-                    LazyVStack(spacing: 34) {
-                        
-                        // SELECTION 1: GENRE
-                        SelectionChipsView(
-                            isYes: .constant(false),
-                            selected: .constant(""),
-                            selections: $genresSelection,
-                            options: genresOptions,
-                            title: "Genre"
-                        )
-                        
-                        // SELECTION 2: LANGUAGE
-                        SelectionChipsView(
-                            isYes: .constant(false),
-                            selected: $languageSelected,
-                            selections: .constant([]),
-                            options: languagesOptions,
-                            isSingleSelection: true,
-                            title: "Language"
-                        )
-                        
-                        // OPTION 3: ADULT MOVIE
-                        SelectionChipsView(
-                            isYes: $isAdultSelected,
-                            selected: .constant(""),
-                            selections: .constant([]),
-                            title: "Adult Movie"
-                        )
-                        
-                        Spacer()
-
-                    } //: VStack
-                    .padding(.bottom, 100)
-                    
-                } //: ScrollView
-
             } //: VStack
             .padding(.leading, 21)
             .padding(.trailing, 12)
             .fillMaxSize()
                             
-            // MARK: Layer 2 - Save
-            VStack(spacing: 0) {
-                
-                DisappearingGradientView(
-                    contentDirection: .bottom,
-                    color: .background
-                )
-                .frame(height: 114)
-                
-                HStack {
-                    FilledButtonView(
-                        title: "Done",
-                        action: doneAction
-                    )
-                }
-                .padding(.bottom, dimensions.insets.bottom)
-                .background(Colors.background.color)
-                
-            } //: VStack
-            
+            // MARK: - L2: Done Button
+            doneButton
+                            
         } //: ZStack
         .frame(height: dimensions.screen.height * 0.85)
         .fillMaxWidth()
@@ -116,7 +145,7 @@ struct PreferencesSheetView: View {
 }
 
 // MARK: - Preview
-struct PreferenesSheet_Previews: PreviewProvider {
+struct PreferencesSheet_Previews: PreviewProvider {
     static var genres = TestData.sampleGenres.compactMap(\.name)
     static var languages = TestData.sampleLanguages.compactMap(\.englishName)
     

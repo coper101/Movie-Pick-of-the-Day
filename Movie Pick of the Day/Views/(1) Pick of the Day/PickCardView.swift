@@ -20,18 +20,18 @@ struct PickCardView: View {
     
     // MARK: - UI
     var background: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             
             // Layer 1: BACKGROUND IMAGE
             Group {
-                
+
                 // POSTER
                 AsyncImageView(
                     imageCache: imageCache,
                     path: posterPath,
                     resolution: posterResolution
                 ) { $0.height / 3 }
-                
+
                 // TESTING
                 if let uiImage {
                     Image(uiImage: uiImage)
@@ -43,7 +43,7 @@ struct PickCardView: View {
             // Layer 2: BACKDROP
             LinearGradient(
                 colors: [.clear, .black],
-                startPoint: .init(x: 0.5, y: 0.55),
+                startPoint: .init(x: 0.5, y: 0.3),
                 endPoint: .bottom
             )
             
@@ -58,14 +58,16 @@ struct PickCardView: View {
                 .textStyle(
                     font: .interExtraBold,
                     size: 20,
-                    lineLimit: 1
+                    lineLimit: 2
                 )
 
             // Row 2: DESCRIPTION
             Text(description)
                 .textStyle(
-                    font: .interSemiBold,
-                    lineLimit: 2
+                    font: .interBold,
+                    size: 14,
+                    lineLimit: 2,
+                    lineSpacing: 3
                 )
 
         } //: VStack

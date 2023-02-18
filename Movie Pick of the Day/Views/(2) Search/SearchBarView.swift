@@ -7,6 +7,36 @@
 
 import SwiftUI
 
+struct DynamicTextField: View {
+    // MARK: - Props
+    var placeholder: String
+    @Binding var text: String
+    var onCommit: Action
+    
+    // MARK: - UI
+    var body: some View {
+        Group {
+            if #available(iOS 15.0, *) {
+                TextField(
+                    placeholder,
+                    text: $text
+                )
+                .onSubmit(onCommit)
+                .submitLabel(.done)
+            } else {
+                TextField(
+                    placeholder,
+                    text: $text,
+                    onCommit: onCommit
+                )
+            }
+        } //: Group
+    }
+    
+    // MARK: - Actions
+}
+
+
 struct SearchBarView: View {
     // MARK: - Props
     @Binding var text: String
@@ -15,8 +45,8 @@ struct SearchBarView: View {
     
     // MARK: - UI
     var body: some View {
-        TextField(
-            placeholder,
+        DynamicTextField(
+            placeholder: placeholder,
             text: $text,
             onCommit: onCommit
         )

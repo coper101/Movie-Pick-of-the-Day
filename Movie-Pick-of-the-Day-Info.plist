@@ -9,12 +9,5 @@
 		<string>Inter-ExtraBold.ttf</string>
 		<string>Inter-SemiBold.ttf</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>background</string>
-		<key>UIImageName</key>
-		<string>app-logo</string>
-	</dict>
 </dict>
 </plist>

@@ -77,7 +77,7 @@ extension AppViewModel {
             .dropFirst()
             .sink { [weak self] in self?.selectMoviePickIDsOfTheWeek($0) }
             .store(in: &subscriptions)
-        
+
         appDataRepository.preferencePublisher
             .sink { [weak self] in self?.preference = $0 }
             .store(in: &subscriptions)
@@ -89,12 +89,18 @@ extension AppViewModel {
         
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.genres = $0.sorted() }
+            .sink { [weak self] in
+                self?.genres = $0.sorted()
+                self?.selectPreferences()
+            }
             .store(in: &subscriptions)
         
         movieRepository.languagesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.languages = $0.sorted() }
+            .sink { [weak self] in
+                self?.languages = $0.sorted()
+                self?.selectPreferences()
+            }
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
@@ -104,9 +110,7 @@ extension AppViewModel {
         
         movieRepository.preferredMoviesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.reSelectMoviePickIDsOfTheWeek($0)
-            }
+            .sink { [weak self] in self?.reSelectMoviePickIDsOfTheWeek($0) }
             .store(in: &subscriptions)
         
         movieRepository.searchedMoviesPublisher
@@ -165,6 +169,25 @@ extension AppViewModel {
     // }
 
     /// Preferences
+    func selectPreferences() {
+        guard let preference else {
+            return
+        }
+        
+        if preference.includeAdult != isAdultSelected {
+            isAdultSelected = preference.includeAdult
+        }
+        
+        if genresSelection.isEmpty && !genres.isEmpty {
+            genresSelection = preference.genres.compactMap(\.name)
+        }
+        
+        if languageSelected.isEmpty && !languages.isEmpty {
+            let foundLanguage = languages.first(where: { ($0.iso6391 ?? "") == preference.language })
+            languageSelected = foundLanguage?.englishName ?? ""
+        }
+    }
+    
     func didTapPreferences() {
         isPreferencesSheetShown = true
 
@@ -218,10 +241,6 @@ extension AppViewModel {
     
     func didTapClosePreferences() {
         isPreferencesSheetShown = false
-        
-        // movieRepository.clearGenres()
-        // movieRepository.clearLanguages()
-        
         preferenceInput = nil
     }
     
@@ -231,7 +250,7 @@ extension AppViewModel {
         }
         
         let daysInWeekLeft = Date().getRemainingWeekDaysCount()
-        guard daysInWeekLeft > 0 else {
+        guard daysInWeekLeft >= 0 else {
             return
         }
         
@@ -252,20 +271,20 @@ extension AppViewModel {
         let remainingWeekdaysCount = todaysDate.getRemainingWeekDaysCount()
         
         /**
-            No Change in Movie Pick
+            No. Change in Movie Pick
             (1) today is last day of week
             (2) insufficient movies to assign all to remaining days in week
          */
         
         guard
-            remainingWeekdaysCount > 0,
+            remainingWeekdaysCount >= 0,
             prefferedMovies.count >= remainingWeekdaysCount
         else {
             return
         }
                 
         guard
-            let shufflePreferredMovies = prefferedMovies.shuffle(keep: remainingWeekdaysCount)
+            let shufflePreferredMovies = prefferedMovies.shuffle(keep: remainingWeekdaysCount + 1)
         else {
             return
         }
@@ -288,8 +307,13 @@ extension AppViewModel {
                 let todayWeekday = remainingWeekdaysRange.first,
                 weekday == todayWeekday
             {
-                /// add movie of today
-                if moviePicks.first(where: { $0.day.rawValue == todayWeekday }) == nil {
+                if let todaysPickIndex = moviePicks.firstIndex(where: { $0.day.rawValue == todayWeekday }) {
+                    /// set today's movie if not set
+                    if moviePicks[todaysPickIndex].movie == nil {
+                        moviePicks[todaysPickIndex].movie = newMovie
+                    }
+                } else {
+                    /// add movie of today
                     moviePicks.append(
                         .init(
                             day: day,
@@ -298,7 +322,6 @@ extension AppViewModel {
                         )
                     )
                 }
-                /// skip today's movie day if set
                 continue
             }
             
@@ -330,11 +353,13 @@ extension AppViewModel {
         screen = .search
     }
     
-    func didTapSearchOnCommitMovie(_ query: String) {
+    func didTapSearchOnCommitMovie(_ query: String, onDone: (Bool) -> Void) {
         guard !query.isEmptyField() else {
+            onDone(true)
             return
         }
         movieRepository.searchMovie(with: query)
+        onDone(false)
     }
     
     // MARK: Pick of the Day Detail

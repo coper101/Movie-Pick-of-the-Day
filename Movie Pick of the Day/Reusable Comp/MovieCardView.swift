@@ -90,18 +90,22 @@ struct MovieCardView: View {
     var body: some View {
         VStack(spacing: 16) {
             
-            // POSTER
+            // MARK: - Poster
             poster
             
-            // TITLE
+            // MARK: - Title
             if let movieTitle {
+                
                 Text(movieTitle)
                     .textStyle(
                         font: .interBold,
                         size: 16,
-                        lineLimit: 1
+                        lineLimit: 2,
+                        lineSpacing: 5
                     )
-            }
+                    .multilineTextAlignment(.center)
+                
+            } //: if
             
         } //: VStack
         .frame(width: 127)

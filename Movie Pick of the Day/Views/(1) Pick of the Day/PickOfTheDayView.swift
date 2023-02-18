@@ -50,73 +50,88 @@ struct PickOfTheDayView: View {
         return preference.summary
     }
     
+    let paddingVertical: CGFloat = 30
+    let topBarHeight: CGFloat = 54
+    
     // MARK: - UI
+    var preferenceAndSource: some View {
+        HStack(spacing: 12) {
+        
+            RoundButtonView(
+                title: preferenceSummary,
+                subtitle: "Preferences",
+                action: openPreferenceAction
+            )
+            
+            RoundButtonView(
+                subtitle: "powered by",
+                icon: .tmdbLogo,
+                fillSpace: false,
+                action: sourceAction
+            )
+            
+        } //: HStack
+    }
+    
+    var pickOfTheDay: some View {
+        Button(action: pickOfTheDayAction) {
+
+            if
+                let todaysMovieDay,
+                let todaysMovie = todaysMovieDay.movie
+            {
+
+                PickCardView(
+                    title: todaysMovie.title ?? "",
+                    description: todaysMovie.overview ?? "",
+                    uiImage: nil,
+                    posterPath: todaysMovie.posterPath,
+                    posterResolution: .original
+                )
+
+            } else {
+
+                EmptyView()
+
+            } //: if-else
+
+        } //: Button
+    }
+    
     var content: some View {
         ZStack(alignment: .top) {
             
-            // MARK: Layer 1 - Top Bar
+            // MARK: - Layer 1: Status Bar Background
             StatusBarBackgroundView()
                 .zIndex(2)
 
+            // MARK: - Layer 2: Top Bar
             TopBarView(title: "Movie Pick of the Day")
                 .zIndex(1)
                 .padding(.top, dimensions.insets.top)
             
-            // MARK: Layer 2 - Content
+            // MARK: - Layer 3: Content
             ScrollView {
                 
-                VStack(spacing: 30) {
+                VStack(spacing: 0) {
                     
-                    // MARK: Row 1 - Preferences + Source
-                    HStack(spacing: 12) {
+                    // PREFERENCE + SOURCE
+                    preferenceAndSource
+                        .padding(.horizontal, 21)
+                        .padding(.top, 16)
                     
-                        RoundButtonView(
-                            title: preferenceSummary,
-                            subtitle: "Preferences",
-                            action: openPreferenceAction
-                        )
-                        
-                        RoundButtonView(
-                            subtitle: "powered by",
-                            icon: .tmdbLogo,
-                            fillSpace: false,
-                            action: sourceAction
-                        )
-                        
-                    } //: HStack
-                    .padding(.horizontal, 21)
+                    // PICK OF THE DAY
+                    pickOfTheDay
+                        .padding(.horizontal, 21)
+                        .padding(.top, paddingVertical)
                     
-                    // MARK: Row 2 - Pick of the Day
-                    Button(action: pickOfTheDayAction) {
-
-                        if
-                            let todaysMovieDay,
-                            let todaysMovie = todaysMovieDay.movie
-                        {
-
-                            PickCardView(
-                                title: todaysMovie.title ?? "",
-                                description: todaysMovie.overview ?? "",
-                                uiImage: nil,
-                                posterPath: todaysMovie.posterPath,
-                                posterResolution: .original
-                            )
-
-                        } else {
-
-                            EmptyView()
-
-                        } //: if-else
-
-                    } //: Button
-                    .padding(.horizontal, 21)
-                    
-                    // MARK: Row 3 - Picks for the Week
+                    // PICKS FOR THE REST OF THE WEEK
                     MoviePicksView(movies: nextMovieDays)
-                        .padding(.bottom, 50)
+                        .padding(.top, paddingVertical - 12)
+                        .padding(.bottom, 63 + 12)
                     
                 } //: VStack
-                .padding(.top, 74 + dimensions.insets.top)
+                .padding(.top, topBarHeight + dimensions.insets.top)
                 .fillMaxSize(alignment: .top)
                 
             } //: ScrollView
@@ -130,11 +145,11 @@ struct PickOfTheDayView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             
-            // MARK: Layer 1 - Movie Picks
+            // MARK: - Layer 1: Pick of The Day Screen
             content
                 .zIndex(0)
             
-            // MARK: Layer 2 - Preference Sheet
+            // MARK: - Layer 2: Preference Sheet
             if appViewModel.isPreferencesSheetShown {
                 
                 Group {

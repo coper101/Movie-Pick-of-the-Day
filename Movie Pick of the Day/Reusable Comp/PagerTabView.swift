@@ -29,18 +29,18 @@ struct PagerItemView: View {
     
     // MARK: - UI
     var body: some View {
-        HStack(spacing: 32) {
-            
-            CircledButtonView(
-                icon: icon,
-                isDisabled: false,
-                action: action
-            )
-            .opacity(isSelected ? 1 : 0.5)
-            .scaleEffect(isSelected ? 1 : 0.8)
-            .cardShadow(y: isSelected ? 5 : 0)
-                        
-        } //: HStack
+        CircledButtonView(
+            icon: icon,
+            isDisabled: false,
+            action: action
+        )
+        .opacity(isSelected ? 1 : 0.5)
+        .scaleEffect(isSelected ? 1 : 0.8)
+        .cardShadow(y: isSelected ? 5 : 0)
+        .animation(
+            .spring(response: 0.9).speed(2.2),
+            value: isSelected
+        )
     }
     
     // MARK: - Actions
