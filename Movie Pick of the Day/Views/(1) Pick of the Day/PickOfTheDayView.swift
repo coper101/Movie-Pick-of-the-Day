@@ -111,7 +111,7 @@ struct PickOfTheDayView: View {
                 .padding(.top, dimensions.insets.top)
             
             // MARK: - Layer 3: Content
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 
                 VStack(spacing: 0) {
                     
@@ -128,7 +128,7 @@ struct PickOfTheDayView: View {
                     // PICKS FOR THE REST OF THE WEEK
                     MoviePicksView(movies: nextMovieDays)
                         .padding(.top, paddingVertical - 12)
-                        .padding(.bottom, 63 + 12)
+                        .padding(.bottom, 63 + 28)
                     
                 } //: VStack
                 .padding(.top, topBarHeight + dimensions.insets.top)

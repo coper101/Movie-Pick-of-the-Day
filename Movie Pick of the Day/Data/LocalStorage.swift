@@ -33,6 +33,13 @@ class LocalStorage {
         }
         defaults.set(value, forKey: key.rawValue)
     }
+    
+    static func getItem(forKey key: Keys) -> Any? {
+        guard let defaults = getUserDefaults() else {
+            return nil
+        }
+        return defaults.object(forKey: key.rawValue)
+    }
 
     static func getDictionary(forKey key: Keys) -> [String: Int]? {
         guard let defaults = getUserDefaults() else {

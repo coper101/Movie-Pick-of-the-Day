@@ -31,6 +31,7 @@ struct MovieCardView: View {
                 imageCache: imageCache,
                 path: posterPath,
                 resolution: posterResolution,
+                placeholderTitle: movieTitle ?? "",
                 isResizable: true,
                 isScaledToFill: true,
                 scaleEffect: 1.1

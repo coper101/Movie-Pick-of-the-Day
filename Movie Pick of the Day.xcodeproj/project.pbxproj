@@ -41,6 +41,7 @@
 		27BB19E5297007BC00851E14 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E4297007BC00851E14 /* Validation.swift */; };
 		27BB19E72970166E00851E14 /* Date_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E62970166E00851E14 /* Date_Tests.swift */; };
 		27BB19E929701DC000851E14 /* App_View_Model_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */; };
+		27C1BD2F29A23CFB00D81AAA /* NoImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */; };
 		27FAD23D298A58F20069DE72 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */; };
 		27FAD23E298A58F20069DE72 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */; };
 		27FAD23F298A58F20069DE72 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */; };
@@ -136,6 +137,7 @@
 		27BB19E4297007BC00851E14 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		27BB19E62970166E00851E14 /* Date_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_Tests.swift; sourceTree = "<group>"; };
 		27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App_View_Model_Tests.swift; sourceTree = "<group>"; };
+		27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoImageView.swift; sourceTree = "<group>"; };
 		27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Movie-Pick-of-the-Day-Info.plist"; sourceTree = SOURCE_ROOT; };
 		27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				2763BF542992793B008D609A /* StatusBarBackgroundView.swift */,
 				272C3A51299E22B200316768 /* DisappearingGradientView.swift */,
 				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
+				27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */,
 				27FAD250298A77230069DE72 /* MovieCardView.swift */,
 			);
 			path = "Reusable Comp";
@@ -577,6 +580,7 @@
 				27FDBDBD29696887008FA32E /* MovieRepository.swift in Sources */,
 				27FDBDDE296969BA008FA32E /* AppViewModel.swift in Sources */,
 				277F84A1299BA64000109CD3 /* Numbers.swift in Sources */,
+				27C1BD2F29A23CFB00D81AAA /* NoImageView.swift in Sources */,
 				275D09EF299E18B6000F6169 /* MovieInfoBoxView.swift in Sources */,
 				2763BF9329938A47008D609A /* ChipOptionView.swift in Sources */,
 				27FDBDBA29696887008FA32E /* Keys.swift in Sources */,

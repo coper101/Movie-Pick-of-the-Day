@@ -19,6 +19,7 @@ final class AppViewModel: ObservableObject {
     // MARK: Data
     /// [A] App Data
     @Published var preference: Preference?
+    @Published var weekEndDate: Date?
     
     /// [B] Movie Data
     @Published var genres: [Genre] = []
@@ -79,9 +80,15 @@ extension AppViewModel {
             .store(in: &subscriptions)
 
         appDataRepository.preferencePublisher
-            .sink { [weak self] in self?.preference = $0 }
+            .sink { [weak self] in
+                self?.preference = $0
+                self?.refreshMoviePicksOfTheWeek($0)
+            }
             .store(in: &subscriptions)
         
+        appDataRepository.weekEndDatePublisher
+            .sink { [weak self] in self?.weekEndDate = $0 }
+            .store(in: &subscriptions)
     }
     
     /// [B]
@@ -127,47 +134,24 @@ extension AppViewModel {
     
     // MARK: Pick of the Day
     /// Picks
+    func refreshMoviePicksOfTheWeek(_ preference: Preference?) {
+        let todaysDate = Date()
+        
+        guard
+            let preference,
+            let weekEndDate,
+            weekEndDate > todaysDate
+        else {
+            return
+        }
+        
+        selectMoviePickIDsOfTheWeek(preference)
+    }
+    
     func didTapPickOfTheDayMovieScreen() {
         screen = .pickOfTheDay
     }
     
-    // func loadMoviePicks(_ movieDays: [MovieDay]) {
-    //     print(#function)
-    //
-    //     /// for displaying movie picks
-    //     self.moviePicks = movieDays
-    //
-    //     guard !self.preferredMovies.isEmpty else {
-    //         return
-    //     }
-    //
-    //     /// get movie from the discovered movies as get movie description
-    //     /// doesn't return a movie as movies are mostly deleted
-    //     for (index, movieDay) in movieDays.enumerated() {
-    //         guard
-    //             let movie = self.preferredMovies.first(where: { $0.id == movieDay.id })
-    //         else {
-    //             continue
-    //         }
-    //         self.moviePicks[index].movie = movie
-    //     }
-    //
-    //     print("moviePicks: ", moviePicks.compactMap(\.movie?.title))
-    //
-    //     /// get the movie description for each pick - async
-    //     // for (index, movieDay) in movieDays.enumerated() {
-    //     //     movieRepository.getMovie(with: movieDay.id)
-    //     //         .receive(on: DispatchQueue.main)
-    //     //         .sink { [weak self] movie in
-    //     //             /// optional if movie can't be found using id - invalid id -1
-    //     //             /// display error image on ui
-    //     //             self?.moviePicks[index].movie = movie
-    //     //             Logger.appModel.debug("getMovie - success: \(movie?.title ?? "nil")")
-    //     //         }
-    //     //         .store(in: &subscriptions)
-    //     // }
-    // }
-
     /// Preferences
     func selectPreferences() {
         guard let preference else {
@@ -346,7 +330,9 @@ extension AppViewModel {
         print("new movie pick movie title: ", moviePicks.compactMap { $0.movie?.title })
         
         appDataRepository.setMoviePicksOfTheWeek(moviePicks)
+        appDataRepository.setWeekEndDate(to: todaysDate.getEndOfWeekDate())
     }
+
 
     // MARK: Search
     func didTapSearchScreen() {

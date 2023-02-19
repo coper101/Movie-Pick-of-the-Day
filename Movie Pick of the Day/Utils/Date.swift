@@ -57,5 +57,22 @@ extension Date {
         getRemainingWeekDaysRange().count - 1
     }
     
+    func getEndOfWeekDate() -> Date {
+        let lastWeekday = 7
+        let weekday = self.toDateComp().weekday ?? 1
+        let daysRemaining = lastWeekday - weekday
+        
+        guard daysRemaining > 0 else {
+            return self
+        }
+        
+        guard let endDate = Calendar.current.date(
+            byAdding: .day, value: daysRemaining, to: self)
+        else {
+            return self
+        }
+        
+        return endDate
+    }
 }
 

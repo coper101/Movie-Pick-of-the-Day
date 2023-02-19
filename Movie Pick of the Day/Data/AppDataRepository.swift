@@ -17,17 +17,24 @@ protocol AppDataRepositoryType {
     var preference: Preference? { get set }
     var preferencePublisher: Published<Preference?>.Publisher { get }
     
+    var weekEndDate: Date? { get set }
+    var weekEndDatePublisher: Published<Date?>.Publisher { get }
+    
     /// Setters and Getters
     func getMoviePicksOfTheWeek() -> [MovieDay]
     func setMoviePicksOfTheWeek(_ movieDays: [MovieDay])
     
     func getPreference() -> Preference?
     func setPreference(_ preference: Preference) -> Void
+    
+    func getWeekEndDate() -> Date?
+    func setWeekEndDate(to endDate: Date)
 }
 
 enum Keys: String {
     case moviePicksOfTheWeek = "Movie_Picks_Of_The_Week"
     case preference = "Preference"
+    case weekEndDate = "Week_End_Date"
 }
 
 
@@ -40,6 +47,9 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
     
     @Published var preference: Preference?
     var preferencePublisher: Published<Preference?>.Publisher { $preference }
+    
+    @Published var weekEndDate: Date?
+    var weekEndDatePublisher: Published<Date?>.Publisher { $weekEndDate }
     
     init() {
         moviePicksOfTheWeek = getMoviePicksOfTheWeek()
@@ -102,6 +112,20 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
         LocalStorage.setItem(dictionary, forKey: .preference)
         self.preference = getPreference()
     }
+    
+    /// - Week Tracker
+    func getWeekEndDate() -> Date? {
+        guard let endDate = LocalStorage.getItem(forKey: .weekEndDate) else {
+            return nil
+        }
+        return endDate as? Date
+    }
+    
+    func setWeekEndDate(to endDate: Date) {
+        LocalStorage.setItem(endDate, forKey: .weekEndDate)
+        self.weekEndDate = getWeekEndDate()
+    }
+    
 }
 
 
@@ -114,6 +138,9 @@ class MockAppDataRepository: AppDataRepositoryType {
     
     @Published var preference: Preference?
     var preferencePublisher: Published<Preference?>.Publisher { $preference }
+    
+    @Published var weekEndDate: Date?
+    var weekEndDatePublisher: Published<Date?>.Publisher { $weekEndDate }
     
     /// Setters and Getters
     /// - Movie Picks
@@ -147,5 +174,13 @@ class MockAppDataRepository: AppDataRepositoryType {
         self.preference = preference
     }
     
+    /// - Week Tracker
+    func getWeekEndDate() -> Date? {
+        "2023-01-12T00:00:00+00:00".toDate()
+    }
+    
+    func setWeekEndDate(to endDate: Date) {
+        self.weekEndDate = endDate
+    }
 }
 

@@ -15,6 +15,8 @@ struct AsyncImageView: View {
     
     let paddingTop: PaddingTop
     let placeholderUiImage = TestData.createImage(color: .black, width: 1083, height: 1539)
+    let placeholderTitle: String
+    
     var isResizable: Bool = false
     var isScaledToFill: Bool = false
     var scaleEffect: CGFloat = 1
@@ -23,6 +25,7 @@ struct AsyncImageView: View {
         imageCache: ImageCache,
         path: String?,
         resolution: ImageResolution,
+        placeholderTitle: String,
         isResizable: Bool = false,
         isScaledToFill: Bool = false,
         scaleEffect: CGFloat = 1,
@@ -32,6 +35,7 @@ struct AsyncImageView: View {
             wrappedValue: .init(path: path, resolution: resolution, imageCache: imageCache)
         )
         self.paddingTop = paddingTop
+        self.placeholderTitle = placeholderTitle
         self.isResizable = isResizable
         self.isScaledToFill = isScaledToFill
     }
@@ -43,7 +47,7 @@ struct AsyncImageView: View {
             image
                 .transition(.opacity.animation(.easeIn(duration: 1.0)))
         case .failed, .loading:
-            Color.black
+            NoImageView(title: placeholderTitle)
                 .transition(.opacity.animation(.easeIn(duration: 1.0)))
         }
     }

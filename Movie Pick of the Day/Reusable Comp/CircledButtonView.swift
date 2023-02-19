@@ -26,7 +26,7 @@ struct CircledButtonView: View {
                 .padding(.bottom, paddingBottom)
                 .frame(width: 63, height: 63)
                 .background(
-                    Colors.onBackground.color.opacity(0.1)
+                    Colors.onBackgroundLight.color
                 )
                 .clipShape(Circle())
         } //: Button

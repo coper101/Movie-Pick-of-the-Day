@@ -12,6 +12,7 @@ enum Colors: String {
     case background = "background"
     case backgroundLight = "background-light"
     case onBackground = "on-background"
+    case onBackgroundLight = "on-background-light"
     var color: Color {
         Color(self.rawValue)
     }

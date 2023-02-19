@@ -29,7 +29,8 @@ struct PickCardView: View {
                 AsyncImageView(
                     imageCache: imageCache,
                     path: posterPath,
-                    resolution: posterResolution
+                    resolution: posterResolution,
+                    placeholderTitle: title
                 ) { $0.height / 3 }
 
                 // TESTING

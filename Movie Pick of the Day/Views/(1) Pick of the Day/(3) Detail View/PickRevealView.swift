@@ -27,6 +27,7 @@ struct PickRevealView: View {
                 imageCache: imageCache,
                 path: movie.posterPath,
                 resolution: .original,
+                placeholderTitle: movie.title ?? "",
                 isResizable: true,
                 isScaledToFill: true,
                 scaleEffect: 1.1
