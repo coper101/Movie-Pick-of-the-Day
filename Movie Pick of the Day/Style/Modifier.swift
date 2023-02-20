@@ -130,3 +130,51 @@ extension View {
         self.modifier(SlowPopAnimationModifier())
     }
 }
+
+
+// MARK: - Skeleton Loading Loading Animation
+struct SkeletonLoadingAnimationModifier: ViewModifier {
+    // MARK: - Props
+    @State private var isAnimating: Bool = false
+    var opacity: Double
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        content
+            .dynamicOverlay(alignment: .center) {
+                GeometryReader { geometry in
+                    
+                    let width = geometry.size.width
+                    
+                    LinearGradient(
+                        colors: [
+                            .clear,
+                            Colors.onBackground.color.opacity(opacity),
+                            .clear
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .offset(x: isAnimating ? width : -width)
+                    .transition(.opacity.animation(.easeInOut))
+                    
+                } //: GeometryReader
+                .onAppear {
+                    withAnimation(
+                        .easeInOut(duration: 1.2)
+                        .repeatForever(autoreverses: false)
+                        
+                    ) {
+                        isAnimating = true
+                    }
+                } //: onAppear
+            } //: dynamicOverlay
+    }
+}
+
+extension View {
+    
+    func withSkeletonLoadingAnimation(opacity: Double = 0.05) -> some View {
+        self.modifier(SkeletonLoadingAnimationModifier(opacity: opacity))
+    }
+}

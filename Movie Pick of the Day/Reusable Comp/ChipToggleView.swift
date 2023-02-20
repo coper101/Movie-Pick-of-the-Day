@@ -18,12 +18,14 @@ struct ChipToggleView: View {
         HStack(spacing: 12) {
             ChipButtonView(
                 isSelected: isYes,
+                isLoading: false,
                 title: yesTitle,
                 action: yesAction
             )
             
             ChipButtonView(
                 isSelected: !isYes,
+                isLoading: false,
                 title: noTitle,
                 action: noAction
             )

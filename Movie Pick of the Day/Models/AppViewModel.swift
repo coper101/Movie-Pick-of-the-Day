@@ -23,7 +23,9 @@ final class AppViewModel: ObservableObject {
     
     /// [B] Movie Data
     @Published var genres: [Genre] = []
+    @Published var isLoadingGenres: Bool = false
     @Published var languages: [Language] = []
+    @Published var isLoadingLanguages: Bool = false
     @Published var preferredMovies: [Movie] = []
     @Published var similarMovies: [Movie] = []
     @Published var searchedMovies: [Movie] = []
@@ -97,16 +99,28 @@ extension AppViewModel {
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                self?.genres = $0.sorted()
-                self?.selectPreferences()
+                guard let self else {
+                    return
+                }
+                self.genres = $0.sorted()
+                if self.isLoadingGenres {
+                    self.isLoadingGenres = false
+                }
+                self.selectPreferences()
             }
             .store(in: &subscriptions)
         
         movieRepository.languagesPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                self?.languages = $0.sorted()
-                self?.selectPreferences()
+                guard let self else {
+                    return
+                }
+                self.languages = $0.sorted()
+                if self.isLoadingLanguages {
+                    self.isLoadingLanguages = false
+                }
+                self.selectPreferences()
             }
             .store(in: &subscriptions)
         
@@ -175,11 +189,14 @@ extension AppViewModel {
     func didTapPreferences() {
         isPreferencesSheetShown = true
 
-        if genres.isEmpty || languages.isEmpty {
-            DispatchQueue.global().async {
-                self.movieRepository.getGenres()
-                self.movieRepository.getLanguages()
-            }
+        if genres.isEmpty {
+            isLoadingGenres = true
+            self.movieRepository.getGenres()
+        }
+        
+        if languages.isEmpty {
+            isLoadingLanguages = true
+            self.movieRepository.getLanguages()
         }
         
         preferenceInput = .init(

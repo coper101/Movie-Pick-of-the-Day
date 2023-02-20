@@ -13,6 +13,31 @@ struct SimilarMoviesView: View {
     var paddingHorizontal: CGFloat = 24
     
     // MARK: - UI
+    var movieList: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            
+            LazyHStack(alignment: .top, spacing: 28) {
+                
+                ForEach(movies) { movie in
+                                            
+                    MovieCardView(
+                        movieDay: nil,
+                        movieTitle: movie.title ?? "",
+                        uiImage: nil,
+                        posterPath: movie.posterPath,
+                        posterResolution: .w500
+                    )
+                    
+                } //: ForEach
+                
+            } //: LazyHGrid
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, paddingHorizontal)
+            .padding(.bottom, 50)
+            
+        } //: ScrollView
+    }
+        
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
             
@@ -27,35 +52,18 @@ struct SimilarMoviesView: View {
                 .padding(.top, 28)
             
             // MOVIES
-            ScrollView(.horizontal, showsIndicators: false) {
-
-                LazyHStack(spacing: 28) {
-
-                    ForEach(movies) { movie in
-                                                    
-                        Button(action: {}) {
-
-                            MovieCardView(
-                                movieDay: nil,
-                                movieTitle: movie.title ?? "",
-                                uiImage: nil,
-                                posterPath: movie.posterPath,
-                                posterResolution: .w500
-                            )
-
-                        } //: Button
-
-                    } //: ForEach
-
-                } //: LazyHGrid
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, paddingHorizontal)
-                .padding(.bottom, 50)
-                
-                Spacer()
-                
-            } //: ScrollView
-           
+            if !movies.isEmpty {
+                movieList
+            } else {
+                Text("No Similar Movies")
+                    .textStyle(foregroundColor: .onBackground, size: 18)
+                    .opacity(0.15)
+                    .padding(.horizontal, paddingHorizontal)
+                    .fillMaxWidth(alignment: .leading)
+            }
+            
+            Spacer()
+                           
         }  //: VStack
         .background(Colors.backgroundLight.color)
     }
@@ -70,5 +78,12 @@ struct SimilarMoviesView_Previews: PreviewProvider {
             .frame(height: 310)
             .previewLayout(.sizeThatFits)
             .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Available")
+        
+        SimilarMoviesView(movies: [])
+            .frame(height: 310)
+            .previewLayout(.sizeThatFits)
+            .environmentObject(ImageCacheRepository())
+            .previewDisplayName("NA")
     }
 }

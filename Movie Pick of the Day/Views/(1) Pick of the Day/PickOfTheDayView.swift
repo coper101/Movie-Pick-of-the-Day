@@ -168,6 +168,8 @@ struct PickOfTheDayView: View {
                         genresSelection: $appViewModel.genresSelection,
                         languageSelected: $appViewModel.languageSelected,
                         isAdultSelected: $appViewModel.isAdultSelected,
+                        isLoadingGenres: appViewModel.isLoadingGenres,
+                        isLoadingLanguages: appViewModel.isLoadingLanguages,
                         genresOptions: appViewModel.genres.compactMap(\.name),
                         languagesOptions: appViewModel.languages.compactMap(\.englishName),
                         closeAction: closePreferenceAction,

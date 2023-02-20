@@ -50,7 +50,7 @@ struct PickRevealView: View {
             VStack(alignment: .leading, spacing: 0) {
                 
                 // TITLE
-                Text(movie.title ?? "")
+                Text(movie.displayedTitle)
                     .kerning(1)
                     .textStyle(
                         font: .interExtraBold,
@@ -60,7 +60,7 @@ struct PickRevealView: View {
                     .padding(.top, 30)
                 
                 // DESCRIPTION
-                Text(movie.overview  ?? "")
+                Text(movie.displayedOverview)
                     .kerning(0.5)
                     .textStyle(
                         font: .interSemiBold,
@@ -161,15 +161,24 @@ struct PickRevealView: View {
 
 // MARK: - Preview
 struct PickRevealView_Previews: PreviewProvider {
-    static var movie = TestData.sampleMovie
-    
     static var previews: some View {
         PickRevealView(
-            movie: movie,
+            movie:  TestData.sampleMovie,
             uiImage: UIImage(named: Icons.samplePoster.rawValue)!
         )
             .previewLayout(.sizeThatFits)
             .environmentObject(TestData.appViewModel)
             .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Normal")
+        
+        PickRevealView(
+            movie:  TestData.sampleMovieEmpty,
+            uiImage: UIImage(named: Icons.samplePoster.rawValue)!
+        )
+            .previewLayout(.sizeThatFits)
+            .environmentObject(TestData.appViewModel)
+            .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Empty")
+
     }
 }

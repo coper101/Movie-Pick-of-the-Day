@@ -25,19 +25,15 @@ struct ResultMoviesView: View {
             ) {
                 
                 ForEach(movies) { movie in
-
-                    Button(action: {}) {
                         
-                        MovieCardView(
-                            movieTitle: movie.title,
-                            uiImage: nil,
-                            posterPath: movie.posterPath,
-                            posterResolution: .w500
-                        )
-                        .transition(.opacity)
+                    MovieCardView(
+                        movieTitle: movie.title,
+                        uiImage: nil,
+                        posterPath: movie.posterPath,
+                        posterResolution: .w500
+                    )
+                    .transition(.opacity)
                         
-                    } //: Button
-
                 } //: ForEach
                 
             } //: LazyVGrid

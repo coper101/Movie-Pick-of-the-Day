@@ -30,6 +30,7 @@ struct PickCardView: View {
                     imageCache: imageCache,
                     path: posterPath,
                     resolution: posterResolution,
+                    showLoading: false,
                     placeholderTitle: title
                 ) { $0.height / 3 }
 

@@ -14,6 +14,9 @@ struct PreferencesSheetView: View {
     @Binding var languageSelected: String
     @Binding var isAdultSelected: Bool
     
+    var isLoadingGenres: Bool
+    var isLoadingLanguages: Bool
+
     var genresOptions: [String]
     var languagesOptions: [String]
     
@@ -71,6 +74,7 @@ struct PreferencesSheetView: View {
                     selected: .constant(""),
                     selections: $genresSelection,
                     options: genresOptions,
+                    isLoadingOptions: isLoadingGenres,
                     title: "Genre"
                 )
                 
@@ -80,6 +84,7 @@ struct PreferencesSheetView: View {
                     selected: $languageSelected,
                     selections: .constant([]),
                     options: languagesOptions,
+                    isLoadingOptions: isLoadingLanguages,
                     isSingleSelection: true,
                     title: "Language"
                 )
@@ -154,6 +159,8 @@ struct PreferencesSheet_Previews: PreviewProvider {
             genresSelection: .constant([]),
             languageSelected: .constant(""),
             isAdultSelected: .constant(false),
+            isLoadingGenres: false,
+            isLoadingLanguages: false,
             genresOptions: genres,
             languagesOptions: languages,
             closeAction: {},
@@ -161,5 +168,21 @@ struct PreferencesSheet_Previews: PreviewProvider {
         )
             .previewLayout(.sizeThatFits)
             .padding()
+            .previewDisplayName("Selections")
+        
+        PreferencesSheetView(
+            genresSelection: .constant([]),
+            languageSelected: .constant(""),
+            isAdultSelected: .constant(false),
+            isLoadingGenres: true,
+            isLoadingLanguages: true,
+            genresOptions: genres,
+            languagesOptions: languages,
+            closeAction: {},
+            doneAction: {}
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .previewDisplayName("Loading Selections")
     }
 }

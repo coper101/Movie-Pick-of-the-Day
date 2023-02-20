@@ -17,6 +17,7 @@ struct MovieCardView: View {
     var uiImage: UIImage?
     var posterPath: String?
     var posterResolution: ImageResolution
+    var showLoading: Bool = true
     
     var isBlurred: Bool {
         movieDay != nil
@@ -31,6 +32,7 @@ struct MovieCardView: View {
                 imageCache: imageCache,
                 path: posterPath,
                 resolution: posterResolution,
+                showLoading: showLoading,
                 placeholderTitle: movieTitle ?? "",
                 isResizable: true,
                 isScaledToFill: true,

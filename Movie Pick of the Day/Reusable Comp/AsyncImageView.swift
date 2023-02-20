@@ -17,6 +17,9 @@ struct AsyncImageView: View {
     let placeholderUiImage = TestData.createImage(color: .black, width: 1083, height: 1539)
     let placeholderTitle: String
     
+    var resolution: ImageResolution
+    var showLoading: Bool
+    
     var isResizable: Bool = false
     var isScaledToFill: Bool = false
     var scaleEffect: CGFloat = 1
@@ -25,6 +28,7 @@ struct AsyncImageView: View {
         imageCache: ImageCache,
         path: String?,
         resolution: ImageResolution,
+        showLoading: Bool = true,
         placeholderTitle: String,
         isResizable: Bool = false,
         isScaledToFill: Bool = false,
@@ -36,20 +40,31 @@ struct AsyncImageView: View {
         )
         self.paddingTop = paddingTop
         self.placeholderTitle = placeholderTitle
+        
+        self.resolution = resolution
+        self.showLoading = showLoading
+        
         self.isResizable = isResizable
         self.isScaledToFill = isScaledToFill
     }
     
     // MARK: - UI
     var body: some View {
-        switch imageRepository.phase {
-        case .successful:
-            image
-                .transition(.opacity.animation(.easeIn(duration: 1.0)))
-        case .failed, .loading:
-            NoImageView(title: placeholderTitle)
-                .transition(.opacity.animation(.easeIn(duration: 1.0)))
-        }
+        Group {
+            switch imageRepository.phase {
+            case .loading:
+                if showLoading {
+                    LoadingImageView()
+                } else {
+                    Color.black
+                }
+            case .successful:
+                image
+            case .failed:
+                NoImageView(title: placeholderTitle)
+            }
+        } //: Group
+        .transition(.opacity.animation(.easeIn(duration: 1.0)))
     }
     
     var image: some View {
@@ -65,7 +80,8 @@ struct AsyncImageView: View {
                     .scaleEffect(scaleEffect)
                     .padding(.top, paddingTop(uiImage.size))
             } else {
-                Image(uiImage: placeholderUiImage)
+                NoImageView(title: placeholderTitle)
+                    .transition(.opacity.animation(.easeIn(duration: 1.0)))
             }
         }
     } //: image

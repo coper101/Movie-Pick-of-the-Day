@@ -12,4 +12,5 @@ extension Animation {
     static func slowPop() -> Self {
         Animation.spring(response: 0.9, dampingFraction: 0.5)
     }
+    
 }

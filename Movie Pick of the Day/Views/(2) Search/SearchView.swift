@@ -14,6 +14,8 @@ struct SearchView: View {
     
     @State private var searchText: String = ""
     
+    let searchBarHeight: CGFloat = 79
+    
     // MARK: - UI
     var body: some View {
         ZStack(alignment: .top) {
@@ -28,11 +30,11 @@ struct SearchView: View {
             
             // MARK: Layer 2 - Results
             ResultMoviesView(movies: appViewModel.searchedMovies)
-                .padding(.bottom, 79 + dimensions.insets.bottom + 84)
+                .padding(.bottom, dimensions.insets.bottom + searchBarHeight + 63 + 28)
                 .zIndex(0)
                 
             // MARK: Layer 3 - Search
-            VStack {
+            VStack(spacing: 0) {
                 
                 Spacer()
                 
@@ -42,7 +44,7 @@ struct SearchView: View {
                     onCommit: commitAction
                 )
                 .padding(.horizontal, 24)
-                .padding(.bottom, dimensions.insets.bottom + 92)
+                .padding(.bottom, dimensions.insets.bottom + searchBarHeight + 13)
                 
             } //: VStack
             .zIndex(1)

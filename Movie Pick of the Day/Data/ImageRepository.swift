@@ -40,7 +40,10 @@ class ImageRepository: ObservableObject {
     }
     
     func getUIImage() {
+        self.phase = .loading // 1
+
         guard let path else {
+            self.phase = .failed // 2
             return
         }
         Logger.imageRepository.debug("getUIImage - path: \(path)")
@@ -59,35 +62,38 @@ class ImageRepository: ObservableObject {
         )
         .receive(on: DispatchQueue.main)
         .sink { [weak self] completion in
+            guard let self else {
+                return
+            }
+            
             switch completion {
             case .failure(let error):
-                Logger.imageRepository.debug("getUIImage - failure")
-                
+                Logger.imageRepository.debug("getUIImage - path: \(path), failure")
+                self.phase = .failed // 2
+
                 if error is NetworkError {
                     let networkError = error as! NetworkError
                     switch networkError {
                     case .server(let message):
-                        Logger.imageRepository.debug("getUIImage - server error: \(message)")
+                        Logger.imageRepository.debug("getUIImage - path: \(path), server error: \(message)")
                     case .request(let message):
-                        Logger.imageRepository.debug("getUIImage - request error: \(message)")
+                        Logger.imageRepository.debug("getUIImage - path: \(path), request error: \(message)")
                     default:
                         break
                     }
                 }
-                
-                self?.phase = .failed
-                
+                                
             case .finished:
-                Logger.imageRepository.debug("getUIImage - finished")
+                Logger.imageRepository.debug("getUIImage - path: \(path), finished")
             }
         } receiveValue: { [weak self] uiImage in
-            Logger.imageRepository.debug("getUIImage - success")
+            Logger.imageRepository.debug("getUIImage - path: \(path), success")
 
             guard let self else {
                 return
             }
             self.uiImage = uiImage
-            self.phase = .successful
+            self.phase = .successful // 3
             self.imageCache[key] = uiImage
         }
         .store(in: &subscriptions)

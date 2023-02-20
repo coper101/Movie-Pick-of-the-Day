@@ -77,6 +77,8 @@ class TestData {
         )!
     }
     
+    static let sampleMovieEmpty = createMovie(id: 7660)
+    
     static let sampleMovie = createMovie(
         id: 76600,
         title: "Avatar: The Way of Water",

@@ -30,7 +30,8 @@ struct MoviePicksView: View {
                             movieDay: movieDay,
                             uiImage: nil,
                             posterPath: movie?.posterPath,
-                            posterResolution: .w500
+                            posterResolution: .w500,
+                            showLoading: false
                         )
                         
                     } //: Button

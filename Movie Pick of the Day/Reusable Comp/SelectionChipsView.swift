@@ -14,6 +14,7 @@ struct SelectionChipsView: View {
     @Binding var selections: [String]
     
     var options: [String] = []
+    var isLoadingOptions = false
     var isSingleSelection: Bool = false
     
     var title: String
@@ -38,6 +39,19 @@ struct SelectionChipsView: View {
             
             // Row 2: OPTIONS
             // Text("selections: \(selections.debugDescription)")
+            if isLoadingOptions {
+                HStack(spacing: 12) {
+                    ForEach(1..<3, id: \.self) { _ in
+                        ChipOptionView(
+                            isSelected: false,
+                            isLoading: true,
+                            title: "",
+                            isSingleSelected: false,
+                            toggleAction: { _ in }
+                        )
+                    } //: ForEach
+                } //: HStack
+            }
             
             if !options.isEmpty {
                 
@@ -64,6 +78,7 @@ struct SelectionChipsView: View {
                                 
                                 ChipOptionView(
                                     isSelected: selections.first(where: { $0 == title }) != nil,
+                                    isLoading: false,
                                     title: title,
                                     isSingleSelected: isSingleSelection ? title == selected : nil,
                                     toggleAction: { isSelected in
@@ -86,7 +101,7 @@ struct SelectionChipsView: View {
                 
             } //: if-check-empty
 
-            if options.isEmpty {
+            if options.isEmpty && !isLoadingOptions {
                 ChipToggleView(isYes: $isYes)
             }
           
@@ -144,6 +159,19 @@ struct SelectionChipsView_Previews: PreviewProvider {
             isYes: .constant(true),
             selected: .constant(""),
             selections: .constant([]),
+            options: [],
+            isLoadingOptions: true,
+            title: "Genres"
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
+            .previewDisplayName("Multi Selection / Loading")
+        
+        SelectionChipsView(
+            isYes: .constant(true),
+            selected: .constant(""),
+            selections: .constant([]),
             title: "Adult Movie"
         )
             .previewLayout(.sizeThatFits)
@@ -163,5 +191,19 @@ struct SelectionChipsView_Previews: PreviewProvider {
             .padding()
             .background(Colors.background.color)
             .previewDisplayName("Single Selection")
+        
+        SelectionChipsView(
+            isYes: .constant(true),
+            selected: .constant(""),
+            selections: .constant([]),
+            options: [],
+            isLoadingOptions: true,
+            isSingleSelection: true,
+            title: "Language"
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
+            .previewDisplayName("Single Selection / Loading")
     }
 }

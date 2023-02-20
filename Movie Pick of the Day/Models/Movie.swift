@@ -47,6 +47,14 @@ struct Movie: Codable, CustomDebugStringConvertible, Identifiable {
             """
     }
     
+    var displayedTitle: String {
+        title ?? "NA"
+    }
+    
+    var displayedOverview: String {
+        overview ?? "NA"
+    }
+    
     var displayedVoteAverage: String {
         guard let voteAverage else {
             return "NA"

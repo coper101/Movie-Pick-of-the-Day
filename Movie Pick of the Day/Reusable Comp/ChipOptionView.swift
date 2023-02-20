@@ -3,13 +3,13 @@
 //  Movie Pick of the Day
 //
 //  Created by Wind Versi on 8/2/23.
-//
 
 import SwiftUI
 
 struct ChipOptionView: View {
     // MARK: - Props
     @State var isSelected: Bool = false
+    var isLoading: Bool
     var title: String
     var isSingleSelected: Bool?
     var toggleAction: (Bool) -> Void
@@ -33,6 +33,7 @@ struct ChipOptionView: View {
     var body: some View {
         ChipButtonView(
             isSelected: isSelectedChip,
+            isLoading: isLoading,
             title: title,
             action: toggleSelection
         )
@@ -51,6 +52,7 @@ struct ChipOptionView: View {
 struct ChipView_Previews: PreviewProvider {
     static var previews: some View {
         ChipOptionView(
+            isLoading: false,
             title: "Adventure",
             toggleAction: { _ in }
         )

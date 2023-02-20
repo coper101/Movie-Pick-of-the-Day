@@ -50,6 +50,7 @@ struct NoImageView_Previews: PreviewProvider {
     static var previews: some View {
         NoImageView(title: "Glass Onion")
             .previewLayout(.fixed(width: 127, height: 164))
+            .cornerRadius(10)
             .padding()
             .background(Colors.background.color)
     }
