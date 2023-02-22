@@ -40,7 +40,7 @@ struct ResultMoviesView: View {
             .padding(.top, 74 + dimensions.insets.top)
             .fillMaxSize(alignment: .top)
             .padding(.horizontal, 24)
-            .padding(.bottom, 45)
+            .padding(.bottom, 90)
             
         } //: ScrollView
         .dynamicOverlay(alignment: .bottom) {

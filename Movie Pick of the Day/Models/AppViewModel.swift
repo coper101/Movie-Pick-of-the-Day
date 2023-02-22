@@ -15,6 +15,7 @@ final class AppViewModel: ObservableObject {
     
     let appDataRepository: AppDataRepositoryType
     let movieRepository: MovieRepositoryType
+    let networkConnectionRepository: NetworkConnectivity
     
     // MARK: Data
     /// [A] App Data
@@ -24,11 +25,19 @@ final class AppViewModel: ObservableObject {
     /// [B] Movie Data
     @Published var genres: [Genre] = []
     @Published var isLoadingGenres: Bool = false
+    
     @Published var languages: [Language] = []
     @Published var isLoadingLanguages: Bool = false
+    
     @Published var preferredMovies: [Movie] = []
     @Published var similarMovies: [Movie] = []
+    
     @Published var searchedMovies: [Movie] = []
+    @Published var isSearching: Bool = false
+    @Published var hasSearched: Bool = false
+    
+    /// [C] Network Connection
+    @Published var hasInternetConnection: Bool = false
     
     // MARK: UI
     @Published var screen: Screen = .pickOfTheDay
@@ -42,19 +51,45 @@ final class AppViewModel: ObservableObject {
     @Published var preferenceInput: Preference?
     @Published var todaysMoviePick: MovieDay?
     
+    var todaysMovieDay: MovieDay? {
+        guard
+            let todaysWeekDay = Date().toDateComp().weekday,
+            let movieDay = moviePicks.first(where: { $0.day.rawValue == todaysWeekDay })
+        else {
+            return nil
+        }
+        return movieDay
+    }
+
+    var nextMovieDays: [MovieDay] {
+        guard
+            let todaysWeekDay = Date().toDateComp().weekday,
+            let todaysMovieDay = moviePicks.first(where: { $0.day.rawValue == todaysWeekDay })
+        else {
+            return []
+        }
+        let nextMovies = moviePicks
+            .filter { $0.day.rawValue > todaysMovieDay.day.rawValue }
+        
+        return nextMovies
+    }
+    
     init(
         _ appDataRepository: AppDataRepositoryType = AppDataRepository(),
         _ movieRepository: MovieRepositoryType = MovieRepository(),
+        _ networkConnectionRepository: NetworkConnectivity = NetworkConnectionRepository(),
         republishData: Bool = true
     ) {
         self.appDataRepository = appDataRepository
         self.movieRepository = movieRepository
+        self.networkConnectionRepository = networkConnectionRepository
         
         guard republishData else {
             return
         }
         republishAppData()
         republishMovieData()
+        republishNetworkData()
     }
         
 }
@@ -135,10 +170,32 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.searchedMoviesPublisher
+            .dropFirst()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.searchedMovies = $0 }
+            .sink { [weak self] in
+                guard let self else {
+                    return
+                }
+                self.searchedMovies = $0
+                if self.isSearching {
+                    self.isSearching = false
+                }
+                if !self.hasSearched {
+                    self.hasSearched = true
+                }
+            }
             .store(in: &subscriptions)
         
+    }
+    
+    /// [C] Network Data
+    func republishNetworkData() {
+        
+        networkConnectionRepository
+            .hasInternetConnectionPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.hasInternetConnection = $0 }
+            .store(in: &subscriptions)
     }
     
 }
@@ -361,6 +418,7 @@ extension AppViewModel {
             onDone(true)
             return
         }
+        isSearching = true
         movieRepository.searchMovie(with: query)
         onDone(false)
     }

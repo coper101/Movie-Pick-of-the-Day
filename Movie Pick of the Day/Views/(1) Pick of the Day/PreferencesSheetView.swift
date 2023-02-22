@@ -64,7 +64,7 @@ struct PreferencesSheetView: View {
                     isYes: $isAdultSelected,
                     selected: .constant(""),
                     selections: .constant([]),
-                    title: "Adult Movie"
+                    title: "Include Adult"
                 )
                 .padding(.top, 54 + 24)
                 

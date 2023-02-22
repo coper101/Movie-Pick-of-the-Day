@@ -12,37 +12,7 @@ struct PickOfTheDayView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
     @Environment(\.openURL) var openURL
-        
-    let movie = TestData.sampleMovie
-    
-    var todaysMovieDay: MovieDay? {
-        guard
-            let todaysWeekDay = Date().toDateComp().weekday
-        else {
-            return nil
-        }
-        let movieDay = appViewModel.moviePicks.first(
-            where: { $0.day.rawValue == todaysWeekDay }
-        )
-        return movieDay
-    }
-
-    var nextMovieDays: [MovieDay] {
-        guard
-            let todaysWeekDay = Date().toDateComp().weekday
-        else {
-            return []
-        }
-        guard
-            let todaysMovieDayIndex = appViewModel.moviePicks.firstIndex(
-                where: { $0.day.rawValue == todaysWeekDay }
-            )
-        else {
-            return []
-        }
-        return Array(appViewModel.moviePicks[(todaysMovieDayIndex + 1)...])
-    }
-    
+            
     var preferenceSummary: String {
         guard let preference = appViewModel.preference else {
             return ""
@@ -77,7 +47,7 @@ struct PickOfTheDayView: View {
         Button(action: pickOfTheDayAction) {
 
             if
-                let todaysMovieDay,
+                let todaysMovieDay = appViewModel.todaysMovieDay,
                 let todaysMovie = todaysMovieDay.movie
             {
 
@@ -126,7 +96,7 @@ struct PickOfTheDayView: View {
                         .padding(.top, paddingVertical)
                     
                     // PICKS FOR THE REST OF THE WEEK
-                    MoviePicksView(movies: nextMovieDays)
+                    MoviePicksView(movies: appViewModel.nextMovieDays)
                         .padding(.top, paddingVertical - 12)
                         .padding(.bottom, 63 + 28)
                     

@@ -65,11 +65,13 @@ struct PickRevealView: View {
                     .textStyle(
                         font: .interSemiBold,
                         size: 17,
+                        lineLimit: nil,
                         lineSpacing: 4
                     )
                     .opacity(0.5)
                     .padding(.top, 24)
                     .padding(.horizontal, paddingHorizontal)
+                    .fixedSize(horizontal: false, vertical: true)
                 
                 // MORE INFO
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -110,7 +112,10 @@ struct PickRevealView: View {
                     .padding(.top, 44)
                 
             } //: VStack
-            .frame(minHeight: dimensions.screen.height * 0.75, alignment: .top)
+            .frame(
+                minHeight: dimensions.screen.height * 0.75,
+                alignment: .top
+            )
             .background(Colors.background.color)
             .cornerRadius(radius: 22, corners: [.topLeft, .topRight])
             .padding(.top, 280)

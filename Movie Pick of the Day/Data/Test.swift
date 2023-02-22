@@ -174,6 +174,8 @@ extension TestData {
     static var appViewModel: AppViewModel {
         let appViewModel = AppViewModel(republishData: false)
         
+        appViewModel.hasInternetConnection = true
+        
         appViewModel.moviePicks = sampleMoviePicks
         appViewModel.searchedMovies = sampleMovies
         appViewModel.similarMovies = sampleMovies
