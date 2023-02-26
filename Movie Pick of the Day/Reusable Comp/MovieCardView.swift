@@ -80,7 +80,7 @@ struct MovieCardView: View {
         } //: VStack
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
-        .frame(height: 164, alignment: .bottom)
+        .frame(height: 187.5, alignment: .bottom)
         .fillMaxWidth()
         .background(background)
         .clipped()

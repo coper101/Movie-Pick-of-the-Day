@@ -83,14 +83,23 @@ class Networking {
                 guard let response = response as? HTTPURLResponse else {
                     throw NetworkError.request("Invalid URL Response")
                 }
-                guard (200..<400).contains(response.statusCode) else {
-                    throw NetworkError.server("Server Error")
+                let statusCode = response.statusCode
+                guard (200..<400).contains(statusCode) else {
+                    
+                    if (400...499).contains(statusCode) {
+                        throw NetworkError.server("Something went wrong connecting to the Server")
+                    } else if statusCode > 500 {
+                        throw NetworkError.server("Internal Server Error")
+                    } else {
+                        throw NetworkError.server("Server Error")
+                    }
+                        
                 }
                 return data
             }
             .tryMap { data in
                 guard let uiImage = UIImage(data: data) else {
-                    throw NetworkError.request("Conversion to UIImage Error")
+                    throw NetworkError.server("Conversion to UIImage Error")
                 }
                 return uiImage
             }

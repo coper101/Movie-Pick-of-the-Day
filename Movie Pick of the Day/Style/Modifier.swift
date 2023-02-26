@@ -46,6 +46,26 @@ extension View {
     
 }
 
+// MARK: Alignment Modifier
+struct CenterAlignmentModifier: ViewModifier {
+    // MARK: - Props
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        content
+            .fillMaxSize(alignment: .center)
+            .opacity(0.5)
+            .padding(.top, 50)
+    }
+}
+
+extension View {
+    
+    func alignToCenter() -> some View {
+        modifier(CenterAlignmentModifier())
+    }
+}
+
 // MARK: Custom Corner Modifier
 struct CornerRadiusStyle: ViewModifier {
     // MARK: - Props
@@ -97,7 +117,7 @@ struct DynamicOverlayModifier<TheContent>: ViewModifier where TheContent: View {
 extension View {
     
     func dynamicOverlay(alignment: Alignment, _ theContent: @escaping () -> some View) -> some View {
-        self.modifier(
+        modifier(
             DynamicOverlayModifier(
                 alignment: alignment,
                 theContent: theContent
@@ -106,7 +126,7 @@ extension View {
     }
 }
 
-// MARK: - Slow Pop Animation
+// MARK: Slow Pop Animation
 struct SlowPopAnimationModifier: ViewModifier {
     // MARK: - Props
     @State private var isAnimating: Bool = false
@@ -127,12 +147,11 @@ struct SlowPopAnimationModifier: ViewModifier {
 extension View {
     
     func withSlowPopAnimation() -> some View {
-        self.modifier(SlowPopAnimationModifier())
+        modifier(SlowPopAnimationModifier())
     }
 }
 
-
-// MARK: - Skeleton Loading Loading Animation
+// MARK: Skeleton Loading Loading Animation
 struct SkeletonLoadingAnimationModifier: ViewModifier {
     // MARK: - Props
     @State private var isAnimating: Bool = false
@@ -175,6 +194,35 @@ struct SkeletonLoadingAnimationModifier: ViewModifier {
 extension View {
     
     func withSkeletonLoadingAnimation(opacity: Double = 0.05) -> some View {
-        self.modifier(SkeletonLoadingAnimationModifier(opacity: opacity))
+        modifier(SkeletonLoadingAnimationModifier(opacity: opacity))
     }
 }
+
+// MARK: Moving Animation
+struct MovingUpAndDownAnimation: ViewModifier {
+    // MARK: - Props
+    @State private var isAnimating: Bool = false
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        content
+            .offset(y: isAnimating ? 130 : -130)
+            .onAppear {
+                withAnimation(
+                    .easeInOut(duration: 40.0)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
+extension View {
+    
+    func withMovingUpAndDownAnimation() -> some View {
+        modifier(MovingUpAndDownAnimation())
+    }
+}
+
+

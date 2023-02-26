@@ -9,6 +9,8 @@ import SwiftUI
 
 enum SearchContent {
     case noInternet
+    case serverError
+    case requestError
     case noResults
     case searching
     case hasResults
@@ -29,19 +31,30 @@ struct SearchView: View {
             get: {
                 if !appViewModel.hasInternetConnection {
                     return .noInternet
+                    
+                } else if appViewModel.searchError == .server {
+                    return .serverError
+                    
+                }  else if appViewModel.searchError == .request {
+                    return .requestError
+                    
                 } else if appViewModel.isSearching {
                     return .searching
+                    
                 } else if
                     !appViewModel.isSearching &&
                     appViewModel.hasSearched &&
                     appViewModel.searchedMovies.isEmpty {
                     return .noResults
+                    
                 } else if
                     !appViewModel.isSearching &&
                     !appViewModel.searchedMovies.isEmpty {
                     return .hasResults
+                    
                 } else {
                     return .none
+                    
                 }
             },
             set: { _ in}
@@ -71,16 +84,20 @@ struct SearchView: View {
                     
                 case .noResults:
                     ResultNoneView()
-                        .fillMaxSize(alignment: .center)
-                        .opacity(0.5)
-                        .padding(.top, 50)
+                        .alignToCenter()
                     
                 case .noInternet:
                     ResultNoInternetConnectionView()
-                        .fillMaxSize(alignment: .center)
-                        .opacity(0.5)
-                        .padding(.top, 50)
+                        .alignToCenter()
                     
+                case .serverError:
+                    ResultNetworkErrorView(error: .server)
+                        .alignToCenter()
+                    
+                case .requestError:
+                    ResultNetworkErrorView(error: .request)
+                        .alignToCenter()
+
                 case .none:
                     EmptyView()
                 }
@@ -135,6 +152,18 @@ struct SearchView_Previews: PreviewProvider {
         return model
     }
     
+    static var serverErrorModel: AppViewModel {
+        let model = TestData.appViewModel
+        model.searchError = .server
+        return model
+    }
+    
+    static var requestErrorModel: AppViewModel {
+        let model = TestData.appViewModel
+        model.searchError = .request
+        return model
+    }
+    
     static var previews: some View {
         SearchView()
             .previewLayout(.sizeThatFits)
@@ -153,5 +182,17 @@ struct SearchView_Previews: PreviewProvider {
             .environmentObject(TestData.appViewModel)
             .environmentObject(ImageCacheRepository())
             .previewDisplayName("Results")
+        
+        SearchView()
+            .previewLayout(.sizeThatFits)
+            .environmentObject(serverErrorModel)
+            .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Server Error")
+
+        SearchView()
+            .previewLayout(.sizeThatFits)
+            .environmentObject(requestErrorModel)
+            .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Request Error")
     }
 }

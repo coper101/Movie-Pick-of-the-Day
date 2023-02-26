@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-typealias PaddingTop = (CGSize) -> CGFloat
-
 struct AsyncImageView: View {
     // MARK: - Props
     @StateObject var imageRepository: ImageRepository
     
-    let paddingTop: PaddingTop
     let placeholderUiImage = TestData.createImage(color: .black, width: 1083, height: 1539)
     let placeholderTitle: String
+    let hasMovingUpAndDownAnimation: Bool
     
     var resolution: ImageResolution
     var showLoading: Bool
@@ -33,13 +31,13 @@ struct AsyncImageView: View {
         isResizable: Bool = false,
         isScaledToFill: Bool = false,
         scaleEffect: CGFloat = 1,
-        paddingTop: @escaping PaddingTop = { _ in 0 }
+        hasMovingUpAndDownAnimation: Bool = false
     ) {
         self._imageRepository = .init(
             wrappedValue: .init(path: path, resolution: resolution, imageCache: imageCache)
         )
-        self.paddingTop = paddingTop
         self.placeholderTitle = placeholderTitle
+        self.hasMovingUpAndDownAnimation = hasMovingUpAndDownAnimation
         
         self.resolution = resolution
         self.showLoading = showLoading
@@ -78,7 +76,9 @@ struct AsyncImageView: View {
                         $0.scaledToFill()
                     }
                     .scaleEffect(scaleEffect)
-                    .padding(.top, paddingTop(uiImage.size))
+                    .`if`(hasMovingUpAndDownAnimation) {
+                        $0.withMovingUpAndDownAnimation()
+                    }
             } else {
                 NoImageView(title: placeholderTitle)
                     .transition(.opacity.animation(.easeIn(duration: 1.0)))

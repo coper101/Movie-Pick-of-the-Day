@@ -10,6 +10,7 @@ import SwiftUI
 struct PickCardView: View {
     // MARK: - Props
     @EnvironmentObject var imageCache: ImageCacheRepository
+    @State var isAnimating: Bool = false
 
     var title: String
     var description: String
@@ -31,16 +32,23 @@ struct PickCardView: View {
                     path: posterPath,
                     resolution: posterResolution,
                     showLoading: false,
-                    placeholderTitle: title
-                ) { $0.height / 3 }
-
+                    placeholderTitle: title,
+                    isResizable: true,
+                    isScaledToFill: true,
+                    scaleEffect: 1.1,
+                    hasMovingUpAndDownAnimation: true
+                )
+                
                 // TESTING
                 if let uiImage {
                     Image(uiImage: uiImage)
-                        .padding(.top, uiImage.size.height / 3)
+                        .resizable()
+                        .scaledToFill()
+                        .withMovingUpAndDownAnimation()
                 }
-            }
-            .scaleEffect(1.1)
+                
+            } //: Group
+            .scaleEffect(1.05)
             
             // Layer 2: BACKDROP
             LinearGradient(

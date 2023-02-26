@@ -10,9 +10,37 @@ import Combine
 import UIKit
 import OSLog
 
+enum MovieRepositoryError: Error, Equatable {
+    case server
+    case request
+    
+    var description: String {
+        switch self {
+        case .server:
+            return "Something went wrong connecting to the Server"
+        case .request:
+            return "Something went wrong with your Request"
+        }
+    }
+}
+
+
 // MARK: Protocol
 protocol MovieRepositoryType {
     
+    /// Error
+    var searchError: MovieRepositoryError? { get set }
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var genresError: MovieRepositoryError? { get set }
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var languagesError: MovieRepositoryError? { get set }
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var similarMoviesError: MovieRepositoryError? { get set }
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+
     /// Genres
     var genres: [Genre] { get set }
     var genresPublisher: Published<[Genre]>.Publisher { get }
@@ -56,6 +84,19 @@ protocol MovieRepositoryType {
 class MovieRepository: MovieRepositoryType, ObservableObject {
     
     var subscriptions = Set<AnyCancellable>()
+    
+    /// Error
+    @Published var searchError: MovieRepositoryError?
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { $searchError }
+    
+    @Published var genresError: MovieRepositoryError?
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { $genresError }
+    
+    @Published var languagesError: MovieRepositoryError?
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $languagesError }
+    
+    @Published var similarMoviesError: MovieRepositoryError?
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $similarMoviesError }
 
     /// Data
     @Published var genres: [Genre] = []
@@ -75,16 +116,24 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     
     /// Services
     func getGenres() {
+        genresError = nil
+        
         TMDBService.getGenres()
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
                             Logger.movieRepository.debug("getGenres - server error: \(message)")
-                            break
+                            self?.genresError = .server
+
+                        case .request(let message):
+                            Logger.movieRepository.debug("getGenres - request error: \(message)")
+                            self?.genresError = .request
+                            
                         default:
                             break
                         }
@@ -103,16 +152,24 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     }
     
     func getLanguages() {
+        languagesError = nil
+        
         TMDBService.getLanguages()
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
                             Logger.movieRepository.debug("getLanguages - server error: \(message)")
-                            break
+                            self?.languagesError = .server
+
+                        case .request(let message):
+                            Logger.movieRepository.debug("getLanguages - request error: \(message)")
+                            self?.languagesError = .request
+
                         default:
                             break
                         }
@@ -135,17 +192,24 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     }
     
     func getSimilarMovies(of id: Int) {
+        similarMoviesError = nil
+
         TMDBService.getSimilarMovies(of: id)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
                             Logger.movieRepository.debug("getSimilarMovies - server error: \(message)")
+                            self?.similarMoviesError = .server
+
                         case .request(let message):
                             Logger.movieRepository.debug("getSimilarMovies - error: \(message)")
+                            self?.similarMoviesError = .request
+
                         default:
                             break
                         }
@@ -203,17 +267,24 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     }
     
     func searchMovie(with query: String) {
+        searchError = nil
+
         TMDBService.searchMovie(with: query)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
                             Logger.movieRepository.debug("searchMovie - server error: \(message)")
+                            self?.searchError = .server
+
                         case .request(let message):
                             Logger.movieRepository.debug("searchMovie - request error: \(message)")
+                            self?.searchError = .request
+
                         default:
                             break
                         }
@@ -262,6 +333,19 @@ extension MovieRepository {
 class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     
     var subscriptions = Set<AnyCancellable>()
+    
+    /// Error
+    @Published var searchError: MovieRepositoryError?
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { $searchError }
+    
+    @Published var genresError: MovieRepositoryError?
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { $genresError }
+    
+    @Published var languagesError: MovieRepositoryError?
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $languagesError }
+    
+    @Published var similarMoviesError: MovieRepositoryError?
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $similarMoviesError }
 
     /// Data
     @Published var genres: [Genre] = []

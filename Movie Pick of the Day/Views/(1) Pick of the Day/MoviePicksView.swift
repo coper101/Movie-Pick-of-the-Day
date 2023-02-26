@@ -23,18 +23,14 @@ struct MoviePicksView: View {
                 ForEach(movies) { movieDay in
                     
                     let movie = movieDay.movie
-                    
-                    Button(action: {}) {
                         
-                        MovieCardView(
-                            movieDay: movieDay,
-                            uiImage: nil,
-                            posterPath: movie?.posterPath,
-                            posterResolution: .w500,
-                            showLoading: false
-                        )
-                        
-                    } //: Button
+                    MovieCardView(
+                        movieDay: movieDay,
+                        uiImage: nil,
+                        posterPath: movie?.posterPath,
+                        posterResolution: .w500,
+                        showLoading: false
+                    )
                     
                 } //: ForEach
                 

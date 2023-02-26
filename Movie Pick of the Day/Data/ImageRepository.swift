@@ -46,7 +46,7 @@ class ImageRepository: ObservableObject {
             self.phase = .failed // 2
             return
         }
-        Logger.imageRepository.debug("getUIImage - path: \(path)")
+        // Logger.imageRepository.debug("getUIImage - path: \(path)")
         
         // load image from cache
         let key = "\(path)/\(resolution.rawValue)"
@@ -84,10 +84,11 @@ class ImageRepository: ObservableObject {
                 }
                                 
             case .finished:
-                Logger.imageRepository.debug("getUIImage - path: \(path), finished")
+                // Logger.imageRepository.debug("getUIImage - path: \(path), finished")
+                break
             }
         } receiveValue: { [weak self] uiImage in
-            Logger.imageRepository.debug("getUIImage - path: \(path), success")
+            // Logger.imageRepository.debug("getUIImage - path: \(path), success")
 
             guard let self else {
                 return

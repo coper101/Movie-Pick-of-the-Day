@@ -13,6 +13,7 @@ enum Icons: String {
     case player = "player-icon"
     case search = "search-icon"
     case close = "close-icon"
+    case warning = "warning-icon"
     
     // Logo
     case tmdbLogo = "tmdb-logo"

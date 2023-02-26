@@ -25,16 +25,20 @@ final class AppViewModel: ObservableObject {
     /// [B] Movie Data
     @Published var genres: [Genre] = []
     @Published var isLoadingGenres: Bool = false
+    @Published var genresError: MovieRepositoryError?
     
     @Published var languages: [Language] = []
     @Published var isLoadingLanguages: Bool = false
+    @Published var languagesError: MovieRepositoryError?
     
     @Published var preferredMovies: [Movie] = []
     @Published var similarMovies: [Movie] = []
+    @Published var similarMoviesError: MovieRepositoryError?
     
     @Published var searchedMovies: [Movie] = []
     @Published var isSearching: Bool = false
     @Published var hasSearched: Bool = false
+    @Published var searchError: MovieRepositoryError?
     
     /// [C] Network Connection
     @Published var hasInternetConnection: Bool = false
@@ -107,7 +111,7 @@ extension AppViewModel {
                     return
                 }
                 self.moviePicks = $0
-                print("new movie pick ids: ", self.moviePicks.map { "\($0.day), \($0.id)" })
+                Logger.appModel.debug("Movie Pick IDs: \(self.moviePicks.map { "\($0.day), \($0.id)" } )")
             }
             .store(in: &subscriptions)
         
@@ -117,20 +121,42 @@ extension AppViewModel {
             .store(in: &subscriptions)
 
         appDataRepository.preferencePublisher
-            .sink { [weak self] in
-                self?.preference = $0
-                self?.refreshMoviePicksOfTheWeek($0)
-            }
+            .sink { [weak self] in self?.preference = $0 }
             .store(in: &subscriptions)
         
-        appDataRepository.weekEndDatePublisher
-            .sink { [weak self] in self?.weekEndDate = $0 }
+        appDataRepository.preferencePublisher
+            .zip(appDataRepository.weekEndDatePublisher)
+            .sink { [weak self] preference, weekEndDate in
+                self?.refreshMoviePicksOfTheWeek(preference, weekEndDate)
+            }
             .store(in: &subscriptions)
     }
     
     /// [B]
     func republishMovieData() {
         
+        /// Errors
+        movieRepository.searchErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.searchError = $0 }
+            .store(in: &subscriptions)
+        
+        movieRepository.genresErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.genresError = $0 }
+            .store(in: &subscriptions)
+        
+        movieRepository.languagesErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.languagesError = $0 }
+            .store(in: &subscriptions)
+        
+        movieRepository.similarMoviesErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.similarMoviesError = $0 }
+            .store(in: &subscriptions)
+            
+        /// Data
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
@@ -205,13 +231,13 @@ extension AppViewModel {
     
     // MARK: Pick of the Day
     /// Picks
-    func refreshMoviePicksOfTheWeek(_ preference: Preference?) {
+    func refreshMoviePicksOfTheWeek(_ preference: Preference?, _ weekEndDate: Date?) {
         let todaysDate = Date()
         
         guard
             let preference,
             let weekEndDate,
-            weekEndDate > todaysDate
+            weekEndDate < todaysDate
         else {
             return
         }

@@ -31,11 +31,11 @@ final class ImageCacheRepository: ImageCache, ObservableObject {
             
             if let newValue {
                 cache.setObject(newValue, forKey: key)
-                Logger.imageCacheRepository.debug("added image for key \(key)")
+                // Logger.imageCacheRepository.debug("added image for key \(key)")
                 return
             }
             cache.removeObject(forKey: key)
-            Logger.imageCacheRepository.debug("removed image for key \(key)")
+            // Logger.imageCacheRepository.debug("removed image for key \(key)")
         }
     }
 }

@@ -1,32 +1,34 @@
 //
-//  ResultNoInternetConnectionView.swift
+//  ResultNetworkErrorView.swift
 //  Movie Pick of the Day
 //
-//  Created by Wind Versi on 22/2/23.
+//  Created by Wind Versi on 26/2/23.
 //
 
 import SwiftUI
 
-struct ResultNoInternetConnectionView: View {
+struct ResultNetworkErrorView: View {
     // MARK: - Props
+    var error: MovieRepositoryError
     
     // MARK: - UI
     var body: some View {
         VStack(spacing: 22) {
             
-            Icons.noInternetConnectionIllus.image
+            Icons.warning.image
                 .resizable()
                 .scaledToFit()
                 .frame(width: 93)
                 .foregroundColor(Colors.secondary.color)
             
-            Text("Please Check Your\nInternet Connection")
+            Text(error.description)
                 .textStyle(
                     foregroundColor: .secondary,
                     size: 16,
                     lineSpacing: 6
                 )
                 .multilineTextAlignment(.center)
+                .frame(width: 198)
             
         } //: VStack
     }
@@ -35,11 +37,18 @@ struct ResultNoInternetConnectionView: View {
 }
 
 // MARK: - Preview
-struct ResultNoInternetConnectionView_Previews: PreviewProvider {
+struct ResultNetworkErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultNoInternetConnectionView()
+        ResultNetworkErrorView(error: .server)
             .previewLayout(.sizeThatFits)
             .padding()
             .background(Colors.background.color)
+            .previewDisplayName("Server Error")
+        
+        ResultNetworkErrorView(error: .request)
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
+            .previewDisplayName("Request Error")
     }
 }

@@ -54,6 +54,7 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
     init() {
         moviePicksOfTheWeek = getMoviePicksOfTheWeek()
         preference = getPreference()
+        weekEndDate = getWeekEndDate()
     }
     
     /// Setters and Getters
