@@ -74,6 +74,7 @@ final class AppViewModel: ObservableObject {
         }
         let nextMovies = moviePicks
             .filter { $0.day.rawValue > todaysMovieDay.day.rawValue }
+            .sorted(by: { $0.day.rawValue < $1.day.rawValue })
         
         return nextMovies
     }
