@@ -16,6 +16,9 @@ struct PreferencesSheetView: View {
     
     var isLoadingGenres: Bool
     var isLoadingLanguages: Bool
+    
+    var hasFailedLoadingGenres: Bool
+    var hasFailedLoadingLanguages: Bool
 
     var genresOptions: [String]
     var languagesOptions: [String]
@@ -75,6 +78,7 @@ struct PreferencesSheetView: View {
                     selections: $genresSelection,
                     options: genresOptions,
                     isLoadingOptions: isLoadingGenres,
+                    hasLoadingFailed: hasFailedLoadingGenres,
                     title: "Genre"
                 )
                 
@@ -86,6 +90,7 @@ struct PreferencesSheetView: View {
                     options: languagesOptions,
                     isLoadingOptions: isLoadingLanguages,
                     isSingleSelection: true,
+                    hasLoadingFailed: hasFailedLoadingLanguages,
                     title: "Language"
                 )
                 
@@ -161,6 +166,8 @@ struct PreferencesSheet_Previews: PreviewProvider {
             isAdultSelected: .constant(false),
             isLoadingGenres: false,
             isLoadingLanguages: false,
+            hasFailedLoadingGenres: false,
+            hasFailedLoadingLanguages: false,
             genresOptions: genres,
             languagesOptions: languages,
             closeAction: {},
@@ -168,7 +175,7 @@ struct PreferencesSheet_Previews: PreviewProvider {
         )
             .previewLayout(.sizeThatFits)
             .padding()
-            .previewDisplayName("Selections")
+            .previewDisplayName("Loaded Selections")
         
         PreferencesSheetView(
             genresSelection: .constant([]),
@@ -176,13 +183,32 @@ struct PreferencesSheet_Previews: PreviewProvider {
             isAdultSelected: .constant(false),
             isLoadingGenres: true,
             isLoadingLanguages: true,
-            genresOptions: genres,
-            languagesOptions: languages,
+            hasFailedLoadingGenres: false,
+            hasFailedLoadingLanguages: false,
+            genresOptions: [],
+            languagesOptions: [],
             closeAction: {},
             doneAction: {}
         )
             .previewLayout(.sizeThatFits)
             .padding()
             .previewDisplayName("Loading Selections")
+        
+        PreferencesSheetView(
+            genresSelection: .constant([]),
+            languageSelected: .constant(""),
+            isAdultSelected: .constant(false),
+            isLoadingGenres: false,
+            isLoadingLanguages: false,
+            hasFailedLoadingGenres: true,
+            hasFailedLoadingLanguages: true,
+            genresOptions: [],
+            languagesOptions: [],
+            closeAction: {},
+            doneAction: {}
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .previewDisplayName("Failed to Load Selections")
     }
 }

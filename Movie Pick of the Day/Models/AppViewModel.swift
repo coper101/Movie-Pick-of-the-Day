@@ -144,12 +144,18 @@ extension AppViewModel {
         
         movieRepository.genresErrorPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.genresError = $0 }
+            .sink { [weak self] in
+                self?.genresError = $0
+                self?.isLoadingGenres = false
+            }
             .store(in: &subscriptions)
         
         movieRepository.languagesErrorPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.languagesError = $0 }
+            .sink { [weak self] in
+                self?.languagesError = $0
+                self?.isLoadingLanguages = false
+            }
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesErrorPublisher
@@ -160,28 +166,28 @@ extension AppViewModel {
         /// Data
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+            .sink { [weak self] genres in
                 guard let self else {
                     return
                 }
-                self.genres = $0.sorted()
-                if self.isLoadingGenres {
-                    self.isLoadingGenres = false
-                }
+                // Loading
+                self.isLoadingGenres = false
+                // Loaded
+                self.genres = genres.sorted()
                 self.selectPreferences()
             }
             .store(in: &subscriptions)
         
         movieRepository.languagesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+            .sink { [weak self] languages in
                 guard let self else {
                     return
                 }
-                self.languages = $0.sorted()
-                if self.isLoadingLanguages {
-                    self.isLoadingLanguages = false
-                }
+                // Loading
+                self.isLoadingLanguages = false
+                // Loaded
+                self.languages = languages.sorted()
                 self.selectPreferences()
             }
             .store(in: &subscriptions)

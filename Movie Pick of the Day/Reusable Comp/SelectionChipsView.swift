@@ -16,6 +16,7 @@ struct SelectionChipsView: View {
     var options: [String] = []
     var isLoadingOptions = false
     var isSingleSelection: Bool = false
+    var hasLoadingFailed: Bool = false
     
     var title: String
     
@@ -37,8 +38,7 @@ struct SelectionChipsView: View {
                 
             } //: HStack
             
-            // Row 2: OPTIONS
-            // Text("selections: \(selections.debugDescription)")
+            // MARK: State - A. Loading
             if isLoadingOptions {
                 HStack(spacing: 12) {
                     ForEach(1..<3, id: \.self) { _ in
@@ -53,6 +53,7 @@ struct SelectionChipsView: View {
                 } //: HStack
             }
             
+            // MARK: State - B1. Loaded (Single Selection / Multi-Selection)
             if !options.isEmpty {
                 
                 LazyVStack(alignment: .leading, spacing: 12) {
@@ -100,10 +101,23 @@ struct SelectionChipsView: View {
                 } //: VStack
                 
             } //: if-check-empty
-
-            if options.isEmpty && !isLoadingOptions {
+            
+            // MARK: State - B2. Loaded (Yes / No Selection)
+            if options.isEmpty && !isLoadingOptions && !hasLoadingFailed {
                 ChipToggleView(isYes: $isYes)
             }
+            
+            // MARK: State - C. Failed
+            if hasLoadingFailed {
+                Text("Couldn't load \(title.lowercased())s at the moment")
+                    .textStyle(
+                        foregroundColor: .onBackground,
+                        font: .interBold,
+                        size: 14
+                    )
+                    .opacity(0.2)
+            }
+
           
         } //: VStack
     }
@@ -205,5 +219,34 @@ struct SelectionChipsView_Previews: PreviewProvider {
             .padding()
             .background(Colors.background.color)
             .previewDisplayName("Single Selection / Loading")
+        
+        SelectionChipsView(
+            isYes: .constant(true),
+            selected: .constant(""),
+            selections: .constant([]),
+            options: [],
+            isLoadingOptions: false,
+            hasLoadingFailed: true,
+            title: "Genre"
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
+            .previewDisplayName("Multi Selection / Failed")
+        
+        SelectionChipsView(
+            isYes: .constant(true),
+            selected: .constant(""),
+            selections: .constant([]),
+            options: [],
+            isLoadingOptions: false,
+            isSingleSelection: true,
+            hasLoadingFailed: true,
+            title: "Language"
+        )
+            .previewLayout(.sizeThatFits)
+            .padding()
+            .background(Colors.background.color)
+            .previewDisplayName("Single Selection / Failed")
     }
 }

@@ -116,8 +116,6 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     
     /// Services
     func getGenres() {
-        genresError = nil
-        
         TMDBService.getGenres()
             .sink { [weak self] completion in
                 switch completion {
@@ -146,14 +144,13 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     return
                 }
                 self.genres = genres
+                self.genresError = nil
                 Logger.movieRepository.debug("getGenres - success: \(genres.map(\.name))")
             }
             .store(in: &subscriptions)
     }
     
     func getLanguages() {
-        languagesError = nil
-        
         TMDBService.getLanguages()
             .sink { [weak self] completion in
                 switch completion {
@@ -178,10 +175,12 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     Logger.movieRepository.debug("getLanguages - finished")
                 }
             } receiveValue: { [weak self] languages in
+                Logger.movieRepository.debug("getLanguages - receive value")
                 guard let self else {
                     return
                 }
                 self.languages = languages
+                self.languagesError = nil
                 Logger.movieRepository.debug("getLanguages - success: \(languages.map(\.name))")
             }
             .store(in: &subscriptions)
@@ -192,8 +191,6 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     }
     
     func getSimilarMovies(of id: Int) {
-        similarMoviesError = nil
-
         TMDBService.getSimilarMovies(of: id)
             .sink { [weak self] completion in
                 switch completion {
@@ -222,6 +219,7 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     return
                 }
                 self.similarMovies = results
+                self.similarMoviesError = nil
                 Logger.movieRepository.debug("getSimilarMovies - success: \(results.map(\.title))")
             }
             .store(in: &subscriptions)
@@ -267,8 +265,6 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     }
     
     func searchMovie(with query: String) {
-        searchError = nil
-
         TMDBService.searchMovie(with: query)
             .sink { [weak self] completion in
                 switch completion {
@@ -297,6 +293,7 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     return
                 }
                 self.searchedMovies = results
+                self.searchError = nil
                 Logger.movieRepository.debug("searchMovie - success: \(results.map(\.title))")
             }
             .store(in: &subscriptions)
