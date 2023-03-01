@@ -62,6 +62,19 @@ struct AppView: View {
                 
             }
             
+            // MARK: Layer 3: Alert
+            if appViewModel.isAlertShown {
+                ZStack {
+                    Color.black.opacity(0.75)
+                    AlertView(
+                        title: "NOTE",
+                        message: "Some days will not appear due to insufficient movies available",
+                        action: closeAlertAction
+                    )
+                    .padding(.horizontal, 24)
+                } //: ZStack
+            }
+            
         } //: Group
         .ignoresSafeArea(.container, edges: .all)
     }
@@ -78,14 +91,26 @@ struct AppView: View {
             appViewModel.didTapSearchScreen()
         }
     }
+    
+    func closeAlertAction() {
+        withAnimation {
+            appViewModel.closeAlert()
+        }
+    }
 }
 
 // MARK: - Preview
 struct AppView_Previews: PreviewProvider {
+    static var alertModel: AppViewModel {
+        let appViewModel = TestData.appViewModel
+        appViewModel.isAlertShown = true
+        return appViewModel
+    }
+    
     static var previews: some View {
         AppView()
             .previewLayout(.sizeThatFits)
-            .environmentObject(TestData.appViewModel)
+            .environmentObject(alertModel)
             .environmentObject(ImageCacheRepository())
     }
 }

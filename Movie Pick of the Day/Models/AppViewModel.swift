@@ -54,6 +54,7 @@ final class AppViewModel: ObservableObject {
     @Published var moviePicks: [MovieDay] = []
     @Published var preferenceInput: Preference?
     @Published var todaysMoviePick: MovieDay?
+    @Published var isAlertShown: Bool = false
     
     var todaysMovieDay: MovieDay? {
         guard
@@ -113,6 +114,11 @@ extension AppViewModel {
                 }
                 self.moviePicks = $0
                 Logger.appModel.debug("Movie Pick IDs: \(self.moviePicks.map { "\($0.day), \($0.id)" } )")
+                
+                let hasNoMovie = self.moviePicks.first { $0.movie == nil } != nil
+                if hasNoMovie {
+                    self.showAlert()
+                }
             }
             .store(in: &subscriptions)
         
@@ -235,6 +241,15 @@ extension AppViewModel {
 
 // MARK: Events
 extension AppViewModel {
+    
+    // MARK: Alert
+    func closeAlert() {
+        isAlertShown = false
+    }
+    
+    func showAlert() {
+        isAlertShown = true
+    }
     
     // MARK: Pick of the Day
     /// Picks

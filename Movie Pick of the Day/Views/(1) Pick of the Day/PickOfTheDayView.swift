@@ -15,7 +15,7 @@ struct PickOfTheDayView: View {
             
     var preferenceSummary: String {
         guard let preference = appViewModel.preference else {
-            return ""
+            return "Select"
         }
         return preference.summary
     }
@@ -90,15 +90,13 @@ struct PickOfTheDayView: View {
                         .padding(.horizontal, 21)
                         .padding(.top, 16)
                     
-                    // PICK OF THE DAY
-                    pickOfTheDay
-                        .padding(.horizontal, 21)
-                        .padding(.top, paddingVertical)
-                    
-                    // PICKS FOR THE REST OF THE WEEK
-                    MoviePicksView(movies: appViewModel.nextMovieDays)
-                        .padding(.top, paddingVertical - 12)
-                        .padding(.bottom, 63 + 28)
+                    // WEEK PICKS
+                    MoviePicksView(
+                        todaysMovieDay: appViewModel.todaysMovieDay,
+                        movies: appViewModel.nextMovieDays,
+                        pickOfTheDayAction: pickOfTheDayAction
+                    )
+                    .padding(.bottom, 63 + 28)
                     
                 } //: VStack
                 .padding(.top, topBarHeight + dimensions.insets.top)
