@@ -65,11 +65,16 @@ protocol MovieRepositoryType {
     /// Preferred Movies
     var preferredMovies: [Movie] { get set }
     var preferredMoviesPublisher: Published<[Movie]>.Publisher { get }
+    
+    var preferredMoviesPage: Int { get set }
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { get }
+    
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
         originalLanguage: String,
-        with genres: [String]
+        with genres: [String],
+        currentPage: Int
     ) -> Void
     
     /// Searched Movies
@@ -110,6 +115,9 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     
     @Published var preferredMovies: [Movie] = []
     var preferredMoviesPublisher: Published<[Movie]>.Publisher { $preferredMovies }
+    
+    @Published var preferredMoviesPage: Int = 0
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { $preferredMoviesPage }
     
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
@@ -229,14 +237,42 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
         includeAdult: Bool,
         language: String,
         originalLanguage: String,
-        with genres: [String]
+        with genres: [String],
+        currentPage: Int
     ) {
-        TMDBService.discoverMovies(
+        let nextPage = currentPage + 1
+        
+        return TMDBService.discoverMovies(
             includeAdult: includeAdult,
             language: language,
             originalLanguage: originalLanguage,
-            with: genres
-        )
+            with: genres,
+            page: 1
+        ).flatMap { response in
+            guard nextPage > 1 else {
+                Logger.movieRepository.debug("getPreferredMovies - getting page 1")
+                return Just(response)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+            guard
+                let totalPages = response.totalPages,
+                nextPage <= totalPages
+            else {
+                Logger.movieRepository.debug("getPreferredMovies - getting page 1")
+                return Just(response)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+            Logger.movieRepository.debug("getPreferredMovies - getting page \(nextPage)")
+            return TMDBService.discoverMovies(
+                includeAdult: includeAdult,
+                language: language,
+                originalLanguage: originalLanguage,
+                with: genres,
+                page: nextPage
+            )
+        }
         .sink { completion in
             switch completion {
             case .failure(let error):
@@ -258,8 +294,10 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
             guard let self, let results = response.results else {
                 return
             }
+            let currentPage = response.page ?? 1
+            self.preferredMoviesPage = currentPage
             self.preferredMovies = results
-            Logger.movieRepository.debug("getPreferredMovies - success: \(results.map(\.title))")
+            Logger.movieRepository.debug("getPreferredMovies - success: \(currentPage), \(results.map(\.title))")
         }
         .store(in: &subscriptions)
     }
@@ -343,6 +381,9 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     
     @Published var similarMoviesError: MovieRepositoryError?
     var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $similarMoviesError }
+    
+    @Published var preferredMoviesPage: Int = 0
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { $preferredMoviesPage }
 
     /// Data
     @Published var genres: [Genre] = []
@@ -398,7 +439,8 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
         includeAdult: Bool,
         language: String,
         originalLanguage: String,
-        with genres: [String]
+        with genres: [String],
+        currentPage: Int
     ) {
         preferredMovies = [
             TestData.createMovie(id: 101),

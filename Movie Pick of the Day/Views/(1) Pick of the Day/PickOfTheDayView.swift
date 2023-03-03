@@ -43,31 +43,6 @@ struct PickOfTheDayView: View {
         } //: HStack
     }
     
-    var pickOfTheDay: some View {
-        Button(action: pickOfTheDayAction) {
-
-            if
-                let todaysMovieDay = appViewModel.todaysMovieDay,
-                let todaysMovie = todaysMovieDay.movie
-            {
-
-                PickCardView(
-                    title: todaysMovie.title ?? "",
-                    description: todaysMovie.overview ?? "",
-                    uiImage: nil,
-                    posterPath: todaysMovie.posterPath,
-                    posterResolution: .original
-                )
-
-            } else {
-
-                EmptyView()
-
-            } //: if-else
-
-        } //: Button
-    }
-    
     var content: some View {
         ZStack(alignment: .top) {
             

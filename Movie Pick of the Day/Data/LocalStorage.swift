@@ -13,6 +13,7 @@ class LocalStorage {
         .standard
     }
     
+    // Data
     static func setData(_ data: Data, forKey key: Keys) {
         guard let defaults = getUserDefaults() else {
             return
@@ -27,6 +28,7 @@ class LocalStorage {
         return defaults.data(forKey: key.rawValue)
     }
     
+    // Any Object - dates
     static func setItem(_ value: Any?, forKey key: Keys) {
         guard let defaults = getUserDefaults() else {
             return
@@ -41,6 +43,7 @@ class LocalStorage {
         return defaults.object(forKey: key.rawValue)
     }
 
+    // Dictionary
     static func getDictionary(forKey key: Keys) -> [String: Int]? {
         guard let defaults = getUserDefaults() else {
             return nil
@@ -57,4 +60,11 @@ class LocalStorage {
         return dictionary
     }
 
+    // Integer
+    static func getInt(forKey key: Keys) -> Int {
+        guard let defaults = getUserDefaults() else {
+            return 0
+        }
+        return defaults.integer(forKey: key.rawValue)
+    }
 }

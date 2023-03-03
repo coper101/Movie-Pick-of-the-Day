@@ -225,4 +225,28 @@ extension View {
     }
 }
 
+// MARK: - Snap Pop Animation
+struct SnapPopAnimation: ViewModifier {
+    // MARK: - Props
+    @State private var isAnimating: Bool = false
+    
+    // MARK: - UI
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isAnimating ? 1 : 0.65)
+            .onAppear {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.55)) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
+extension View {
+    
+    func withSnapPopAnimation() -> some View {
+        modifier(SnapPopAnimation())
+    }
+}
+
 

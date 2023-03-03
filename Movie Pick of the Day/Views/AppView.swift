@@ -48,6 +48,7 @@ struct AppView: View {
                 )
                 .background(Colors.background.color)
                 .statusBarHidden(false)
+                .zIndex(0)
                 
             }
             
@@ -59,23 +60,27 @@ struct AppView: View {
                 
                 PickRevealView(movie: movie)
                     .statusBarHidden(true)
+                    .zIndex(1)
                 
             }
             
             // MARK: Layer 3: Alert
             if appViewModel.isAlertShown {
-                ZStack {
-                    Color.black.opacity(0.75)
-                    AlertView(
-                        title: "NOTE",
-                        message: "Some days will not appear due to insufficient movies available",
-                        action: closeAlertAction
-                    )
-                    .padding(.horizontal, 24)
-                } //: ZStack
+                Color.black.opacity(0.75)
+                    .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                    .zIndex(2)
+
+                AlertView(
+                    title: "NOTE",
+                    message: "Some days will not appear due to insufficient movies available",
+                    action: closeAlertAction
+                )
+                .padding(.horizontal, 24)
+                .zIndex(2)
+                .transition(.opacity.animation(.easeOut(duration: 0.2)))
             }
             
-        } //: Group
+        } //: ZStack
         .ignoresSafeArea(.container, edges: .all)
     }
     
@@ -101,6 +106,7 @@ struct AppView: View {
 
 // MARK: - Preview
 struct AppView_Previews: PreviewProvider {
+    
     static var alertModel: AppViewModel {
         let appViewModel = TestData.appViewModel
         appViewModel.isAlertShown = true
@@ -110,7 +116,15 @@ struct AppView_Previews: PreviewProvider {
     static var previews: some View {
         AppView()
             .previewLayout(.sizeThatFits)
+            .environmentObject(TestData.appViewModel)
+            .environmentObject(ImageCacheRepository())
+            .previewDisplayName("Movie Picks Available")
+        
+        AppView()
+            .previewLayout(.sizeThatFits)
             .environmentObject(alertModel)
             .environmentObject(ImageCacheRepository())
+            .previewDisplayName("No Movie Picks Available")
+        
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Preference: Codable {
+struct Preference: Codable, CustomDebugStringConvertible {
     var language: String
     var originalLanguage: String
     var includeAdult: Bool
@@ -18,7 +18,18 @@ struct Preference: Codable {
         summary += ", \(includeAdult ? "Include Adult" : "Exclude Adult")"
         if !genres.isEmpty {
             summary += ", " +  genres.compactMap(\.name).joined(separator: ", ")
+        } else {
+            summary += ", Any Genre"
         }
         return summary
+    }
+    
+    var debugDescription: String {
+        """
+            language: \(language)
+            original Language: \(originalLanguage)
+            include Adult: \(includeAdult)
+            genres: \(genres)
+            """
     }
 }

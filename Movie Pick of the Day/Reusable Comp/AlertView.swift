@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AlertView: View {
-    // MARK: - Props
+    // MARK: - Props    
     var title: String
     var message: String
     var action: Action
@@ -50,6 +50,7 @@ struct AlertView: View {
         .padding(.vertical, 24)
         .background(Colors.background.color)
         .cornerRadius(15)
+        .withSnapPopAnimation()
     }
     
     // MARK: - Actions

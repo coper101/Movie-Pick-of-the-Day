@@ -11,6 +11,7 @@ extension Logger {
     
     enum Category: String {
         // case widgetProvider = "widgetprovider"
+        case appDataRepository = "appdatarepository"
         case movieRepository = "movierepository"
         case imageRepository = "imagerepository"
         case imageCacheRepository = "imagecacherepository"
@@ -19,6 +20,7 @@ extension Logger {
     }
     
     // static let widgetProvider = createLogger(of: .widgetProvider)
+    static let appDataRepository = createLogger(of: .appDataRepository)
     static let movieRepository = createLogger(of: .movieRepository)
     static let imageRepository = createLogger(of: .imageRepository)
     static let imageCacheRepository = createLogger(of: .imageCacheRepository)
