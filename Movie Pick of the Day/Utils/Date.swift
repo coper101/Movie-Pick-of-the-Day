@@ -9,12 +9,6 @@ import Foundation
 
 extension String {
     
-    /// Converts ISO String Date to Date
-    func toDate() -> Date {
-        let dateFormatter = ISO8601DateFormatter()
-        return dateFormatter.date(from: self) ?? Date()
-    }
-    
     /// Coverts Formatted String Date to Date
     /// e.g. 2022-12-14
     func toDate(format: String = "yyyy-MM-dd") -> Date? {

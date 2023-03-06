@@ -167,6 +167,12 @@ class TestData {
         createGenre(name: "Mystery")
     ]
     
+    static var samplePreference: Preference = .init(
+        language: "EN",
+        originalLanguage: "EN",
+        includeAdult: true,
+        genres: Array(sampleGenres[..<4])
+    )
 }
 
 extension TestData {
@@ -184,12 +190,7 @@ extension TestData {
         appViewModel.genres = sampleGenres
         appViewModel.isAdultSelected = false
         
-        appViewModel.preference = .init(
-            language: "en",
-            originalLanguage: "en",
-            includeAdult: true,
-            genres: Array(sampleGenres[..<4])
-        )
+        appViewModel.preference = samplePreference
         
         return appViewModel
     }

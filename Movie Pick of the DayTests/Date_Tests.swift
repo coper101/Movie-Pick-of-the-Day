@@ -17,7 +17,7 @@ final class Date_Tests: XCTestCase {
     /// getRemainingWeekDaysRange()
     func test_get_remaining_weekdays_range() throws {
         // (1) Given
-        let date = "2023-01-12T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-12".toDate())
 
         // (2) When
         let range = date.getRemainingWeekDaysRange()
@@ -34,7 +34,7 @@ final class Date_Tests: XCTestCase {
     
     func test_get_remaining_weekday_range_left_one_weekday() throws {
         // (1) Given
-        let date = "2023-01-14T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-14".toDate())
 
         // (2) When
         let range = date.getRemainingWeekDaysRange()
@@ -51,7 +51,7 @@ final class Date_Tests: XCTestCase {
     
     func test_get_remaining_weekday_range_complete_week() throws {
         // (1) Given
-        let date = "2023-01-08T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-08".toDate())
 
         // (2) When
         let range = date.getRemainingWeekDaysRange()
@@ -69,7 +69,7 @@ final class Date_Tests: XCTestCase {
     /// getRemainingWeekDaysCount()
     func test_get_remaining_weekday_count() throws {
         // (1) Given
-        let date = "2023-01-12T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-12".toDate())
         
         // (2) When
         let count = date.getRemainingWeekDaysCount()
@@ -80,7 +80,7 @@ final class Date_Tests: XCTestCase {
     
     func test_get_remaining_weekday_count_left_one_day() throws {
         // (1) Given
-        let date = "2023-01-14T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-14".toDate())
         
         // (2) When
         let count = date.getRemainingWeekDaysCount()
@@ -91,7 +91,7 @@ final class Date_Tests: XCTestCase {
     
     func test_get_remaining_weekday_count_complete_week() throws {
         // (1) Given
-        let date = "2023-01-08T00:00:00+00:00".toDate()
+        let date = try XCTUnwrap("2023-01-08".toDate())
         
         // (2) When
         let count = date.getRemainingWeekDaysCount()

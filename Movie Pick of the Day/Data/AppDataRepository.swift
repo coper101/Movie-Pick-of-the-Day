@@ -173,12 +173,7 @@ class MockAppDataRepository: AppDataRepositoryType {
     /// Setters and Getters
     /// - Movie Picks
     func getMoviePicksOfTheWeek() -> [MovieDay] {
-        [
-            TestData.createMovieDay(movieID: 104, day: .wednesday),
-            TestData.createMovieDay(movieID: 105, day: .thursday),
-            TestData.createMovieDay(movieID: 106, day: .friday),
-            TestData.createMovieDay(movieID: 107, day: .saturday),
-        ]
+        TestData.sampleMoviePicks
     }
     
     func setMoviePicksOfTheWeek(_ movieDays: [MovieDay]) {
@@ -187,15 +182,7 @@ class MockAppDataRepository: AppDataRepositoryType {
     
     /// - Preference
     func getPreference() -> Preference? {
-        .init(
-            language: "en",
-            originalLanguage: "en",
-            includeAdult: false,
-            genres: [
-                .init(id: 1, name: "Action"),
-                .init(id: 2, name:  "Adventure")
-            ]
-        )
+        TestData.samplePreference
     }
     
     func setPreference(_ preference: Preference) {
@@ -204,7 +191,7 @@ class MockAppDataRepository: AppDataRepositoryType {
     
     /// - Week Tracker
     func getWeekEndDate() -> Date? {
-        "2023-01-12T00:00:00+00:00".toDate()
+        "2023-01-01".toDate()
     }
     
     func setWeekEndDate(to endDate: Date) {

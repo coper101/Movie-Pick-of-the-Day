@@ -29,24 +29,24 @@ final class App_View_Model_Tests: XCTestCase {
         movieRepository = nil
         appViewModel = nil
     }
-    
+
     // MARK: Pick of the Day
     /// User Event - didTapPickOfTheDayMovieScreen()
     func test_did_tap_pick_of_the_day_movie_screen() throws {
         // (1) Given
         let currentScreen = Screen.search
-        
+
         // (2) When
         appViewModel.screen = currentScreen
-        
+
         XCTAssertEqual(appViewModel.screen, .search)
-        
+
         appViewModel.didTapPickOfTheDayMovieScreen()
-        
+
         // (3) Then
         XCTAssertEqual(appViewModel.screen, .pickOfTheDay)
     }
-    
+
     /// Event - loadMoviePicks()
     func test_load_movie_picks() throws {
         // (1) Given
@@ -56,18 +56,18 @@ final class App_View_Model_Tests: XCTestCase {
             .init(day: .friday, id: 106),
             .init(day: .saturday, id: 107)
         ]
-        
+
         // (2) When
-        appDataRepository.setMoviePicksIDsOfTheWeek(newMoviePicks)
+        appDataRepository.setMoviePicksOfTheWeek(newMoviePicks)
         appViewModel.republishAppData()
-        
+
         // (3) Then
         let expectation = expectation(description: "Get Movie Description")
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            
+
             let moviePicks = self.appViewModel.moviePicks
-            
+
             XCTAssertEqual(moviePicks.count, 4)
 
             XCTAssertEqual(moviePicks[0].day, .wednesday)
@@ -93,27 +93,31 @@ final class App_View_Model_Tests: XCTestCase {
             XCTAssertNotNil(moviePicks[3].movie)
             XCTAssertNotNil(moviePicks[3].movie!.id)
             XCTAssertEqual(moviePicks[3].movie!.id!, 107)
-            
+
             expectation.fulfill()
         }
-    
+
         waitForExpectations(timeout: 0.5)
     }
-    
+
     /// Event - selectMoviePickIDsOfTheWeek()
     func test_select_movie_pick_ids_of_the_week() throws {
         // (1) Given
         let preference = Preference(
             language: "EN",
+            originalLanguage: "EN",
             includeAdult: false,
-            genres: ["Action", "Adventure"]
+            genres: [
+                .init(id: 1, name: "Action"),
+                .init(id: 2, name: "Adventure")
+            ]
         )
-        
+
         // (2) When
         appDataRepository.setPreference(preference)
         appViewModel.republishAppData()
         appDataRepository.setPreference(preference) /// again as it drops the first one
-                
+
         // (3) Then
         let preferredMovies = movieRepository.preferredMovies
 
@@ -125,7 +129,7 @@ final class App_View_Model_Tests: XCTestCase {
         XCTAssertEqual(preferredMovies[5].id, 106)
         XCTAssertEqual(preferredMovies[6].id, 107)
     }
-    
+
     /// Event - reSelectMoviePickIDsOfTheWeek()
     func test_reselect_movie_pick_ids_of_the_week_first_time() throws {
         // (1) Given
@@ -141,23 +145,21 @@ final class App_View_Model_Tests: XCTestCase {
             TestData.createMovie(id: 106),
             TestData.createMovie(id: 107)
         ]
-        
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
         // (2) When
         // Jan 22, Saturday (index: 1)
-        appDataRepository.setMoviePicksIDsOfTheWeek(existingMoviePicks)
-        appViewModel.reSelectMoviePickIDsOfTheWeek(
-            movies,
-            todaysDate: "2023-01-22T00:00:00+00:00".toDate()
-        )
-        
+        appDataRepository.setMoviePicksOfTheWeek(existingMoviePicks)
+        appViewModel.reSelectMoviePickIDsOfTheWeek(movies, todaysDate: todaysDate)
+
         // (3) Then
-        let moviePickIDs = appDataRepository.moviePickIDsOfTheWeek
-        
+        let moviePickIDs = appDataRepository.moviePicksOfTheWeek
+
         XCTAssertEqual(moviePickIDs.count, 7)
 
         XCTAssertEqual(moviePickIDs[0].day, .sunday)
         XCTAssertEqual(moviePickIDs[0].id, 100)
-        
+
         XCTAssertEqual(moviePickIDs[1].day, .monday)
         XCTAssertGreaterThan(moviePickIDs[1].id, 100)
 
@@ -176,7 +178,7 @@ final class App_View_Model_Tests: XCTestCase {
         XCTAssertEqual(moviePickIDs[6].day, .saturday)
         XCTAssertGreaterThan(moviePickIDs[6].id, 100)
     }
-    
+
     func test_reselect_movie_pick_ids_of_the_week_with_existing_selection() throws {
         // (1) Given
         let existingMoviePicks: [MovieDay] = [
@@ -197,23 +199,21 @@ final class App_View_Model_Tests: XCTestCase {
             TestData.createMovie(id: 96),
             TestData.createMovie(id: 97)
         ]
-        
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
         // (2) When
         // Jan 22, Sunday (index: 1)
-        appDataRepository.setMoviePicksIDsOfTheWeek(existingMoviePicks)
-        appViewModel.reSelectMoviePickIDsOfTheWeek(
-            movies,
-            todaysDate: "2023-01-22T00:00:00+00:00".toDate()
-        )
-        
+        appDataRepository.setMoviePicksOfTheWeek(existingMoviePicks)
+        appViewModel.reSelectMoviePickIDsOfTheWeek(movies, todaysDate: todaysDate)
+
         // (3) Then
-        let moviePickIDs = appDataRepository.moviePickIDsOfTheWeek
+        let moviePickIDs = appDataRepository.moviePicksOfTheWeek
 
         XCTAssertEqual(moviePickIDs.count, 7)
-        
+
         XCTAssertEqual(moviePickIDs[0].day, .sunday)
         XCTAssertEqual(moviePickIDs[0].id, 100)
-        
+
         XCTAssertEqual(moviePickIDs[1].day, .monday)
         XCTAssertGreaterThanOrEqual(moviePickIDs[1].id, 90)
 
@@ -228,11 +228,11 @@ final class App_View_Model_Tests: XCTestCase {
 
         XCTAssertEqual(moviePickIDs[5].day, .friday)
         XCTAssertGreaterThanOrEqual(moviePickIDs[5].id, 90)
-        
+
         XCTAssertEqual(moviePickIDs[6].day, .saturday)
         XCTAssertGreaterThanOrEqual(moviePickIDs[6].id, 90)
     }
-    
+
     func test_reselect_movie_pick_ids_of_the_week_last_day_of_week() throws {
         // (1) Given
         let existingMoviePicks: [MovieDay] = [
@@ -253,23 +253,21 @@ final class App_View_Model_Tests: XCTestCase {
             TestData.createMovie(id: 106),
             TestData.createMovie(id: 107)
         ]
-        
+        let todaysDate = try XCTUnwrap("2023-01-28".toDate())
+
         // (2) When
         // Jan 28, Saturday (index: 7)
-        appDataRepository.setMoviePicksIDsOfTheWeek(existingMoviePicks)
-        appViewModel.reSelectMoviePickIDsOfTheWeek(
-            movies,
-            todaysDate: "2023-01-28T00:00:00+00:00".toDate()
-        )
-        
+        appDataRepository.setMoviePicksOfTheWeek(existingMoviePicks)
+        appViewModel.reSelectMoviePickIDsOfTheWeek(movies, todaysDate: todaysDate)
+
         // (3) Then
-        let moviePickIDs = appDataRepository.moviePickIDsOfTheWeek
+        let moviePickIDs = appDataRepository.moviePicksOfTheWeek
 
         XCTAssertEqual(moviePickIDs.count, 7)
-        
+
         XCTAssertEqual(moviePickIDs[0].day, .sunday)
         XCTAssertEqual(moviePickIDs[0].id, 100)
-        
+
         XCTAssertEqual(moviePickIDs[1].day, .monday)
         XCTAssertEqual(moviePickIDs[1].id, 99)
 
@@ -284,11 +282,11 @@ final class App_View_Model_Tests: XCTestCase {
 
         XCTAssertEqual(moviePickIDs[5].day, .friday)
         XCTAssertEqual(moviePickIDs[5].id, 95)
-        
+
         XCTAssertEqual(moviePickIDs[6].day, .saturday)
         XCTAssertEqual(moviePickIDs[6].id, 94)
     }
-    
+
     func test_reselect_movie_pick_ids_of_the_week_insufficient_movies() throws {
         // (1) Given
         let existingMoviePicks: [MovieDay] = [
@@ -297,24 +295,22 @@ final class App_View_Model_Tests: XCTestCase {
         let movies = [
             TestData.createMovie(id: 101)
         ]
-        
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
         // (2) When
         // Jan 22, Sunday (index: 1)
-        appDataRepository.setMoviePicksIDsOfTheWeek(existingMoviePicks)
-        appViewModel.reSelectMoviePickIDsOfTheWeek(
-            movies,
-            todaysDate: "2023-01-22T00:00:00+00:00".toDate()
-        )
-         
+        appDataRepository.setMoviePicksOfTheWeek(existingMoviePicks)
+        appViewModel.reSelectMoviePickIDsOfTheWeek(movies, todaysDate: todaysDate)
+
         // (3) Then
-        let moviePickIDs = appDataRepository.moviePickIDsOfTheWeek
+        let moviePickIDs = appDataRepository.moviePicksOfTheWeek
 
         XCTAssertEqual(moviePickIDs.count, 1)
-        
+
         XCTAssertEqual(moviePickIDs[0].day, .sunday)
         XCTAssertEqual(moviePickIDs[0].id, 100)
     }
-    
+
     /// User Event - didTapPreferences()
     func test_did_tap_preferenes() throws {
         // (1) Given
@@ -341,21 +337,21 @@ final class App_View_Model_Tests: XCTestCase {
                  )
              ]
          */
-        
+
         // (2) When
         appViewModel.republishMovieData()
         appViewModel.didTapPreferences()
-                
+
         // (3) Then
         let expectation = expectation(description: "Republish Genres and Languages")
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            
+
             let genres = self.appViewModel.genres
             let languages = self.appViewModel.languages
 
             XCTAssertFalse(genres.isEmpty)
-            
+
             XCTAssertEqual(genres[0].id, 1)
             XCTAssertNotNil(genres[0].name)
             XCTAssertEqual(genres[0].name!, "Action")
@@ -375,40 +371,49 @@ final class App_View_Model_Tests: XCTestCase {
             XCTAssertEqual(languages[1].iso6391!, "de")
             XCTAssertNotNil(languages[1].englishName)
             XCTAssertEqual(languages[1].englishName!, "German")
-            
+
             XCTAssertNotNil(self.appViewModel.preferenceInput)
-            
+
             expectation.fulfill()
         }
-        
+
         waitForExpectations(timeout: 0.2)
     }
 
-    
+
     /// User Event - didTapSave()
     func test_did_tap_save_preferences() throws {
         // (1) Given
         let newPreference = Preference(
             language: "EN",
+            originalLanguage: "EN",
             includeAdult: false,
-            genres: ["Action", "Adventure"]
+            genres: [
+                .init(id: 1, name: "Action"),
+                .init(id: 2, name: "Adventure")
+            ]
         )
-        
+
         // (2) When
         appViewModel.republishAppData()
         appViewModel.preferenceInput = newPreference
+
+        let updatedPreference = try XCTUnwrap(appViewModel.preferenceInput)
         
-        XCTAssertNotNil(appViewModel.preferenceInput)
-        XCTAssertEqual(appViewModel.preferenceInput!.language, "EN")
-        XCTAssertEqual(appViewModel.preferenceInput!.includeAdult, false)
-        XCTAssertEqual(appViewModel.preferenceInput!.genres, ["Action", "Adventure"])
-        
+        XCTAssertEqual(updatedPreference.language, "EN")
+        XCTAssertEqual(updatedPreference.originalLanguage, "EN")
+        XCTAssertEqual(updatedPreference.includeAdult, false)
+        XCTAssertEqual(updatedPreference.genres[0].id, 1)
+        XCTAssertEqual(updatedPreference.genres[0].name, "Action")
+        XCTAssertEqual(updatedPreference.genres[1].id, 2)
+        XCTAssertEqual(updatedPreference.genres[1].name, "Adventure")
+
         appViewModel.didTapSavePreferences()
-                
+
         // (3) Then
         XCTAssertNil(appViewModel.preferenceInput)
     }
-    
+
     /// User Event - didTapClosePreferences()
     func test_did_tap_close_preferenes() throws {
         // (1) Given
@@ -435,44 +440,44 @@ final class App_View_Model_Tests: XCTestCase {
                  )
              ]
          */
-        
+
         // (2) When
         appViewModel.republishMovieData()
         appViewModel.didTapPreferences()
         appViewModel.didTapClosePreferences()
-                
+
         // (3) Then
         let expectation = expectation(description: "Republish Genres and Languages")
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+
             XCTAssertTrue(self.appViewModel.genres.isEmpty)
             XCTAssertTrue(self.appViewModel.languages.isEmpty)
             XCTAssertNil(self.appViewModel.preferenceInput)
-            
+
             expectation.fulfill()
         }
-        
-        waitForExpectations(timeout: 0.5)
+
+        waitForExpectations(timeout: 1.5)
     }
-    
+
     // MARK: Search
     /// User Event - didTapSearchScreen()
     func test_did_tap_search_screen() throws {
         // (1) Given
         let currentScreen = Screen.pickOfTheDay
-        
+
         // (2) When
         appViewModel.screen = currentScreen
-        
+
         XCTAssertEqual(appViewModel.screen, .pickOfTheDay)
-        
+
         appViewModel.didTapSearchScreen()
-        
+
         // (3) Then
         XCTAssertEqual(appViewModel.screen, .search)
     }
-    
+
     /// User Event - didTapSearchOnCommitMovie()
     func test_did_tap_search_commit_movie() throws {
         // (1) Given
@@ -482,33 +487,33 @@ final class App_View_Model_Tests: XCTestCase {
                  TestData.createMovie(id: 102, title: "Toy Story 2")
              ]
          */
-        
+
         // (2) When
         XCTAssertTrue(appViewModel.searchedMovies.isEmpty)
-        
-        appViewModel.didTapSearchOnCommitMovie("Toy")
-        
+
+        appViewModel.didTapSearchOnCommitMovie("Toy", onDone: { _ in })
+
         // (3) Then
         let expectation = expectation(description: "Republish Searched Movies")
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            
+
             let searchedMovies = self.appViewModel.searchedMovies
-            
+
             XCTAssertFalse(searchedMovies.isEmpty)
-            
+
             XCTAssertNotNil(searchedMovies[0].title)
             XCTAssertEqual(searchedMovies[0].title, "Toy Story 1")
-            
+
             XCTAssertNotNil(searchedMovies[1].title)
             XCTAssertEqual(searchedMovies[1].title, "Toy Story 2")
-            
+
             expectation.fulfill()
         }
-        
+
         waitForExpectations(timeout: 0.2)
     }
-    
+
     // MARK: Pick of the Day Detail
     /// User Event - didPickOfTheDayDetailScreen()
     func test_did_tap_pick_of_the_day_detail_screen() throws {
@@ -525,81 +530,80 @@ final class App_View_Model_Tests: XCTestCase {
             .init(day: .friday, id: 105),
             .init(day: .saturday, id: 106)
         ]
-    
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
         // (2) When
         appViewModel.moviePicks = existingMoviePicks
-        
+
         XCTAssertEqual(appViewModel.screen, .pickOfTheDay)
         XCTAssertEqual(appViewModel.moviePicks.count, 7)
-        
-        appViewModel.didTapPickOfTheDayDetailScreen(
-            todaysDate: "2023-01-22T00:00:00+00:00".toDate()
-        )
-        
+
+        appViewModel.didTapPickOfTheDayDetailScreen(todaysDate: todaysDate)
+
         XCTAssertEqual(appViewModel.screen, .pickOfTheDayDetail)
-                
+
         // (3) Then
         let expectation = expectation(description: "Republish Similar Movies")
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            
+
             let similarMovies = self.appViewModel.similarMovies
             let todaysMoviePick = self.appViewModel.todaysMoviePick
-            
+
             XCTAssertFalse(similarMovies.isEmpty)
-            
+            print("similar movies: ", similarMovies)
+
             XCTAssertNotNil(similarMovies[0].title)
             XCTAssertEqual(similarMovies[0].title, "Toy Story 1")
-            
+
             XCTAssertNotNil(similarMovies[1].title)
             XCTAssertEqual(similarMovies[1].title, "Toy Story 2")
-            
+
             XCTAssertNotNil(todaysMoviePick)
             XCTAssertNotNil(todaysMoviePick!.day)
             XCTAssertEqual(todaysMoviePick!.day, .sunday)
-            
+
             XCTAssertNotNil(todaysMoviePick!.id)
             XCTAssertEqual(todaysMoviePick!.id, 100)
-            
+
             XCTAssertNotNil(todaysMoviePick!.movie)
             XCTAssertNotNil(todaysMoviePick!.movie!.id)
             XCTAssertEqual(todaysMoviePick!.movie!.id, 99)
-            
+
             expectation.fulfill()
         }
-        
+
         waitForExpectations(timeout: 0.2)
     }
-    
+
     /// User Event - didTapClosePickOfTheDayDetailScreen()
     func test_did_tap_close_pick_of_the_day_detail_screen() throws {
         // (1) Given
-    
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
         // (2) When
-        appViewModel.didTapPickOfTheDayDetailScreen(
-            todaysDate: "2023-01-22T00:00:00+00:00".toDate()
-        )
-        
+        appViewModel.didTapPickOfTheDayDetailScreen(todaysDate: todaysDate)
+
         XCTAssertEqual(appViewModel.screen, .pickOfTheDayDetail)
 
         appViewModel.didTapClosePickOfTheDayDetailScreen()
-        
+
         XCTAssertEqual(appViewModel.screen, .pickOfTheDay)
-                
+
         // (3) Then
         let expectation = expectation(description: "Republish Similar Movies")
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            
+
             let similarMovies = self.appViewModel.similarMovies
             let todaysMoviePick = self.appViewModel.todaysMoviePick
-            
+
             XCTAssertTrue(similarMovies.isEmpty)
             XCTAssertNil(todaysMoviePick)
-            
+
             expectation.fulfill()
         }
-        
+
         waitForExpectations(timeout: 0.2)
     }
 }
