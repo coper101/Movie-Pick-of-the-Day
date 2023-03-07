@@ -58,27 +58,11 @@ final class AppViewModel: ObservableObject {
     @Published var isAlertShown: Bool = false
     
     var todaysMovieDay: MovieDay? {
-        guard
-            let todaysWeekDay = Date().toDateComp().weekday,
-            let movieDay = moviePicks.first(where: { $0.day.rawValue == todaysWeekDay })
-        else {
-            return nil
-        }
-        return movieDay
+        moviePicks.getTodaysMovieDay(todaysDate: .init())
     }
 
     var nextMovieDays: [MovieDay] {
-        guard
-            let todaysWeekDay = Date().toDateComp().weekday,
-            let todaysMovieDay = moviePicks.first(where: { $0.day.rawValue == todaysWeekDay })
-        else {
-            return []
-        }
-        let nextMovies = moviePicks
-            .filter { $0.day.rawValue > todaysMovieDay.day.rawValue }
-            .sorted(by: <)
-        
-        return nextMovies
+        moviePicks.getNextMovieDays(todaysDate: .init())
     }
     
     init(
@@ -263,9 +247,11 @@ extension AppViewModel {
     
     // MARK: Pick of the Day
     // Picks
-    func refreshMoviePicksOfTheWeek(_ preference: Preference?, _ weekEndDate: Date?) {
-        let todaysDate = Date()
-        
+    func refreshMoviePicksOfTheWeek(
+        _ preference: Preference?,
+        _ weekEndDate: Date?,
+        todaysDate: Date = Date()
+    ) {
         guard
             let preference,
             let weekEndDate,
@@ -281,7 +267,7 @@ extension AppViewModel {
         screen = .pickOfTheDay
     }
     
-    // Preferences
+    // Preference
     func selectPreferences() {
         guard let preference else {
             return

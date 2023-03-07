@@ -31,6 +31,46 @@ final class App_View_Model_Tests: XCTestCase {
     }
 
     // MARK: Pick of the Day
+    // Picks
+    func test_donot_refresh_movie_picks_of_the_week() throws {
+        // (1) Given
+        let preference = Preference(
+            language: "EN",
+            originalLanguage: "EN",
+            includeAdult: false,
+            genres: [
+                .init(id: 1, name: "Action"),
+                .init(id: 2, name: "Adventure")
+            ]
+        )
+        // Jan 21, Saturday (index 7)
+        let weekEndDate = try XCTUnwrap("2023-01-21".toDate())
+        
+        // Jan 22, Saturday (index 1)
+        let todaysDate = try XCTUnwrap("2023-01-22".toDate())
+
+        // (2) When
+        appViewModel.refreshMoviePicksOfTheWeek(
+            preference,
+            weekEndDate,
+            todaysDate: todaysDate
+        )
+        
+        // (3) Then
+        let expectation = expectation(description: "Republish Movie Picks")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
+            let moviePickIDs = self.appDataRepository.moviePicksOfTheWeek.sorted(by: <)
+
+            XCTAssertTrue(moviePickIDs.isEmpty)
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 0.5)
+    }
+    
     func test_did_tap_pick_of_the_day_movie_screen() throws {
         // (1) Given
         let currentScreen = Screen.search
@@ -354,7 +394,7 @@ final class App_View_Model_Tests: XCTestCase {
         waitForExpectations(timeout: 0.5)
     }
 
-    // MARK: Preference Sheet
+    // Preference
     func test_did_tap_preferences() throws {
         // (1) Given
         // (2) When
