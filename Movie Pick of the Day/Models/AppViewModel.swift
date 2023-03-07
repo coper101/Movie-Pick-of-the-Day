@@ -76,7 +76,7 @@ final class AppViewModel: ObservableObject {
         }
         let nextMovies = moviePicks
             .filter { $0.day.rawValue > todaysMovieDay.day.rawValue }
-            .sorted(by: { $0.day.rawValue < $1.day.rawValue })
+            .sorted(by: <)
         
         return nextMovies
     }
@@ -110,6 +110,7 @@ extension AppViewModel {
         appDataRepository.moviePicksOfTheWeekPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
+                print("moviepicks republish: \($0)")
                 guard let self else {
                     return
                 }
@@ -464,7 +465,6 @@ extension AppViewModel {
         appDataRepository.setMoviePicksOfTheWeek(moviePicks)
         appDataRepository.setWeekEndDate(to: todaysDate.getEndOfWeekDate())
     }
-
 
     // MARK: Search
     func didTapSearchScreen() {

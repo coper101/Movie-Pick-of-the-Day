@@ -178,6 +178,7 @@ class MockAppDataRepository: AppDataRepositoryType {
     
     func setMoviePicksOfTheWeek(_ movieDays: [MovieDay]) {
         moviePicksOfTheWeek = movieDays
+        
     }
     
     /// - Preference

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Preference: Codable, CustomDebugStringConvertible {
+struct Preference: Codable {
     var language: String
     var originalLanguage: String
     var includeAdult: Bool
@@ -23,6 +23,18 @@ struct Preference: Codable, CustomDebugStringConvertible {
         }
         return summary
     }
+}
+
+extension Preference: Equatable {
+    static func == (lhs: Preference, rhs: Preference) -> Bool {
+        lhs.language == rhs.language &&
+        lhs.originalLanguage == rhs.originalLanguage &&
+        lhs.includeAdult == rhs.includeAdult &&
+        lhs.genres == rhs.genres
+    }
+}
+
+extension Preference: CustomDebugStringConvertible {
     
     var debugDescription: String {
         """

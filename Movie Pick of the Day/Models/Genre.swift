@@ -10,6 +10,12 @@ struct Genre: Codable {
     let name: String?
 }
 
+extension Genre: Equatable {
+    static func == (lhs: Genre, rhs: Genre) -> Bool {
+        lhs.name == rhs.name && lhs.id == rhs.id
+    }
+}
+
 extension Genre: Comparable {
     static func < (lhs: Genre, rhs: Genre) -> Bool {
         guard

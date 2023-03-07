@@ -43,11 +43,27 @@ struct MovieDay: CustomStringConvertible, Identifiable, Codable {
     var movie: Movie? = nil
     
     var description: String {
-        """
+            """
             day: \(day.rawValue)
             id: \(id)
             movie: \(String(describing: movie))
             """
+    }
+}
+
+extension MovieDay: Equatable {
+    static func ==(lhs: MovieDay, rhs: MovieDay) -> Bool {
+        return (
+            lhs.day == rhs.day &&
+            lhs.id == rhs.id &&
+            lhs.movie?.id == rhs.movie?.id
+        )
+    }
+}
+
+extension MovieDay: Comparable {
+    static func < (lhs: MovieDay, rhs: MovieDay) -> Bool {
+        lhs.day.rawValue < rhs.day.rawValue
     }
 }
 

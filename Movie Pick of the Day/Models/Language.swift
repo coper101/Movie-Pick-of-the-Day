@@ -17,6 +17,13 @@ struct Language: Decodable {
     }
 }
 
+extension Language: Equatable {
+    static func == (lhs: Language, rhs: Language) -> Bool {
+        lhs.englishName == rhs.englishName
+    }
+}
+
+
 extension Language: Comparable {
     static func < (lhs: Language, rhs: Language) -> Bool {
         guard
