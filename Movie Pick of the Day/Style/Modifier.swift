@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// MARK: Conditional Modifier
 extension View {
     
     /// Applies the given transform if the given condition evaluates to `true`.
@@ -44,13 +43,57 @@ extension View {
             )
     }
     
+    func alignToCenter() -> some View {
+        modifier(CenterAlignmentModifier())
+    }
+    
+    func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
+        ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
+    }
+    
+    // MARK: Animations
+    func withSlowPopAnimation() -> some View {
+        modifier(SlowPopAnimationModifier())
+    }
+
+    func withSkeletonLoadingAnimation(opacity: Double = 0.05) -> some View {
+        modifier(SkeletonLoadingAnimationModifier(opacity: opacity))
+    }
+
+    func withMovingUpAndDownAnimation() -> some View {
+        modifier(MovingUpAndDownAnimation())
+    }
+
+    func withSnapPopAnimation() -> some View {
+        modifier(SnapPopAnimation())
+    }
+    
+    // MARK: Dynamic iOS Support
+    func dynamicOverlay(
+        alignment: Alignment,
+        _ theContent: @escaping () -> some View
+    ) -> some View {
+        modifier(
+            DynamicOverlayModifier(
+                alignment: alignment,
+                theContent: theContent
+            )
+        )
+    }
+    
+    func dynamicMask(
+        alignment: Alignment = .center,
+        _ theContent: @escaping () -> some View
+    ) -> some View {
+        modifier(
+            DynamicMask(alignment: alignment, theContent: theContent)
+        )
+    }
 }
 
-// MARK: Alignment Modifier
+
+
 struct CenterAlignmentModifier: ViewModifier {
-    // MARK: - Props
-    
-    // MARK: - UI
     func body(content: Content) -> some View {
         content
             .fillMaxSize(alignment: .center)
@@ -59,20 +102,14 @@ struct CenterAlignmentModifier: ViewModifier {
     }
 }
 
-extension View {
-    
-    func alignToCenter() -> some View {
-        modifier(CenterAlignmentModifier())
-    }
-}
 
-// MARK: Custom Corner Modifier
+
 struct CornerRadiusStyle: ViewModifier {
-    // MARK: - Props
+    // MARK: Props
     var radius: CGFloat
     var corners: UIRectCorner
 
-    // MARK: - UI
+    // MARK: UI
     struct CornerRadiusShape: Shape {
 
         var radius = CGFloat.infinity
@@ -90,48 +127,13 @@ struct CornerRadiusStyle: ViewModifier {
     }
 }
 
-extension View {
-    func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
-        ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
-    }
-}
 
-// MARK: Dynamic Overlay Modifier
-struct DynamicOverlayModifier<TheContent>: ViewModifier where TheContent: View {
-    // MARK: - Props
-    var alignment: Alignment
-    var theContent: () -> TheContent
-    
-    // MARK: - UI
-    func body(content: Content) -> some View {
-        Group {
-            if #available(iOS 15.0, *) {
-                content.overlay(alignment: alignment, content: theContent)
-            } else {
-                content.overlay(theContent(), alignment: alignment)
-            }
-        }
-    }
-}
 
-extension View {
-    
-    func dynamicOverlay(alignment: Alignment, _ theContent: @escaping () -> some View) -> some View {
-        modifier(
-            DynamicOverlayModifier(
-                alignment: alignment,
-                theContent: theContent
-            )
-        )
-    }
-}
-
-// MARK: Slow Pop Animation
 struct SlowPopAnimationModifier: ViewModifier {
-    // MARK: - Props
+    // MARK: Props
     @State private var isAnimating: Bool = false
     
-    // MARK: - UI
+    // MARK: UI
     func body(content: Content) -> some View {
         content
             .opacity(isAnimating ? 1 : 0)
@@ -144,20 +146,14 @@ struct SlowPopAnimationModifier: ViewModifier {
     }
 }
 
-extension View {
-    
-    func withSlowPopAnimation() -> some View {
-        modifier(SlowPopAnimationModifier())
-    }
-}
 
-// MARK: Skeleton Loading Loading Animation
+
 struct SkeletonLoadingAnimationModifier: ViewModifier {
-    // MARK: - Props
+    // MARK: Props
     @State private var isAnimating: Bool = false
     var opacity: Double
     
-    // MARK: - UI
+    // MARK: UI
     func body(content: Content) -> some View {
         content
             .dynamicOverlay(alignment: .center) {
@@ -191,19 +187,13 @@ struct SkeletonLoadingAnimationModifier: ViewModifier {
     }
 }
 
-extension View {
-    
-    func withSkeletonLoadingAnimation(opacity: Double = 0.05) -> some View {
-        modifier(SkeletonLoadingAnimationModifier(opacity: opacity))
-    }
-}
 
-// MARK: Moving Animation
+
 struct MovingUpAndDownAnimation: ViewModifier {
-    // MARK: - Props
+    // MARK: Props
     @State private var isAnimating: Bool = false
     
-    // MARK: - UI
+    // MARK: UI
     func body(content: Content) -> some View {
         content
             .offset(y: isAnimating ? 130 : -130)
@@ -218,19 +208,13 @@ struct MovingUpAndDownAnimation: ViewModifier {
     }
 }
 
-extension View {
-    
-    func withMovingUpAndDownAnimation() -> some View {
-        modifier(MovingUpAndDownAnimation())
-    }
-}
 
-// MARK: - Snap Pop Animation
+
 struct SnapPopAnimation: ViewModifier {
-    // MARK: - Props
+    // MARK: Props
     @State private var isAnimating: Bool = false
     
-    // MARK: - UI
+    // MARK: UI
     func body(content: Content) -> some View {
         content
             .scaleEffect(isAnimating ? 1 : 0.65)
@@ -242,11 +226,41 @@ struct SnapPopAnimation: ViewModifier {
     }
 }
 
-extension View {
+
+
+struct DynamicOverlayModifier<TheContent>: ViewModifier where TheContent: View {
+    // MARK: Props
+    var alignment: Alignment
+    var theContent: () -> TheContent
     
-    func withSnapPopAnimation() -> some View {
-        modifier(SnapPopAnimation())
+    // MARK: UI
+    func body(content: Content) -> some View {
+        Group {
+            if #available(iOS 15.0, *) {
+                content.overlay(alignment: alignment, content: theContent)
+            } else {
+                content.overlay(theContent(), alignment: alignment)
+            }
+        }
     }
 }
 
+
+
+struct DynamicMask<TheContent>: ViewModifier where TheContent: View {
+    // MARK: Props
+    var alignment: Alignment
+    @ViewBuilder var theContent: TheContent
+    
+    // MARK: UI
+    func body(content: Content) -> some View {
+        Group {
+            if #available(iOS 15.0, *) {
+                content.mask(alignment: alignment) { theContent }
+            } else {
+                content.mask(theContent)
+            }
+        }
+    }
+}
 

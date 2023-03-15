@@ -226,6 +226,73 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27579AC229C1E43C001A60B8 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				27FAD249298A5E380069DE72 /* RoundButtonView.swift */,
+				27FAD254298A7DEB0069DE72 /* CircledButtonView.swift */,
+				2763BF5029926751008D609A /* CloseButtonView.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
+		27579AC329C1E446001A60B8 /* Pager */ = {
+			isa = PBXGroup;
+			children = (
+				27FAD252298A7D490069DE72 /* PagerTabView.swift */,
+				27FAD256298A82070069DE72 /* PagerView.swift */,
+			);
+			path = Pager;
+			sourceTree = "<group>";
+		};
+		27579AC429C1E44E001A60B8 /* Chips */ = {
+			isa = PBXGroup;
+			children = (
+				2763BF962993A633008D609A /* ChipButtonView.swift */,
+				2763BF9229938A47008D609A /* ChipOptionView.swift */,
+				2763BF942993A367008D609A /* ChipToggleView.swift */,
+				2763BF5229926899008D609A /* SelectionChipsView.swift */,
+			);
+			path = Chips;
+			sourceTree = "<group>";
+		};
+		27579AC529C1E479001A60B8 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
+				27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */,
+				27C1BD9129A372CA00D81AAA /* LoadingImageView.swift */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		27579AC629C1E4B6001A60B8 /* Visual */ = {
+			isa = PBXGroup;
+			children = (
+				272C3A4B299E1BAC00316768 /* DividerView.swift */,
+				2763BF542992793B008D609A /* StatusBarBackgroundView.swift */,
+				272C3A51299E22B200316768 /* DisappearingGradientView.swift */,
+				27C6C6D229AF326900A15B51 /* MovieFilmView.swift */,
+			);
+			path = Visual;
+			sourceTree = "<group>";
+		};
+		27579AC729C1E4EF001A60B8 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				27FAD250298A77230069DE72 /* MovieCardView.swift */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
+		27579AC829C1E4F8001A60B8 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				27C6C6D429AF3A3D00A15B51 /* AlertView.swift */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
 		27FAD237298A53DD0069DE72 /* Resouces */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,7 +322,6 @@
 				27FAD24B298A627F0069DE72 /* PickCardView.swift */,
 				2763BF4C2992646F008D609A /* PreferencesSheetView.swift */,
 				2763BF4E2992666B008D609A /* FilledButtonView.swift */,
-				2763BF5029926751008D609A /* CloseButtonView.swift */,
 				27FAD244298A5C0E0069DE72 /* (3) Detail View */,
 			);
 			path = "(1) Pick of the Day";
@@ -285,28 +351,18 @@
 			path = "(2) Search";
 			sourceTree = "<group>";
 		};
-		27FAD248298A5E1F0069DE72 /* Reusable Comp */ = {
+		27FAD248298A5E1F0069DE72 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				27FAD249298A5E380069DE72 /* RoundButtonView.swift */,
-				27FAD254298A7DEB0069DE72 /* CircledButtonView.swift */,
-				27FAD252298A7D490069DE72 /* PagerTabView.swift */,
-				27FAD256298A82070069DE72 /* PagerView.swift */,
-				2763BF962993A633008D609A /* ChipButtonView.swift */,
-				2763BF9229938A47008D609A /* ChipOptionView.swift */,
-				2763BF942993A367008D609A /* ChipToggleView.swift */,
-				2763BF5229926899008D609A /* SelectionChipsView.swift */,
-				272C3A4B299E1BAC00316768 /* DividerView.swift */,
-				2763BF542992793B008D609A /* StatusBarBackgroundView.swift */,
-				272C3A51299E22B200316768 /* DisappearingGradientView.swift */,
-				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
-				27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */,
-				27C1BD9129A372CA00D81AAA /* LoadingImageView.swift */,
-				27FAD250298A77230069DE72 /* MovieCardView.swift */,
-				27C6C6D229AF326900A15B51 /* MovieFilmView.swift */,
-				27C6C6D429AF3A3D00A15B51 /* AlertView.swift */,
+				27579AC229C1E43C001A60B8 /* Button */,
+				27579AC329C1E446001A60B8 /* Pager */,
+				27579AC429C1E44E001A60B8 /* Chips */,
+				27579AC629C1E4B6001A60B8 /* Visual */,
+				27579AC529C1E479001A60B8 /* Image */,
+				27579AC729C1E4EF001A60B8 /* Card */,
+				27579AC829C1E4F8001A60B8 /* Alert */,
 			);
-			path = "Reusable Comp";
+			path = Components;
 			sourceTree = "<group>";
 		};
 		27FAD24F298A6F0E0069DE72 /* Style */ = {
@@ -345,7 +401,7 @@
 				27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */,
 				27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */,
 				27FDBDA329696869008FA32E /* App */,
-				27FAD248298A5E1F0069DE72 /* Reusable Comp */,
+				27FAD248298A5E1F0069DE72 /* Components */,
 				27FDBD6029696773008FA32E /* Views */,
 				27FDBDA929696887008FA32E /* Data */,
 				27FDBDCD296969BA008FA32E /* Models */,

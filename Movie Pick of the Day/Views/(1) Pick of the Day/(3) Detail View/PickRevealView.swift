@@ -12,33 +12,44 @@ struct PickRevealView: View {
     @EnvironmentObject var imageCache: ImageCacheRepository
     @EnvironmentObject var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
-    
+        
     var movie: Movie
     var uiImage: UIImage?
     
     let paddingHorizontal: CGFloat = 24
     
     // MARK: - UI
+    var topBar: some View {
+        HStack {
+            Spacer()
+            CloseButtonView(action: closeAction)
+                .padding(.trailing, 12)
+                .padding(.top, 4 + dimensions.insets.top)
+        } //: HStack
+    }
+        
     var background: some View {
         ZStack {
             
             // Layer 1: BACKGROUND IMAGE
-            AsyncImageView(
-                imageCache: imageCache,
-                path: movie.posterPath,
-                resolution: .original,
-                placeholderTitle: movie.displayedTitle,
-                isResizable: true,
-                isScaledToFill: true,
-                scaleEffect: 1.1,
-                hasMovingUpAndDownAnimation: true
-            )
+            if uiImage == nil {
+                AsyncImageView(
+                    imageCache: imageCache,
+                    path: movie.posterPath,
+                    resolution: .original,
+                    placeholderTitle: movie.displayedTitle,
+                    isResizable: true,
+                    isScaledToFill: true,
+                    scaleEffect: 1.1,
+                    hasMovingUpAndDownAnimation: true
+                )
+            }
             
             // TESTING
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .scaleEffect(1.1)
             }
             
@@ -135,26 +146,24 @@ struct PickRevealView: View {
         ZStack(alignment: .top) {
             
             // MARK: Layer 1 - Background Image
-            Colors.background.color
-            Colors.backgroundLight.color
-
-            background
-                .offset(y: -200)
-                .frame(maxWidth: dimensions.screen.width)
+            ZStack(alignment: .top) {
+                Colors.background.color
+                Colors.backgroundLight.color
+                background
+                    .blur(radius: 10)
+                    .offset(y: -200)
+                background
+                    .offset(y: -200)
+            }
+            .frame(width: dimensions.screen.width)
             
             // MARK: Layer 2 - Sheet
             sheet
             
         } //: ZStack
-        .overlay(
-            HStack {
-                Spacer()
-                CloseButtonView(action: closeAction)
-                    .padding(.trailing, 12)
-                    .padding(.top, 4 + dimensions.insets.top)
-            },
-            alignment: .topTrailing
-        )
+        .dynamicOverlay(alignment: .topTrailing) {
+            topBar
+        }
     }
     
     // MARK: - Actions
