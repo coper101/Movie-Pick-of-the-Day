@@ -319,7 +319,7 @@ extension AppViewModel {
             }
             
         var selectedISOLanguage = "en"
-        
+         
         if
             let selectedLanguage = languages.first(where: { $0.englishName == languageSelected }),
             let isoLanguage = selectedLanguage.iso6391

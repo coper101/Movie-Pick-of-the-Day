@@ -13,12 +13,19 @@ struct MoviePicksView: View {
 
     var todaysMovieDay: MovieDay?
     var movies: [MovieDay]
+    var preference: Preference?
     var pickOfTheDayAction: Action
     
     let paddingVertical: CGFloat = 30
     
     var noPicksAvailable: Bool {
         todaysMovieDay?.movie == nil && movies.isEmpty
+    }
+    
+    var noPicksMessage: String {
+        (preference == nil) ?
+            "Select a Preference\nAbove to Generate Movie Picks" :
+            "No Movies Available\nSelect a Preference Again"
     }
     
     // MARK: - UI
@@ -83,7 +90,7 @@ struct MoviePicksView: View {
             MovieFilmView()
                 .frame(height: 153)
             
-            Text("Select a Preference\nabove to generate Movie Picks")
+            Text(noPicksMessage)
                 .textStyle(
                     foregroundColor: .onBackground,
                     size: 16,
@@ -126,6 +133,7 @@ struct MoviePicksView_Previews: PreviewProvider {
         MoviePicksView(
             todaysMovieDay: TestData.sampleMovieDay,
             movies: TestData.sampleMoviePicks,
+            preference: nil,
             pickOfTheDayAction: {}
         )
             .environmentObject(ImageCacheRepository())
@@ -137,6 +145,7 @@ struct MoviePicksView_Previews: PreviewProvider {
         MoviePicksView(
             todaysMovieDay: nil,
             movies: [],
+            preference: nil,
             pickOfTheDayAction: {}
         )
             .environmentObject(ImageCacheRepository())

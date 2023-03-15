@@ -69,6 +69,7 @@ struct PickOfTheDayView: View {
                     MoviePicksView(
                         todaysMovieDay: appViewModel.todaysMovieDay,
                         movies: appViewModel.nextMovieDays,
+                        preference: appViewModel.preference,
                         pickOfTheDayAction: pickOfTheDayAction
                     )
                     .padding(.bottom, 63 + 28)
