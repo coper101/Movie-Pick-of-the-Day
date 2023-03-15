@@ -208,6 +208,7 @@ extension AppViewModel {
             .store(in: &subscriptions)
         
         movieRepository.preferredMoviesPublisher
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.reSelectMoviePickIDsOfTheWeek($0) }
             .store(in: &subscriptions)

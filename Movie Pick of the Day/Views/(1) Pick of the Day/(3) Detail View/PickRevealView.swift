@@ -23,7 +23,7 @@ struct PickRevealView: View {
         HStack {
             Spacer()
             CloseButtonView(
-                hasBlurEffect: false,
+                hasBlurEffect: true,
                 action: closeAction
             )
             .padding(.trailing, 12)
