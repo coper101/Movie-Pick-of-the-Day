@@ -16,25 +16,33 @@ struct VisualEffectView: UIViewRepresentable {
         return view
     }
     
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        
-    }
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
 }
 
 struct CloseButtonView: View {
     // MARK: - Props
+    var hasBlurEffect: Bool
     var action: Action
     
     // MARK: - UI
+    var content: some View {
+        Icons.close.image
+            .resizable()
+            .scaledToFit()
+    }
+    
     var body: some View {
         Button(action: action) {
-            VisualEffectView(style: .systemMaterialDark)
-                .dynamicMask {
-                    Icons.close.image
-                        .resizable()
-                        .scaledToFit()
+            Group {
+                if hasBlurEffect {
+                    VisualEffectView(style: .systemMaterialDark)
+                        .dynamicMask { content }
+                } else {
+                    content
+                        .foregroundColor(.white.opacity(0.45))
                 }
-                .frame(width: 44, height: 44)
+            }
+            .frame(width: 44, height: 44)
         } //: Button
     }
     
@@ -44,9 +52,22 @@ struct CloseButtonView: View {
 // MARK: - Preview
 struct CloseButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        CloseButtonView(action: {})
-            .previewLayout(.sizeThatFits)
-            .padding()
-            .background(Color.white)
+        CloseButtonView(
+            hasBlurEffect: true,
+            action: {}
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+        .background(Color.white)
+        .previewDisplayName("Blur Effect")
+        
+        CloseButtonView(
+            hasBlurEffect: false,
+            action: {}
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+        .background(Color.white)
+        .previewDisplayName("Semi Transparent")
     }
 }

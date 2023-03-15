@@ -98,10 +98,25 @@ extension AppViewModel {
                 guard let self else {
                     return
                 }
-                self.moviePicks = $0                
-                // Display Alert
-                let picksWithNoMovies = self.moviePicks.filter { $0.movie == nil }
-                if picksWithNoMovies.count > 0 {
+                self.moviePicks = $0
+                
+                /**
+                    Display Alert if:
+                     - next movie pick days have at least of 1 non-available movie
+                 */
+                let todaysDate = Date()
+                
+                let todaysPick = self.moviePicks.getTodaysMovieDay(todaysDate: todaysDate)
+                let nextPicks = self.moviePicks.getNextMovieDays(todaysDate: todaysDate, false)
+                let numberOfPicksWithNoMovies = nextPicks.filter { $0.movie == nil }.count
+                
+                // Logger.appModel.debug("republish picks - numberOfPicksWithNoMovies: \(numberOfPicksWithNoMovies)")
+                // Logger.appModel.debug("republish picks - todaysPick is nil? \(todaysPick == nil)")
+                
+                if
+                    todaysPick != nil,
+                    numberOfPicksWithNoMovies > 0
+                {
                     self.showAlert()
                 }
             }
@@ -367,6 +382,16 @@ extension AppViewModel {
     
     func reSelectMoviePickIDsOfTheWeek(_ prefferedMovies: [Movie], todaysDate: Date = .init()) {
         guard !prefferedMovies.isEmpty else {
+            // remove all movies
+            var moviePicks = [MovieDay]()
+            moviePicks.append(contentsOf: self.moviePicks)
+            
+            for (index, _) in self.moviePicks.enumerated() {
+                moviePicks[index].movie = nil
+            }
+            appDataRepository.setMoviePicksOfTheWeek(moviePicks)
+            appDataRepository.setWeekEndDate(to: todaysDate.getEndOfWeekDate())
+            
             return
         }
         
@@ -374,7 +399,7 @@ extension AppViewModel {
         let remainingWeekdaysCount = todaysDate.getRemainingWeekDaysCount()
         
         /**
-            No. Change in Movie Pick
+            No Change in Movie Pick
             (1) today is last day of week
             (2) insufficient movies to assign all to remaining days in week
          */
@@ -397,7 +422,7 @@ extension AppViewModel {
         moviePicks.append(contentsOf: self.moviePicks)
         
         Logger.appModel.debug("existing movie picks: \(moviePicks.map(\.day.rawValue))")
-                    
+        
         // rest of the week
         for (index, weekday) in remainingWeekdaysRange.enumerated() {
             
@@ -411,10 +436,8 @@ extension AppViewModel {
                 weekday == todayWeekday
             {
                 if let todaysPickIndex = moviePicks.firstIndex(where: { $0.day.rawValue == todayWeekday }) {
-                    // set today's movie if not set
-                    if moviePicks[todaysPickIndex].movie == nil {
-                        moviePicks[todaysPickIndex].movie = newMovie
-                    }
+                    // re-assign today's movie (option to skip re-assigning will be implemented in the future)
+                    moviePicks[todaysPickIndex].movie = newMovie
                 } else {
                     // add movie of today
                     moviePicks.append(

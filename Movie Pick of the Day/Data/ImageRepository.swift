@@ -20,7 +20,7 @@ class ImageRepository: ObservableObject {
     
     var subscriptions = Set<AnyCancellable>()
 
-    let path: String?
+    @Published var path: String?
     let resolution: ImageResolution
     var imageCache: ImageCache
     

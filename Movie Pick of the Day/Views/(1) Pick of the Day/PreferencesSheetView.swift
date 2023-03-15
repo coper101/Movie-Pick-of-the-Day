@@ -41,7 +41,10 @@ struct PreferencesSheetView: View {
                 
                 Spacer()
                 
-                CloseButtonView(action: closeAction)
+                CloseButtonView(
+                    hasBlurEffect: false,
+                    action: closeAction
+                )
                 
             } //: HStack
             .padding(.top, 16)

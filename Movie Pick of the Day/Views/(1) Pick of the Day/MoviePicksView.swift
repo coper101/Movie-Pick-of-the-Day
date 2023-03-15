@@ -110,16 +110,19 @@ struct MoviePicksView: View {
                 todaysPick
                     .padding(.horizontal, 21)
                     .padding(.top, paddingVertical)
+                    .transition(.opacity.animation(.easeIn(duration: 0.5)))
                 
                 nextPicks
                     .padding(.top, paddingVertical - 12)
+                    .transition(.opacity.animation(.easeIn(duration: 0.5)))
                 
             } else {
                                 
                 emptyPicks
                     .padding(.top, dimensions.screen.height * 0.15)
+                    .transition(.opacity.animation(.easeIn(duration: 0.5)))
 
-            }
+            } //: if-else
             
         } //: VStack
     }

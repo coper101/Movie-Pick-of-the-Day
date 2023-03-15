@@ -15,6 +15,7 @@ struct AsyncImageView: View {
     let placeholderTitle: String
     let hasMovingUpAndDownAnimation: Bool
     
+    var path: String?
     var resolution: ImageResolution
     var showLoading: Bool
     
@@ -33,6 +34,7 @@ struct AsyncImageView: View {
         scaleEffect: CGFloat = 1,
         hasMovingUpAndDownAnimation: Bool = false
     ) {
+        self.path = path
         self._imageRepository = .init(
             wrappedValue: .init(path: path, resolution: resolution, imageCache: imageCache)
         )
@@ -63,6 +65,10 @@ struct AsyncImageView: View {
             }
         } //: Group
         .transition(.opacity.animation(.easeIn(duration: 1.0)))
+        .onChange(of: path) { newPath in
+            imageRepository.path = newPath
+            imageRepository.getUIImage()
+        }
     }
     
     var image: some View {

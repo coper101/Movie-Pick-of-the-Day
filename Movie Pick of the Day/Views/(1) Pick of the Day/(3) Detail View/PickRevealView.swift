@@ -22,9 +22,12 @@ struct PickRevealView: View {
     var topBar: some View {
         HStack {
             Spacer()
-            CloseButtonView(action: closeAction)
-                .padding(.trailing, 12)
-                .padding(.top, 4 + dimensions.insets.top)
+            CloseButtonView(
+                hasBlurEffect: false,
+                action: closeAction
+            )
+            .padding(.trailing, 12)
+            .padding(.top, 4 + dimensions.insets.top)
         } //: HStack
     }
         
