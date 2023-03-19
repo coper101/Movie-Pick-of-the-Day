@@ -39,6 +39,7 @@ final class AppViewModel: ObservableObject {
     @Published var searchedMovies: [Movie] = []
     @Published var isSearching: Bool = false
     @Published var hasSearched: Bool = false
+    @Published var pageNoOfSearchedMovies: Int = 1
     @Published var searchError: MovieRepositoryError?
     
     /// [C] Network Connection
@@ -56,6 +57,8 @@ final class AppViewModel: ObservableObject {
     @Published var preferenceInput: Preference?
     @Published var todaysMoviePick: MovieDay?
     @Published var isAlertShown: Bool = false
+    
+    @Published var previousSearchQuery: String = ""
     
     var todaysMovieDay: MovieDay? {
         moviePicks.getTodaysMovieDay(todaysDate: .init())
@@ -233,6 +236,14 @@ extension AppViewModel {
                 if !self.hasSearched {
                     self.hasSearched = true
                 }
+            }
+            .store(in: &subscriptions)
+        
+        movieRepository.pageNoOfSearchMoviesPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.pageNoOfSearchedMovies = $0
             }
             .store(in: &subscriptions)
     }
@@ -487,8 +498,16 @@ extension AppViewModel {
             return
         }
         isSearching = true
-        movieRepository.searchMovie(with: query)
+        movieRepository.searchMovie(with: query, page: 1)
         onDone(false)
+        previousSearchQuery = query
+    }
+    
+    func loadMoreMovies() {
+        guard !previousSearchQuery.isEmpty else {
+            return
+        }
+        movieRepository.searchMovie(with: previousSearchQuery, page: pageNoOfSearchedMovies + 1)
     }
     
     // MARK: Pick of the Day Detail

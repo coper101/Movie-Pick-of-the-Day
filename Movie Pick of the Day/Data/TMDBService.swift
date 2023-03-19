@@ -45,7 +45,7 @@ protocol TMDBServiceType {
         page: Int
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error>
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error>
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error>
     
     static func getUIImage(
         of path: String,
@@ -93,8 +93,8 @@ class TMDBService: TMDBServiceType {
         )
     }
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error> {
-        Networking.request(request: GetSearchMovies(query: query))
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error> {
+        Networking.request(request: GetSearchMovies(page: page, query: query))
     }
     
     static func getUIImage(

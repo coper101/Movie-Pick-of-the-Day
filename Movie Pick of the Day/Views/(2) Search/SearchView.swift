@@ -80,7 +80,10 @@ struct SearchView: View {
                     SearchingView()
                     
                 case .hasResults:
-                    ResultMoviesView(movies: appViewModel.searchedMovies)
+                    ResultMoviesView(
+                        movies: appViewModel.searchedMovies,
+                        loadMoreMoviesActions: loadMoreMoviesAction
+                    )
                     
                 case .noResults:
                     ResultNoneView()
@@ -134,6 +137,13 @@ struct SearchView: View {
                     self.searchText.removeAll()
                 }
             }
+        }
+    }
+    
+    func loadMoreMoviesAction(onLoaded: Action) {
+        withAnimation {
+            appViewModel.loadMoreMovies()
+            onLoaded()
         }
     }
 }

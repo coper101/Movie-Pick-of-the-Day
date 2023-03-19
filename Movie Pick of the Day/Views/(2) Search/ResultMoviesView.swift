@@ -11,38 +11,14 @@ struct ResultMoviesView: View {
     // MARK: - Props
     @Environment(\.dimensions) var dimensions
     var movies: [Movie]
+    var loadMoreMoviesActions: NestedAction
     
     // MARK: - UI
     var body: some View {
-        ScrollView(showsIndicators: false) {
-                
-            LazyVGrid(
-                columns: Array(
-                    repeating: .init(.flexible()),
-                    count: 2
-                ),
-                spacing: 30
-            ) {
-                
-                ForEach(movies) { movie in
-                        
-                    MovieCardView(
-                        movieTitle: movie.title,
-                        uiImage: nil,
-                        posterPath: movie.posterPath,
-                        posterResolution: .w500
-                    )
-                    .transition(.opacity)
-                        
-                } //: ForEach
-                
-            } //: LazyVGrid
-            .padding(.top, 74 + dimensions.insets.top)
-            .fillMaxSize(alignment: .top)
-            .padding(.horizontal, 24)
-            .padding(.bottom, 90)
-            
-        } //: ScrollView
+        InfiniteLazyVGridView(
+            movies: movies,
+            loadMoreMoviesAction: loadMoreMoviesActions
+        )
         .dynamicOverlay(alignment: .bottom) {
             DisappearingGradientView(
                 contentDirection: .bottom,
@@ -53,15 +29,19 @@ struct ResultMoviesView: View {
     }
     
     // MARK: - Actions
+    
 }
 
 // MARK: - Preview
 struct ResultMoviesView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultMoviesView(movies: TestData.sampleMovies)
-            .frame(height: 750)
-            .previewLayout(.sizeThatFits)
-            .environmentObject(ImageCacheRepository())
-            .background(Colors.background.color)
+        ResultMoviesView(
+            movies: TestData.sampleMovies,
+            loadMoreMoviesActions: { _ in }
+        )
+        .frame(height: 750)
+        .previewLayout(.sizeThatFits)
+        .environmentObject(ImageCacheRepository())
+        .background(Colors.background.color)
     }
 }

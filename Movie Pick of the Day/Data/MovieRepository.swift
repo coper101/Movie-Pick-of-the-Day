@@ -80,8 +80,10 @@ protocol MovieRepositoryType {
     /// Searched Movies
     var searchedMovies: [Movie] { get set }
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { get }
-    func searchMovie(with query: String) -> Void
+    func searchMovie(with query: String, page: Int) -> Void
     
+    var pageNoOfSearchMovies: Int { get set }
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { get }
 }
 
 
@@ -121,6 +123,9 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
+    
+    @Published var pageNoOfSearchMovies: Int = 1
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { $pageNoOfSearchMovies }
     
     /// Services
     func getGenres() {
@@ -302,8 +307,8 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
         .store(in: &subscriptions)
     }
     
-    func searchMovie(with query: String) {
-        TMDBService.searchMovie(with: query)
+    func searchMovie(with query: String, page: Int) {
+        TMDBService.searchMovie(with: query, page: page)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -330,7 +335,13 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                 guard let self, let results = response.results else {
                     return
                 }
-                self.searchedMovies = results
+                self.pageNoOfSearchMovies = response.page ?? 1
+                
+                if self.pageNoOfSearchMovies > 1 {
+                    self.searchedMovies.append(contentsOf: results)
+                } else {
+                    self.searchedMovies = results
+                }
                 self.searchError = nil
                 Logger.movieRepository.debug("searchMovie - success: \(results.map(\.title))")
             }
@@ -401,6 +412,9 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
     
+    @Published var pageNoOfSearchMovies: Int = 0
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { $pageNoOfSearchMovies }
+    
     func getGenres() {
         genres = [
             .init(id: 1, name: "Action"),
@@ -453,7 +467,7 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
         ]
     }
     
-    func searchMovie(with query: String) {
+    func searchMovie(with query: String, page: Int) {
         searchedMovies = [
             TestData.createMovie(id: 101, title: "Toy Story 1"),
             TestData.createMovie(id: 102, title: "Toy Story 2")
