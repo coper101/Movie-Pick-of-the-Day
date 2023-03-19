@@ -12,7 +12,8 @@ struct PickRevealView: View {
     @EnvironmentObject var imageCache: ImageCacheRepository
     @EnvironmentObject var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
-        
+            
+    @State private var isAnimating: Bool = false
     var movie: Movie
     var uiImage: UIImage?
     
@@ -44,7 +45,8 @@ struct PickRevealView: View {
                     isResizable: true,
                     isScaledToFill: true,
                     scaleEffect: 1.1,
-                    hasMovingUpAndDownAnimation: true
+                    hasMovingUpAndDownAnimation: true,
+                    hasScaleUpAnimation: true
                 )
             }
             
@@ -53,7 +55,7 @@ struct PickRevealView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
-                    .scaleEffect(1.1)
+                    .withScaleAndPopAnimation(originalScale: 1.1)
             }
             
         } //: ZStack
@@ -159,9 +161,12 @@ struct PickRevealView: View {
                     .offset(y: -200)
             }
             .frame(width: dimensions.screen.width)
+            .zIndex(0)
             
             // MARK: Layer 2 - Sheet
             sheet
+                .zIndex(1)
+                .withSlideUpAnimation(yOffset: 200)
             
         } //: ZStack
         .dynamicOverlay(alignment: .topTrailing) {

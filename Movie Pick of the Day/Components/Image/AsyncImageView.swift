@@ -13,7 +13,9 @@ struct AsyncImageView: View {
     
     let placeholderUiImage = TestData.createImage(color: .black, width: 1083, height: 1539)
     let placeholderTitle: String
+    
     let hasMovingUpAndDownAnimation: Bool
+    let hasScaleUpAnimation: Bool
     
     var path: String?
     var resolution: ImageResolution
@@ -32,7 +34,8 @@ struct AsyncImageView: View {
         isResizable: Bool = false,
         isScaledToFill: Bool = false,
         scaleEffect: CGFloat = 1,
-        hasMovingUpAndDownAnimation: Bool = false
+        hasMovingUpAndDownAnimation: Bool = false,
+        hasScaleUpAnimation: Bool = false
     ) {
         self.path = path
         self._imageRepository = .init(
@@ -40,6 +43,7 @@ struct AsyncImageView: View {
         )
         self.placeholderTitle = placeholderTitle
         self.hasMovingUpAndDownAnimation = hasMovingUpAndDownAnimation
+        self.hasScaleUpAnimation = hasScaleUpAnimation
         
         self.resolution = resolution
         self.showLoading = showLoading
@@ -84,6 +88,9 @@ struct AsyncImageView: View {
                     .scaleEffect(scaleEffect)
                     .`if`(hasMovingUpAndDownAnimation) {
                         $0.withMovingUpAndDownAnimation()
+                    }
+                    .`if`(hasScaleUpAnimation) {
+                        $0.withScaleAndPopAnimation(originalScale: scaleEffect)
                     }
             } else {
                 NoImageView(title: placeholderTitle)

@@ -35,7 +35,7 @@ struct CloseButtonView: View {
         Button(action: action) {
             Group {
                 if hasBlurEffect {
-                    VisualEffectView(style: .systemMaterialDark)
+                    VisualEffectView(style: .systemUltraThinMaterialLight)
                         .dynamicMask { content }
                 } else {
                     content
@@ -44,6 +44,7 @@ struct CloseButtonView: View {
             }
             .frame(width: 44, height: 44)
         } //: Button
+        .withScaleButtonStyle(minScale: 0.8)
     }
     
     // MARK: - Actions

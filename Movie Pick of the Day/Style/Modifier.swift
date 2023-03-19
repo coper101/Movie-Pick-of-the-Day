@@ -68,6 +68,19 @@ extension View {
         modifier(SnapPopAnimation())
     }
     
+    func withSlideUpAnimation(yOffset: CGFloat) -> some View {
+        modifier(SlideUpAnimation(yOffset: yOffset))
+    }
+    
+    func withScaleAndPopAnimation(originalScale: CGFloat) -> some View {
+        modifier(ScaleAndPopAnimation(originalScale: originalScale))
+    }
+    
+    // MARK: Styles
+    func withScaleButtonStyle(minScale: CGFloat) -> some View {
+        self.buttonStyle(ScaleButtonStyle(minScale: minScale))
+    }
+    
     // MARK: Dynamic iOS Support
     func dynamicOverlay(
         alignment: Alignment,
@@ -226,6 +239,46 @@ struct SnapPopAnimation: ViewModifier {
     }
 }
 
+
+
+struct SlideUpAnimation: ViewModifier {
+    // MARK: Props
+    @State private var isAnimating: Bool = false
+    var yOffset: CGFloat
+    
+    // MARK: UI
+    func body(content: Content) -> some View {
+        content
+            .offset(y: isAnimating ? 0 : yOffset)
+            .onAppear {
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.75)) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
+
+
+struct ScaleAndPopAnimation: ViewModifier {
+    // MARK: Props
+    @State private var isAnimating: Bool = false
+    var originalScale: CGFloat
+    
+    // MARK: UI
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isAnimating ? originalScale : 0.65)
+            .onAppear {
+                withAnimation(
+                    .spring(response: 0.8, dampingFraction: 0.7)
+                    .delay(0.1)
+                ) {
+                    isAnimating = true
+                }
+            }
+    }
+}
 
 
 struct DynamicOverlayModifier<TheContent>: ViewModifier where TheContent: View {

@@ -52,6 +52,7 @@ struct MoviePicksView: View {
             } //: if-else
             
         } //: Button
+        .withScaleButtonStyle(minScale: 0.95)
     }
     
     var nextPicks: some View {
