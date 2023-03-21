@@ -75,7 +75,9 @@ class MockTMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        page: Int
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error> {
         Just(
             GetDiscoverMovies.Response(
@@ -95,7 +97,7 @@ class MockTMDBService: TMDBServiceType {
         .eraseToAnyPublisher()
     }
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error> {
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error> {
         Just(
             GetDiscoverMovies.Response(
                 page: 1,
@@ -151,13 +153,15 @@ class MockFailTMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        page: Int
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error> {
         Fail(error: NetworkError.server("Server Error"))
             .eraseToAnyPublisher()
     }
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error> {
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error> {
         Fail(error: NetworkError.server("Server Error"))
             .eraseToAnyPublisher()
     }
@@ -383,8 +387,10 @@ final class TMDB_Service_Tests: XCTestCase {
         
         MockTMDBService.discoverMovies(
             includeAdult: false,
-            language: "EN",
-            with: ["Action", "Adventure"]
+            language: "en",
+            originalLanguage: "en",
+            with: ["Action", "Adventure"],
+            page: 1
         )
             .sink { completion in
                 switch completion {
@@ -413,8 +419,10 @@ final class TMDB_Service_Tests: XCTestCase {
 
         MockFailTMDBService.discoverMovies(
             includeAdult: false,
-            language: "EN",
-            with: ["Action", "Adventure"]
+            language: "en",
+            originalLanguage: "en",
+            with: ["Action", "Adventure"],
+            page: 1
         )
             .sink { completion in
                 switch completion {
@@ -440,7 +448,7 @@ final class TMDB_Service_Tests: XCTestCase {
         // (2) When
         let expectation = expectation(description: "Search Movie")
         
-        MockTMDBService.searchMovie(with: "Toy")
+        MockTMDBService.searchMovie(with: "Toy", page: 1)
             .sink { completion in
                 switch completion {
                 case .failure(_):
@@ -466,7 +474,7 @@ final class TMDB_Service_Tests: XCTestCase {
         // (2) When
         let expectation = expectation(description: "Search Movie")
 
-        MockFailTMDBService.searchMovie(with: "Toy")
+        MockFailTMDBService.searchMovie(with: "Toy", page: 1)
             .sink { completion in
                 switch completion {
                 case .failure(let error):

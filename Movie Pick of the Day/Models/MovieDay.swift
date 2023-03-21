@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Day: Int {
+enum Day: Int, Codable {
     case sunday = 1
     case monday
     case tuesday
@@ -37,27 +37,43 @@ enum Day: Int {
 }
 
 
-struct MovieDay: CustomStringConvertible {
+struct MovieDay: CustomStringConvertible, Identifiable, Codable {
     let day: Day
     var id: Int
     var movie: Movie? = nil
     
     var description: String {
-        """
+            """
             day: \(day.rawValue)
             id: \(id)
             movie: \(String(describing: movie))
             """
     }
-    
+}
+
+extension MovieDay: Equatable {
+    static func ==(lhs: MovieDay, rhs: MovieDay) -> Bool {
+        return (
+            lhs.day == rhs.day &&
+            lhs.id == rhs.id &&
+            lhs.movie?.id == rhs.movie?.id
+        )
+    }
+}
+
+extension MovieDay: Comparable {
+    static func < (lhs: MovieDay, rhs: MovieDay) -> Bool {
+        lhs.day.rawValue < rhs.day.rawValue
+    }
 }
 
 extension Array where Element == MovieDay {
     
-    func toDictionary() -> [Int: Int] {
-        self.reduce(into: [Int: Int]()) { dictionary, movieDay in
-            /// 1 (Sunday) : 101 (Movie ID)
-            dictionary[movieDay.day.rawValue] = movieDay.id
+    func toDictionary() -> [String: Int] {
+        self.reduce(into: [String: Int]()) { dictionary, movieDay in
+            /// "1" (Sunday) : 101 (Movie ID)
+            let weekdayNo = "\(movieDay.day.rawValue)"
+            dictionary[weekdayNo] = movieDay.id
         }
     }
     

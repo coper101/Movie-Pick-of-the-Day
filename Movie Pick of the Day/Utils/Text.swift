@@ -49,9 +49,9 @@ extension View {
     ///
     /// - Returns: A Text View with new Style
     func textStyle(
-        foregroundColor: Colors = .primary,
-        font: Types = .DMSansBold,
-        size: Int,
+        foregroundColor: Colors = .onBackground,
+        font: Types = .interBold,
+        size: Int = 12,
         maxWidth: CGFloat? = nil,
         alignment: Alignment = .leading,
         lineLimit: Int? = nil,

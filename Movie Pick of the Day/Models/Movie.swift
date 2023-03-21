@@ -5,7 +5,7 @@
 //  Created by Wind Versi on 6/1/23.
 //
 
-struct Movie: Decodable, CustomDebugStringConvertible {
+struct Movie: Codable, CustomDebugStringConvertible, Identifiable {
     let id: Int?
     let title: String?
     let originalTitle: String?
@@ -45,5 +45,34 @@ struct Movie: Decodable, CustomDebugStringConvertible {
             title: \(title ?? "")
             
             """
+    }
+    
+    var displayedTitle: String {
+        title ?? "NA"
+    }
+    
+    var displayedOverview: String {
+        overview ?? "NA"
+    }
+    
+    var displayedVoteAverage: String {
+        guard let voteAverage else {
+            return "NA"
+        }
+        return "\(voteAverage.toDp()) / 10"
+    }
+    
+    var displayedReleasedDate: String {
+        guard
+            let releaseDate,
+            let date = releaseDate.toDate()
+        else {
+            return "NA"
+        }
+        return date.toDayMonthYearFormat()
+    }
+    
+    var displayedLanguage: String {
+        originalLanguage?.uppercased() ?? "NA"
     }
 }

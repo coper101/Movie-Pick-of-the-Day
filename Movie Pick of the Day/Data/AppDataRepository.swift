@@ -6,28 +6,43 @@
 //
 
 import Foundation
+import OSLog
 
 // MARK: Protocol
 protocol AppDataRepositoryType {
     
     /// Data
-    var moviePickIDsOfTheWeek: [MovieDay] { get set }
-    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { get }
+    var moviePicksOfTheWeek: [MovieDay] { get set }
+    var moviePicksOfTheWeekPublisher: Published<[MovieDay]>.Publisher { get }
     
     var preference: Preference? { get set }
     var preferencePublisher: Published<Preference?>.Publisher { get }
     
+    var weekEndDate: Date? { get set }
+    var weekEndDatePublisher: Published<Date?>.Publisher { get }
+    
+    var currentMoviesPreferredPage: Int { get set }
+    var currentMoviesPreferredPagePublisher: Published<Int>.Publisher { get }
+    
     /// Setters and Getters
-    func getMoviePicksIDsOfTheWeek() -> [MovieDay]
-    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay])
+    func getMoviePicksOfTheWeek() -> [MovieDay]
+    func setMoviePicksOfTheWeek(_ movieDays: [MovieDay])
     
     func getPreference() -> Preference?
     func setPreference(_ preference: Preference) -> Void
+    
+    func getWeekEndDate() -> Date?
+    func setWeekEndDate(to endDate: Date)
+    
+    func getCurrentMoviesPreferredPage() -> Int
+    func setCurretMoviesPreferredPage(_ page: Int) -> Void
 }
 
 enum Keys: String {
-    case moviePickIDsOfTheWeek = "Movie_Pick_IDs_Of_The_Week"
+    case moviePicksOfTheWeek = "Movie_Picks_Of_The_Week"
     case preference = "Preference"
+    case weekEndDate = "Week_End_Date"
+    case currentMoviesPreferredPage = "Current_Movies_Preferred_Page"
 }
 
 
@@ -35,61 +50,106 @@ enum Keys: String {
 final class AppDataRepository: ObservableObject, AppDataRepositoryType {
     
     /// Data
-    @Published var moviePickIDsOfTheWeek: [MovieDay] = []
-    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePickIDsOfTheWeek }
+    @Published var moviePicksOfTheWeek: [MovieDay] = []
+    var moviePicksOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePicksOfTheWeek }
     
     @Published var preference: Preference?
     var preferencePublisher: Published<Preference?>.Publisher { $preference }
     
+    @Published var weekEndDate: Date?
+    var weekEndDatePublisher: Published<Date?>.Publisher { $weekEndDate }
+    
+    @Published var currentMoviesPreferredPage: Int = 0
+    var currentMoviesPreferredPagePublisher: Published<Int>.Publisher { $currentMoviesPreferredPage }
+    
     init() {
-        moviePickIDsOfTheWeek = getMoviePicksIDsOfTheWeek()
+        moviePicksOfTheWeek = getMoviePicksOfTheWeek()
         preference = getPreference()
+        weekEndDate = getWeekEndDate()
+        currentMoviesPreferredPage = getCurrentMoviesPreferredPage()
     }
     
     /// Setters and Getters
     /// - Movie Picks
-    func getMoviePicksIDsOfTheWeek() -> [MovieDay] {
-        let dictionary: [Int: Int]? = LocalStorage.getDictionary(forKey: .moviePickIDsOfTheWeek)
-        guard let dictionary else {
-            print("getMoviePicksIDsOfTheWeek error: movie picks dictionary nil")
+    func getMoviePicksOfTheWeek() -> [MovieDay] {
+        guard
+            let data = LocalStorage.getData(forKey: .moviePicksOfTheWeek)
+        else {
+            Logger.appModel.debug("getMoviePicksOfTheWeek - empty")
             return []
         }
-        let movieDays: [MovieDay] = dictionary
-            .map { .init(day: .init(rawValue: $0) ?? .sunday, id: $1) }
-        return movieDays
+        do {
+            let moviePicks = try JSONDecoder().decode([MovieDay].self, from: data)
+            Logger.appModel.debug("getMoviePicksOfTheWeek - \( moviePicks.map { "\($0.day), \($0.id)" } )")
+            return moviePicks
+        } catch let error {
+            Logger.appDataRepository.debug("getMoviePicksOfTheWeek - error decoding: \(error.localizedDescription)")
+            return []
+        }
     }
     
-    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay]) {
-        LocalStorage.setItem(
-            movieDays.toDictionary(),
-            forKey: .moviePickIDsOfTheWeek
-        )
-        moviePickIDsOfTheWeek = getMoviePicksIDsOfTheWeek()
+    func setMoviePicksOfTheWeek(_ movieDays: [MovieDay]) {
+        do {
+            let data = try JSONEncoder().encode(movieDays)
+            LocalStorage.setData(data, forKey: .moviePicksOfTheWeek)
+            moviePicksOfTheWeek = getMoviePicksOfTheWeek()
+        } catch let error {
+            Logger.appDataRepository.debug("setMoviePicksOfTheWeek - error encoding: \(error.localizedDescription)")
+        }
     }
     
     /// - Preference
     func getPreference() -> Preference? {
         let dictionary: [String: Any]? = LocalStorage.getDictionary(forKey: .preference)
         guard let dictionary else {
-            print("getPreference error: preference dictionary nil")
+            Logger.appDataRepository.debug("getPreference - nil")
             return nil
         }
         let preference: Preference? = DictionaryCoder.getType(of: dictionary)
         guard let preference else {
-            print("getPreference error: preference is nil")
+            Logger.appDataRepository.debug("getPreference - nil")
             return nil
         }
+        Logger.appDataRepository.debug("getPreference - \(preference.debugDescription)")
         return preference
     }
     
     func setPreference(_ preference: Preference) {
         let dictionary = DictionaryCoder.getDictionary(of: preference)
         guard let dictionary else {
-            print("setPreference error: preference dictionary nil")
+            Logger.appDataRepository.debug("setPreference - dictionary is nil")
             return
         }
         LocalStorage.setItem(dictionary, forKey: .preference)
         self.preference = getPreference()
+    }
+    
+    /// - Week Tracker
+    func getWeekEndDate() -> Date? {
+        guard let endDate = LocalStorage.getItem(forKey: .weekEndDate) else {
+            Logger.appDataRepository.debug("getWeekEndDate - nil")
+            return nil
+        }
+        let weekEndDate = endDate as? Date
+        Logger.appDataRepository.debug("getWeekEndDate - \(String(describing: weekEndDate))")
+        return weekEndDate
+    }
+    
+    func setWeekEndDate(to endDate: Date) {
+        LocalStorage.setItem(endDate, forKey: .weekEndDate)
+        self.weekEndDate = getWeekEndDate()
+    }
+    
+    /// - Current Movies Preferred Page
+    func getCurrentMoviesPreferredPage() -> Int {
+        let page = LocalStorage.getInt(forKey: .currentMoviesPreferredPage)
+        Logger.appDataRepository.debug("getCurrentMoviesPreferredPage - \(page)")
+        return page
+    }
+    
+    func setCurretMoviesPreferredPage(_ page: Int) {
+        LocalStorage.setItem(page, forKey: .currentMoviesPreferredPage)
+        self.currentMoviesPreferredPage = getCurrentMoviesPreferredPage()
     }
 }
 
@@ -98,39 +158,54 @@ final class AppDataRepository: ObservableObject, AppDataRepositoryType {
 class MockAppDataRepository: AppDataRepositoryType {
     
     /// Data
-    @Published var moviePickIDsOfTheWeek: [MovieDay] = []
-    var moviePickIDsOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePickIDsOfTheWeek }
+    @Published var moviePicksOfTheWeek: [MovieDay] = []
+    var moviePicksOfTheWeekPublisher: Published<[MovieDay]>.Publisher { $moviePicksOfTheWeek }
     
     @Published var preference: Preference?
     var preferencePublisher: Published<Preference?>.Publisher { $preference }
     
+    @Published var weekEndDate: Date?
+    var weekEndDatePublisher: Published<Date?>.Publisher { $weekEndDate }
+    
+    @Published var currentMoviesPreferredPage: Int = 0
+    var currentMoviesPreferredPagePublisher: Published<Int>.Publisher { $currentMoviesPreferredPage }
+    
     /// Setters and Getters
     /// - Movie Picks
-    func getMoviePicksIDsOfTheWeek() -> [MovieDay] {
-        [
-            TestData.createMovieDay(movieID: 104, day: .wednesday),
-            TestData.createMovieDay(movieID: 105, day: .thursday),
-            TestData.createMovieDay(movieID: 106, day: .friday),
-            TestData.createMovieDay(movieID: 107, day: .saturday),
-        ]
+    func getMoviePicksOfTheWeek() -> [MovieDay] {
+        TestData.sampleMoviePicks
     }
     
-    func setMoviePicksIDsOfTheWeek(_ movieDays: [MovieDay]) {
-        moviePickIDsOfTheWeek = movieDays
+    func setMoviePicksOfTheWeek(_ movieDays: [MovieDay]) {
+        moviePicksOfTheWeek = movieDays
+        
     }
     
     /// - Preference
     func getPreference() -> Preference? {
-        .init(
-            language: "EN",
-            includeAdult: false,
-            genres: ["Action", "Adventure"]
-        )
+        TestData.samplePreference
     }
     
     func setPreference(_ preference: Preference) {
         self.preference = preference
     }
     
+    /// - Week Tracker
+    func getWeekEndDate() -> Date? {
+        "2023-01-01".toDate()
+    }
+    
+    func setWeekEndDate(to endDate: Date) {
+        self.weekEndDate = endDate
+    }
+    
+    /// - Current Movies Preferred Page
+    func getCurrentMoviesPreferredPage() -> Int {
+       0
+    }
+    
+    func setCurretMoviesPreferredPage(_ page: Int) {
+        self.currentMoviesPreferredPage = page
+    }
 }
 

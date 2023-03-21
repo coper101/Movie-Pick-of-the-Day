@@ -14,7 +14,7 @@ enum ImageResolution: String {
 
 struct GetImage: TMDBImageRequest {
     var path: String {
-        "/t/p/\(imageResolution.rawValue)/\(posterPath)"
+        "/t/p/\(imageResolution.rawValue)\(posterPath)"
     }
     
     var imageResolution: ImageResolution
@@ -94,18 +94,26 @@ struct GetDiscoverMovies: TMDBRequest {
             "language": language,
             "page": "\(page)",
             "sort_by": sortBy,
+            "vote_average.gte": "\(voteAverageRange.lowerBound)",
+            "vote_average.lte": "\(voteAverageRange.upperBound)",
+            "vote_count.gte": "\(voteCountRange.lowerBound)",
+            "vote_count.lte": "\(voteCountRange.upperBound)",
             "include_adult": "\(includeAdult)",
             "include_video": "\(includeVideo)",
-            "with_genres": withGenres.joined(separator: ",")
+            "with_genres": withGenres.joined(separator: "%2C"),
+            "with_original_language": withOriginalLanguage
         ]
     }
     
-    var language: String = "en-US"
+    var language: String = "en"
     var page: Int = 1
-    var sortBy: String = "Popularity"
-    var includeAdult: Bool = false
+    var sortBy: String = "popularity.desc"
+    var includeAdult: Bool = true
     var includeVideo: Bool = false
-    var withGenres: [String] = []
+    var voteAverageRange: ClosedRange = 1...10
+    var voteCountRange: ClosedRange = 1...10
+    var withGenres: [String] = [] // IDs
+    var withOriginalLanguage: String = "en"
 }
 
 struct GetSearchMovies: TMDBRequest {

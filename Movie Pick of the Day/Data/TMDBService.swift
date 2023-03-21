@@ -40,10 +40,12 @@ protocol TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        page: Int
     ) -> AnyPublisher<GetDiscoverMovies.Response, Error>
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error>
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error>
     
     static func getUIImage(
         of path: String,
@@ -76,19 +78,23 @@ class TMDBService: TMDBServiceType {
     static func discoverMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
-    ) -> AnyPublisher<GetDiscoverMovies.Response, Error>{
+        originalLanguage: String,
+        with genres: [String],
+        page: Int
+    ) -> AnyPublisher<GetDiscoverMovies.Response, Error> {
         Networking.request(
             request: GetDiscoverMovies(
                 language: language,
+                page: page,
                 includeAdult: includeAdult,
-                withGenres: genres
+                withGenres: genres,
+                withOriginalLanguage: originalLanguage
             )
         )
     }
     
-    static func searchMovie(with query: String) -> AnyPublisher<GetSearchMovies.Response, Error> {
-        Networking.request(request: GetSearchMovies(query: query))
+    static func searchMovie(with query: String, page: Int) -> AnyPublisher<GetSearchMovies.Response, Error> {
+        Networking.request(request: GetSearchMovies(page: page, query: query))
     }
     
     static func getUIImage(

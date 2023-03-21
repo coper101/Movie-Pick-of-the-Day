@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import OSLog
 
 final class AppViewModel: ObservableObject {
     
@@ -14,33 +15,75 @@ final class AppViewModel: ObservableObject {
     
     let appDataRepository: AppDataRepositoryType
     let movieRepository: MovieRepositoryType
+    let networkConnectionRepository: NetworkConnectivity
     
     // MARK: Data
     /// [A] App Data
+    @Published var preference: Preference?
+    @Published var weekEndDate: Date?
+    @Published var currentMoviesPreferredPage: Int = 0
     
     /// [B] Movie Data
     @Published var genres: [Genre] = []
+    @Published var isLoadingGenres: Bool = false
+    @Published var genresError: MovieRepositoryError?
+    
     @Published var languages: [Language] = []
+    @Published var isLoadingLanguages: Bool = false
+    @Published var languagesError: MovieRepositoryError?
+    
+    @Published var preferredMovies: [Movie] = []
     @Published var similarMovies: [Movie] = []
+    @Published var similarMoviesError: MovieRepositoryError?
+    
     @Published var searchedMovies: [Movie] = []
+    @Published var isSearching: Bool = false
+    @Published var hasSearched: Bool = false
+    @Published var pageNoOfSearchedMovies: Int = 1
+    @Published var searchError: MovieRepositoryError?
+    
+    /// [C] Network Connection
+    @Published var hasInternetConnection: Bool = false
     
     // MARK: UI
     @Published var screen: Screen = .pickOfTheDay
+    @Published var isPreferencesSheetShown: Bool = false
+    
+    @Published var genresSelection: [String] = []
+    @Published var languageSelected: String = ""
+    @Published var isAdultSelected: Bool = false
     
     @Published var moviePicks: [MovieDay] = []
     @Published var preferenceInput: Preference?
     @Published var todaysMoviePick: MovieDay?
+    @Published var isAlertShown: Bool = false
+    
+    @Published var previousSearchQuery: String = ""
+    
+    var todaysMovieDay: MovieDay? {
+        moviePicks.getTodaysMovieDay(todaysDate: .init())
+    }
 
+    var nextMovieDays: [MovieDay] {
+        moviePicks.getNextMovieDays(todaysDate: .init())
+    }
+    
     init(
         _ appDataRepository: AppDataRepositoryType = AppDataRepository(),
         _ movieRepository: MovieRepositoryType = MovieRepository(),
+        _ networkConnectionRepository: NetworkConnectivity = NetworkConnectionRepository(),
         republishData: Bool = true
     ) {
         self.appDataRepository = appDataRepository
         self.movieRepository = movieRepository
+        self.networkConnectionRepository = networkConnectionRepository
         
+        guard republishData else {
+            return
+        }
         republishAppData()
         republishMovieData()
+        republishNetworkData()
     }
         
 }
@@ -51,44 +94,166 @@ extension AppViewModel {
     /// [A]
     func republishAppData() {
         
-        appDataRepository.moviePickIDsOfTheWeekPublisher
-            .sink { [weak self] in self?.loadMoviePicks($0) }
+        appDataRepository.moviePicksOfTheWeekPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                print("moviepicks republish: \($0)")
+                guard let self else {
+                    return
+                }
+                self.moviePicks = $0
+                
+                /**
+                    Display Alert if:
+                     - next movie pick days have at least of 1 non-available movie
+                 */
+                let todaysDate = Date()
+                
+                let todaysPick = self.moviePicks.getTodaysMovieDay(todaysDate: todaysDate)
+                let nextPicks = self.moviePicks.getNextMovieDays(todaysDate: todaysDate, false)
+                let numberOfPicksWithNoMovies = nextPicks.filter { $0.movie == nil }.count
+                
+                // Logger.appModel.debug("republish picks - numberOfPicksWithNoMovies: \(numberOfPicksWithNoMovies)")
+                // Logger.appModel.debug("republish picks - todaysPick is nil? \(todaysPick == nil)")
+                
+                if
+                    todaysPick != nil,
+                    numberOfPicksWithNoMovies > 0
+                {
+                    self.showAlert()
+                }
+            }
             .store(in: &subscriptions)
         
         appDataRepository.preferencePublisher
             .dropFirst()
             .sink { [weak self] in self?.selectMoviePickIDsOfTheWeek($0) }
             .store(in: &subscriptions)
+
+        appDataRepository.preferencePublisher
+            .sink { [weak self] in self?.preference = $0 }
+            .store(in: &subscriptions)
         
+        appDataRepository.preferencePublisher
+            .zip(appDataRepository.weekEndDatePublisher)
+            .sink { [weak self] preference, weekEndDate in
+                self?.refreshMoviePicksOfTheWeek(preference, weekEndDate)
+            }
+            .store(in: &subscriptions)
+        
+        appDataRepository.currentMoviesPreferredPagePublisher
+            .sink { [weak self] in self?.currentMoviesPreferredPage = $0 }
+            .store(in: &subscriptions)
     }
     
     /// [B]
     func republishMovieData() {
         
+        /// Errors
+        movieRepository.searchErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.searchError = $0 }
+            .store(in: &subscriptions)
+        
+        movieRepository.genresErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.genresError = $0
+                self?.isLoadingGenres = false
+            }
+            .store(in: &subscriptions)
+        
+        movieRepository.languagesErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.languagesError = $0
+                self?.isLoadingLanguages = false
+            }
+            .store(in: &subscriptions)
+        
+        movieRepository.similarMoviesErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.similarMoviesError = $0 }
+            .store(in: &subscriptions)
+            
+        /// Data
         movieRepository.genresPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.genres = $0 }
+            .sink { [weak self] genres in
+                guard let self else {
+                    return
+                }
+                // Loading
+                self.isLoadingGenres = false
+                // Loaded
+                self.genres = genres.sorted()
+                self.selectPreferences()
+            }
             .store(in: &subscriptions)
         
         movieRepository.languagesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.languages = $0 }
+            .sink { [weak self] languages in
+                guard let self else {
+                    return
+                }
+                // Loading
+                self.isLoadingLanguages = false
+                // Loaded
+                self.languages = languages.sorted()
+                self.selectPreferences()
+            }
             .store(in: &subscriptions)
         
         movieRepository.similarMoviesPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.similarMovies = $0 }
             .store(in: &subscriptions)
         
         movieRepository.preferredMoviesPublisher
-            .sink { [weak self] in
-                self?.reSelectMoviePickIDsOfTheWeek($0)
-            }
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.reSelectMoviePickIDsOfTheWeek($0) }
+            .store(in: &subscriptions)
+        
+        movieRepository.preferredMoviesPagePublisher
+            .drop(while: { $0 == 0 })
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.appDataRepository.setCurretMoviesPreferredPage($0) }
             .store(in: &subscriptions)
         
         movieRepository.searchedMoviesPublisher
-            .sink { [weak self] in self?.searchedMovies = $0 }
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self else {
+                    return
+                }
+                self.searchedMovies = $0
+                if self.isSearching {
+                    self.isSearching = false
+                }
+                if !self.hasSearched {
+                    self.hasSearched = true
+                }
+            }
             .store(in: &subscriptions)
         
+        movieRepository.pageNoOfSearchMoviesPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.pageNoOfSearchedMovies = $0 }
+            .store(in: &subscriptions)
+    }
+    
+    /// [C] Network Data
+    func republishNetworkData() {
+        
+        networkConnectionRepository
+            .hasInternetConnectionPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.hasInternetConnection = $0 }
+            .store(in: &subscriptions)
     }
     
 }
@@ -96,54 +261,113 @@ extension AppViewModel {
 // MARK: Events
 extension AppViewModel {
     
+    // MARK: Alert
+    func closeAlert() {
+        isAlertShown = false
+    }
+    
+    func showAlert() {
+        isAlertShown = true
+    }
+    
     // MARK: Pick of the Day
-    /// Picks
+    // Picks
+    func refreshMoviePicksOfTheWeek(
+        _ preference: Preference?,
+        _ weekEndDate: Date?,
+        todaysDate: Date = Date()
+    ) {
+        guard
+            let preference,
+            let weekEndDate,
+            weekEndDate < todaysDate
+        else {
+            return
+        }
+        
+        selectMoviePickIDsOfTheWeek(preference)
+    }
+    
     func didTapPickOfTheDayMovieScreen() {
         screen = .pickOfTheDay
     }
     
-    func loadMoviePicks(_ movieDays: [MovieDay]) {
-        /// for displaying movie picks
-        moviePicks = movieDays
+    // Preference
+    func selectPreferences() {
+        guard let preference else {
+            return
+        }
         
-        /// get the movie description for each pick - async
-        for (index, movieDay) in movieDays.enumerated() {
-            movieRepository.getMovie(with: movieDay.id)
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in
-                    /// optional if movie can't be found using id - invalid id -1
-                    /// display error image on ui
-                    self?.moviePicks[index].movie = $0
-                }
-                .store(in: &subscriptions)
+        if preference.includeAdult != isAdultSelected {
+            isAdultSelected = preference.includeAdult
+        }
+        
+        if genresSelection.isEmpty && !genres.isEmpty {
+            genresSelection = preference.genres.compactMap(\.name)
+        }
+        
+        if languageSelected.isEmpty && !languages.isEmpty {
+            let foundLanguage = languages.first(where: { ($0.iso6391 ?? "") == preference.language })
+            languageSelected = foundLanguage?.englishName ?? ""
         }
     }
-
-    /// Preferences
+    
     func didTapPreferences() {
-        movieRepository.getGenres()
-        movieRepository.getLanguages()
+        isPreferencesSheetShown = true
+
+        if genres.isEmpty {
+            isLoadingGenres = true
+            self.movieRepository.getGenres()
+        }
+        
+        if languages.isEmpty {
+            isLoadingLanguages = true
+            self.movieRepository.getLanguages()
+        }
         
         preferenceInput = .init(
-            language: "EN",
+            language: "en",
+            originalLanguage: "en",
             includeAdult: false,
             genres: []
         )
     }
     
     func didTapSavePreferences() {
+        isPreferencesSheetShown = false
+        
+        let selectedGenres: [Genre] = genres
+            .filter { genre in
+                genresSelection.reduce(false) { isSelected, genreName in
+                    isSelected || genreName == genre.name
+                }
+            }
+            
+        var selectedISOLanguage = "en"
+         
+        if
+            let selectedLanguage = languages.first(where: { $0.englishName == languageSelected }),
+            let isoLanguage = selectedLanguage.iso6391
+        {
+            selectedISOLanguage = isoLanguage
+        }
+                    
+        self.preferenceInput?.language = "en"
+        self.preferenceInput?.originalLanguage = selectedISOLanguage
+        self.preferenceInput?.includeAdult = isAdultSelected
+        self.preferenceInput?.genres = selectedGenres
+        
         guard let preferenceInput else {
             return
         }
-        
+                
         appDataRepository.setPreference(preferenceInput)
+        
         self.preferenceInput = nil
     }
     
     func didTapClosePreferences() {
-        movieRepository.clearGenres()
-        movieRepository.clearLanguages()
-        
+        isPreferencesSheetShown = false
         preferenceInput = nil
     }
     
@@ -153,19 +377,31 @@ extension AppViewModel {
         }
         
         let daysInWeekLeft = Date().getRemainingWeekDaysCount()
-        guard daysInWeekLeft > 0 else {
+        guard daysInWeekLeft >= 0 else {
             return
         }
         
         movieRepository.getPreferredMovies(
             includeAdult: preference.includeAdult,
             language: preference.language,
-            with: preference.genres
+            originalLanguage: preference.originalLanguage,
+            with: preference.genres.compactMap(\.id).map { "\($0)" },
+            currentPage: currentMoviesPreferredPage
         )
     }
     
-    func reSelectMoviePickIDsOfTheWeek(_ movies: [Movie], todaysDate: Date = .init()) {
-        guard !movies.isEmpty else {
+    func reSelectMoviePickIDsOfTheWeek(_ prefferedMovies: [Movie], todaysDate: Date = .init()) {
+        guard !prefferedMovies.isEmpty else {
+            // remove all movies
+            var moviePicks = [MovieDay]()
+            moviePicks.append(contentsOf: self.moviePicks)
+            
+            for (index, _) in self.moviePicks.enumerated() {
+                moviePicks[index].movie = nil
+            }
+            appDataRepository.setMoviePicksOfTheWeek(moviePicks)
+            appDataRepository.setWeekEndDate(to: todaysDate.getEndOfWeekDate())
+            
             return
         }
         
@@ -179,70 +415,74 @@ extension AppViewModel {
          */
         
         guard
-            remainingWeekdaysCount > 0,
-            movies.count >= remainingWeekdaysCount
+            remainingWeekdaysCount >= 0,
+            prefferedMovies.count >= remainingWeekdaysCount
         else {
             return
         }
                 
         guard
-            let moviePicksOfTheWeek = movies.shuffle(keep: remainingWeekdaysCount)
+            let shufflePreferredMovies = prefferedMovies.shuffle(keep: remainingWeekdaysCount + 1)
         else {
             return
         }
         
-        /// existing movie days in week
+        // existing movie days in week
         var moviePicks = [MovieDay]()
         moviePicks.append(contentsOf: self.moviePicks)
-                
+        
+        Logger.appModel.debug("existing movie picks: \(moviePicks.map(\.day.rawValue))")
+        
+        // rest of the week
         for (index, weekday) in remainingWeekdaysRange.enumerated() {
             
-            /// skip today's movie day
+            let movieIndex = index
+            let newMovie = shufflePreferredMovies[safe: movieIndex]
+            let id = newMovie?.id ?? -1
+            let day = Day(rawValue: weekday) ?? .sunday
+
             if
                 let todayWeekday = remainingWeekdaysRange.first,
                 weekday == todayWeekday
             {
+                if let todaysPickIndex = moviePicks.firstIndex(where: { $0.day.rawValue == todayWeekday }) {
+                    // re-assign today's movie (option to skip re-assigning will be implemented in the future)
+                    moviePicks[todaysPickIndex].movie = newMovie
+                } else {
+                    // add movie of today
+                    moviePicks.append(
+                        .init(
+                            day: day,
+                            id: id,
+                            movie: newMovie
+                        )
+                    )
+                }
                 continue
             }
             
-            let movieIndex = index - 1
-            let day = Day(rawValue: weekday) ?? .sunday
-            let newMovie = moviePicksOfTheWeek[movieIndex]
-            let id = newMovie.id ?? -1
-            
-            print(
-                """
-                    --------------
-                    movieIndex: \(movieIndex)
-                    day: \(day)
-                    new movie id: \(id)
-                    
-                    """
-            )
-            
-            /// re-assign movie day if set
-            if
-                let foundDayIndex = moviePicks.firstIndex(
-                    where: { $0.day == day }
-                )
-            {
+            // re-assign movie day if set
+            if let foundDayIndex = moviePicks.firstIndex(where: { $0.day == day }) {
                 moviePicks[foundDayIndex].id = id
-                moviePicks[foundDayIndex].movie = nil
+                moviePicks[foundDayIndex].movie = newMovie
                 continue
             }
-            /// add movie day if not set
+            
+            // add movie day if not set
             moviePicks.append(
-                .init(day: day, id: id, movie: nil)
+                .init(
+                    day: day,
+                    id: id,
+                    movie: newMovie
+                )
             )
         }
         
-        print("New Movie Picks")
-        moviePicks.forEach {
-            print("--------------")
-            print($0)
-        }
+        Logger.appModel.debug("new movie pick ids: \(moviePicks.map { "\($0.day), \($0.id)" })")
+        Logger.appModel.debug("new movie pick movie titles: \(moviePicks.compactMap { $0.movie?.title })")
         
-        appDataRepository.setMoviePicksIDsOfTheWeek(moviePicks)
+        appDataRepository.setMoviePicksOfTheWeek(moviePicks)
+        appDataRepository.setWeekEndDate(to: todaysDate.getEndOfWeekDate())
     }
 
     // MARK: Search
@@ -250,11 +490,22 @@ extension AppViewModel {
         screen = .search
     }
     
-    func didTapSearchOnCommitMovie(_ query: String) {
-        guard !query.isEmptyField() else {
+    func didTapSearchOnCommitMovie(_ query: String, onDone: (Bool) -> Void) {
+        guard !query.isEmptyField() && hasInternetConnection else {
+            onDone(true)
             return
         }
-        movieRepository.searchMovie(with: query)
+        isSearching = true
+        movieRepository.searchMovie(with: query, page: 1)
+        onDone(false)
+        previousSearchQuery = query
+    }
+    
+    func loadMoreMovies() {
+        guard !previousSearchQuery.isEmpty else {
+            return
+        }
+        movieRepository.searchMovie(with: previousSearchQuery, page: pageNoOfSearchedMovies + 1)
     }
     
     // MARK: Pick of the Day Detail
@@ -263,14 +514,12 @@ extension AppViewModel {
         
         let todaysWeekday = todaysDate.toDateComp().weekday!
         guard let day = Day(rawValue: todaysWeekday) else {
-            /// can't load todays movie pick error
             return
         }
                 
         guard
             let todaysMoviePick = moviePicks.first(where: { $0.day == day })
         else {
-            /// can't load todays movie pick error
             return
         }
         

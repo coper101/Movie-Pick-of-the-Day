@@ -22,3 +22,46 @@ extension Array where Element == Movie {
     }
     
 }
+
+extension Array where Element == MovieDay {
+    
+    /// Returns today's Movie Day
+    /// - Parameter todaysDate: The today's Date
+    func getTodaysMovieDay(todaysDate: Date, _ withMovie: Bool = true) -> MovieDay? {
+        guard
+            let todaysWeekDay = todaysDate.toDateComp().weekday,
+            let movieDay = self.first(where: { $0.day.rawValue == todaysWeekDay })
+        else {
+            return nil
+        }
+        guard
+            withMovie,
+            movieDay.movie != nil
+        else {
+            return nil
+        }
+        return movieDay
+    }
+    
+    /// Returns the Movie Days tomorrow onwards
+    /// - Parameter todaysDate: The today's Date
+    func getNextMovieDays(todaysDate: Date, _ withMovie: Bool = true) -> [MovieDay] {
+        guard
+            let todaysWeekDay = todaysDate.toDateComp().weekday,
+            let todaysMovieDay = self.first(where: {
+                $0.day.rawValue == todaysWeekDay
+            })
+        else {
+            return []
+        }
+        let nextMovies = self
+            .filter { $0.day.rawValue > todaysMovieDay.day.rawValue }
+            .sorted(by: <)
+        
+        guard withMovie else {
+            return nextMovies
+        }
+        return nextMovies.filter { $0.movie != nil }
+    }
+    
+}

@@ -8,10 +8,39 @@
 import Foundation
 import Combine
 import UIKit
+import OSLog
+
+enum MovieRepositoryError: Error, Equatable {
+    case server
+    case request
+    
+    var description: String {
+        switch self {
+        case .server:
+            return "Something went wrong connecting to the Server"
+        case .request:
+            return "Something went wrong with your Request"
+        }
+    }
+}
+
 
 // MARK: Protocol
 protocol MovieRepositoryType {
     
+    /// Error
+    var searchError: MovieRepositoryError? { get set }
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var genresError: MovieRepositoryError? { get set }
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var languagesError: MovieRepositoryError? { get set }
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+    
+    var similarMoviesError: MovieRepositoryError? { get set }
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { get }
+
     /// Genres
     var genres: [Genre] { get set }
     var genresPublisher: Published<[Genre]>.Publisher { get }
@@ -36,17 +65,25 @@ protocol MovieRepositoryType {
     /// Preferred Movies
     var preferredMovies: [Movie] { get set }
     var preferredMoviesPublisher: Published<[Movie]>.Publisher { get }
+    
+    var preferredMoviesPage: Int { get set }
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { get }
+    
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        currentPage: Int
     ) -> Void
     
     /// Searched Movies
     var searchedMovies: [Movie] { get set }
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { get }
-    func searchMovie(with query: String) -> Void
+    func searchMovie(with query: String, page: Int) -> Void
     
+    var pageNoOfSearchMovies: Int { get set }
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { get }
 }
 
 
@@ -54,6 +91,19 @@ protocol MovieRepositoryType {
 class MovieRepository: MovieRepositoryType, ObservableObject {
     
     var subscriptions = Set<AnyCancellable>()
+    
+    /// Error
+    @Published var searchError: MovieRepositoryError?
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { $searchError }
+    
+    @Published var genresError: MovieRepositoryError?
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { $genresError }
+    
+    @Published var languagesError: MovieRepositoryError?
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $languagesError }
+    
+    @Published var similarMoviesError: MovieRepositoryError?
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $similarMoviesError }
 
     /// Data
     @Published var genres: [Genre] = []
@@ -68,62 +118,83 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     @Published var preferredMovies: [Movie] = []
     var preferredMoviesPublisher: Published<[Movie]>.Publisher { $preferredMovies }
     
+    @Published var preferredMoviesPage: Int = 0
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { $preferredMoviesPage }
+    
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
+    
+    @Published var pageNoOfSearchMovies: Int = 1
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { $pageNoOfSearchMovies }
     
     /// Services
     func getGenres() {
         TMDBService.getGenres()
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
-                            print("Failure - error: ", message)
-                            break
+                            Logger.movieRepository.debug("getGenres - server error: \(message)")
+                            self?.genresError = .server
+
+                        case .request(let message):
+                            Logger.movieRepository.debug("getGenres - request error: \(message)")
+                            self?.genresError = .request
+                            
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getGenres - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let genres = response.genres else {
                     return
                 }
                 self.genres = genres
-                print("Success - genres: ", genres)
+                self.genresError = nil
+                Logger.movieRepository.debug("getGenres - success: \(genres.map(\.name))")
             }
             .store(in: &subscriptions)
     }
     
     func getLanguages() {
         TMDBService.getLanguages()
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
-                            print("Failure - error: ", message)
-                            break
+                            Logger.movieRepository.debug("getLanguages - server error: \(message)")
+                            self?.languagesError = .server
+
+                        case .request(let message):
+                            Logger.movieRepository.debug("getLanguages - request error: \(message)")
+                            self?.languagesError = .request
+
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getLanguages - finished")
                 }
             } receiveValue: { [weak self] languages in
+                Logger.movieRepository.debug("getLanguages - receive value")
                 guard let self else {
                     return
                 }
                 self.languages = languages
-                print("Success - languages: ", languages)
+                self.languagesError = nil
+                Logger.movieRepository.debug("getLanguages - success: \(languages.map(\.name))")
             }
             .store(in: &subscriptions)
     }
@@ -134,29 +205,35 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     
     func getSimilarMovies(of id: Int) {
         TMDBService.getSimilarMovies(of: id)
-            .sink { completion in
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
-                            print("Failure - server error: ", message)
+                            Logger.movieRepository.debug("getSimilarMovies - server error: \(message)")
+                            self?.similarMoviesError = .server
+
                         case .request(let message):
-                            print("Failure - request error: ", message)
+                            Logger.movieRepository.debug("getSimilarMovies - error: \(message)")
+                            self?.similarMoviesError = .request
+
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    Logger.movieRepository.debug("getSimilarMovies - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let results = response.results else {
                     return
                 }
                 self.similarMovies = results
-                print("Success - similar movies: ", results)
+                self.similarMoviesError = nil
+                Logger.movieRepository.debug("getSimilarMovies - success: \(results.map(\.title))")
             }
             .store(in: &subscriptions)
     }
@@ -164,13 +241,43 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        currentPage: Int
     ) {
-        TMDBService.discoverMovies(
+        let nextPage = currentPage + 1
+        
+        return TMDBService.discoverMovies(
             includeAdult: includeAdult,
             language: language,
-            with: genres
-        )
+            originalLanguage: originalLanguage,
+            with: genres,
+            page: 1
+        ).flatMap { response in
+            guard nextPage > 1 else {
+                Logger.movieRepository.debug("getPreferredMovies - getting page 1")
+                return Just(response)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+            guard
+                let totalPages = response.totalPages,
+                nextPage <= totalPages
+            else {
+                Logger.movieRepository.debug("getPreferredMovies - getting page 1")
+                return Just(response)
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
+            Logger.movieRepository.debug("getPreferredMovies - getting page \(nextPage)")
+            return TMDBService.discoverMovies(
+                includeAdult: includeAdult,
+                language: language,
+                originalLanguage: originalLanguage,
+                with: genres,
+                page: nextPage
+            )
+        }
         .sink { completion in
             switch completion {
             case .failure(let error):
@@ -178,51 +285,76 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                     let networkError = error as! NetworkError
                     switch networkError {
                     case .server(let message):
-                        print("Failure - server error: ", message)
+                        Logger.movieRepository.debug("getPreferredMovies - server error: \(message)")
                     case .request(let message):
-                        print("Failure - request error: ", message)
+                        Logger.movieRepository.debug("getPreferredMovies - request error: \(message)")
                     default:
                         break
                     }
                 }
             case .finished:
-                print("Finished")
+                Logger.movieRepository.debug("getPreferredMovies - finished")
             }
         } receiveValue: { [weak self] response in
             guard let self, let results = response.results else {
                 return
             }
+            let currentPage = response.page ?? 1
+            self.preferredMoviesPage = currentPage
             self.preferredMovies = results
-            print("Success - preferredMovies movies: ", results)
+            Logger.movieRepository.debug("getPreferredMovies - success: \(currentPage), \(results.compactMap(\.id))")
         }
         .store(in: &subscriptions)
     }
     
-    func searchMovie(with query: String) {
-        TMDBService.searchMovie(with: query)
-            .sink { completion in
+    func searchMovie(with query: String, page: Int) {
+        TMDBService.searchMovie(with: query, page: page)
+            .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
                     if error is NetworkError {
                         let networkError = error as! NetworkError
+                        
                         switch networkError {
                         case .server(let message):
-                            print("Failure - server error: ", message)
+                            Logger.movieRepository.debug("searchMovie - server error: \(message)")
+                            self?.searchError = .server
+
                         case .request(let message):
-                            print("Failure - request error: ", message)
+                            Logger.movieRepository.debug("searchMovie - request error: \(message)")
+                            self?.searchError = .request
+
                         default:
                             break
                         }
                     }
                 case .finished:
-                    print("Finished")
+                    self?.searchError = nil
+                    Logger.movieRepository.debug("searchMovie - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let results = response.results else {
                     return
                 }
-                self.searchedMovies = results
-                print("Success - searched movies: ", results)
+                
+                // prevent incrementing page number if no more items
+                guard Pager.hasNewItems(
+                    current: self.pageNoOfSearchMovies,
+                    total: response.totalPages
+                ) else {
+                    Logger.movieRepository.debug("searchMovie - success: no more results")
+                    return
+                }
+                
+                self.pageNoOfSearchMovies = response.page ?? 1
+                
+                if self.pageNoOfSearchMovies > 1 {
+                    self.searchedMovies.append(contentsOf: results)
+                } else {
+                    self.searchedMovies = results
+                }
+                
+                Logger.movieRepository.debug("searchMovie - success: \(results.compactMap(\.id))")
             }
             .store(in: &subscriptions)
     }
@@ -258,6 +390,22 @@ extension MovieRepository {
 class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     
     var subscriptions = Set<AnyCancellable>()
+    
+    /// Error
+    @Published var searchError: MovieRepositoryError?
+    var searchErrorPublisher: Published<MovieRepositoryError?>.Publisher { $searchError }
+    
+    @Published var genresError: MovieRepositoryError?
+    var genresErrorPublisher: Published<MovieRepositoryError?>.Publisher { $genresError }
+    
+    @Published var languagesError: MovieRepositoryError?
+    var languagesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $languagesError }
+    
+    @Published var similarMoviesError: MovieRepositoryError?
+    var similarMoviesErrorPublisher: Published<MovieRepositoryError?>.Publisher { $similarMoviesError }
+    
+    @Published var preferredMoviesPage: Int = 0
+    var preferredMoviesPagePublisher: Published<Int>.Publisher { $preferredMoviesPage }
 
     /// Data
     @Published var genres: [Genre] = []
@@ -274,6 +422,9 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     
     @Published var searchedMovies: [Movie] = []
     var searchedMoviesPublisher: Published<[Movie]>.Publisher { $searchedMovies }
+    
+    @Published var pageNoOfSearchMovies: Int = 0
+    var pageNoOfSearchMoviesPublisher: Published<Int>.Publisher { $pageNoOfSearchMovies }
     
     func getGenres() {
         genres = [
@@ -312,7 +463,9 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
     func getPreferredMovies(
         includeAdult: Bool,
         language: String,
-        with genres: [String]
+        originalLanguage: String,
+        with genres: [String],
+        currentPage: Int
     ) {
         preferredMovies = [
             TestData.createMovie(id: 101),
@@ -325,7 +478,7 @@ class MockMovieRepository: TMDBService, MovieRepositoryType, ObservableObject {
         ]
     }
     
-    func searchMovie(with query: String) {
+    func searchMovie(with query: String, page: Int) {
         searchedMovies = [
             TestData.createMovie(id: 101, title: "Toy Story 1"),
             TestData.createMovie(id: 102, title: "Toy Story 2")

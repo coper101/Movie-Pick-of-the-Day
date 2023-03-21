@@ -9,15 +9,25 @@ import Foundation
 
 extension String {
     
-    /// Converts ISO String Date to Date
-    func toDate() -> Date {
-        let dateFormatter = ISO8601DateFormatter()
-        return dateFormatter.date(from: self) ?? Date()
+    /// Coverts Formatted String Date to Date
+    /// e.g. 2022-12-14
+    func toDate(format: String = "yyyy-MM-dd") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: self)
     }
     
 }
 
 extension Date {
+    
+    /// Formats the Date to `dd mm yy`
+    /// e.g. 1 Jan 22
+    func toDayMonthYearFormat() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM yyyy"
+        return dateFormatter.string(from: self)
+    }
     
     /// Returns the Date Components
     func toDateComp() -> DateComponents {
@@ -41,5 +51,22 @@ extension Date {
         getRemainingWeekDaysRange().count - 1
     }
     
+    func getEndOfWeekDate() -> Date {
+        let lastWeekday = 7
+        let weekday = self.toDateComp().weekday ?? 1
+        let daysRemaining = lastWeekday - weekday
+        
+        guard daysRemaining > 0 else {
+            return self
+        }
+        
+        guard let endDate = Calendar.current.date(
+            byAdding: .day, value: daysRemaining, to: self)
+        else {
+            return self
+        }
+        
+        return endDate
+    }
 }
 
