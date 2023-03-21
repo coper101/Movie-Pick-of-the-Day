@@ -11,7 +11,6 @@ struct AsyncImageView: View {
     // MARK: - Props
     @StateObject var imageRepository: ImageRepository
     
-    let placeholderUiImage = TestData.createImage(color: .black, width: 1083, height: 1539)
     let placeholderTitle: String
     
     let hasMovingUpAndDownAnimation: Bool

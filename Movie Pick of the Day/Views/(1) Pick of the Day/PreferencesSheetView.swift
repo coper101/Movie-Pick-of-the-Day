@@ -23,6 +23,8 @@ struct PreferencesSheetView: View {
     var genresOptions: [String]
     var languagesOptions: [String]
     
+    var noInternetConnection: Bool
+    
     var closeAction: Action
     var doneAction: Action
         
@@ -117,7 +119,9 @@ struct PreferencesSheetView: View {
             HStack {
                 
                 FilledButtonView(
-                    title: "Done",
+                    title: noInternetConnection ? "No Internet" : "Done",
+                    icon: noInternetConnection ? .warning : nil,
+                    isDisabled: noInternetConnection,
                     action: doneAction
                 )
                 
@@ -173,6 +177,7 @@ struct PreferencesSheet_Previews: PreviewProvider {
             hasFailedLoadingLanguages: false,
             genresOptions: genres,
             languagesOptions: languages,
+            noInternetConnection: true,
             closeAction: {},
             doneAction: {}
         )
@@ -190,6 +195,7 @@ struct PreferencesSheet_Previews: PreviewProvider {
             hasFailedLoadingLanguages: false,
             genresOptions: [],
             languagesOptions: [],
+            noInternetConnection: false,
             closeAction: {},
             doneAction: {}
         )
@@ -207,6 +213,7 @@ struct PreferencesSheet_Previews: PreviewProvider {
             hasFailedLoadingLanguages: true,
             genresOptions: [],
             languagesOptions: [],
+            noInternetConnection: false,
             closeAction: {},
             doneAction: {}
         )

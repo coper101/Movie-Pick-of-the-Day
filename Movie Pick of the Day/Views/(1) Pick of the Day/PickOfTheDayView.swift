@@ -64,6 +64,7 @@ struct PickOfTheDayView: View {
                     preferenceAndSource
                         .padding(.horizontal, 21)
                         .padding(.top, 16)
+                        .zIndex(1)
                     
                     // WEEK PICKS
                     MoviePicksView(
@@ -73,6 +74,7 @@ struct PickOfTheDayView: View {
                         pickOfTheDayAction: pickOfTheDayAction
                     )
                     .padding(.bottom, 63 + 28)
+                    .zIndex(0)
                     
                 } //: VStack
                 .padding(.top, topBarHeight + dimensions.insets.top)
@@ -118,6 +120,7 @@ struct PickOfTheDayView: View {
                         hasFailedLoadingLanguages: appViewModel.languagesError != nil,
                         genresOptions: appViewModel.genres.compactMap(\.name),
                         languagesOptions: appViewModel.languages.compactMap(\.englishName),
+                        noInternetConnection: !appViewModel.hasInternetConnection,
                         closeAction: closePreferenceAction,
                         doneAction: donePreferenceAction
                     )

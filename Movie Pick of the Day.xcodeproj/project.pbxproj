@@ -15,6 +15,9 @@
 		272C3A54299E2BA100316768 /* ResultMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C3A53299E2BA100316768 /* ResultMoviesView.swift */; };
 		273F5D6A29C716AA00C91C24 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6929C716AA00C91C24 /* Button.swift */; };
 		273F5D6C29C71A7E00C91C24 /* InfiniteLazyVGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6B29C71A7E00C91C24 /* InfiniteLazyVGridView.swift */; };
+		273F5D6E29C95E3B00C91C24 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6D29C95E3B00C91C24 /* Page.swift */; };
+		273F5D7029C95F7D00C91C24 /* Pager_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6F29C95F7D00C91C24 /* Pager_Tests.swift */; };
+		273F5D7229C966C200C91C24 /* SearchPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D7129C966C200C91C24 /* SearchPager.swift */; };
 		275D09EF299E18B6000F6169 /* MovieInfoBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */; };
 		276309B7298261BE009392F8 /* TMDB_Service_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */; };
 		2763BF492992455E008D609A /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF482992455E008D609A /* SearchBarView.swift */; };
@@ -121,6 +124,9 @@
 		272C3A53299E2BA100316768 /* ResultMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMoviesView.swift; sourceTree = "<group>"; };
 		273F5D6929C716AA00C91C24 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		273F5D6B29C71A7E00C91C24 /* InfiniteLazyVGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteLazyVGridView.swift; sourceTree = "<group>"; };
+		273F5D6D29C95E3B00C91C24 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		273F5D6F29C95F7D00C91C24 /* Pager_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pager_Tests.swift; sourceTree = "<group>"; };
+		273F5D7129C966C200C91C24 /* SearchPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPager.swift; sourceTree = "<group>"; };
 		275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfoBoxView.swift; sourceTree = "<group>"; };
 		276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB_Service_Tests.swift; sourceTree = "<group>"; };
 		2763BF482992455E008D609A /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
@@ -451,6 +457,7 @@
 		27FDBD8929696776008FA32E /* Movie Pick of the DayTests */ = {
 			isa = PBXGroup;
 			children = (
+				273F5D6F29C95F7D00C91C24 /* Pager_Tests.swift */,
 				276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */,
 				27BB19E829701DC000851E14 /* App_View_Model_Tests.swift */,
 				27BB19E62970166E00851E14 /* Date_Tests.swift */,
@@ -505,6 +512,7 @@
 				27FDBDD0296969BA008FA32E /* Genre.swift */,
 				27FDBDD1296969BA008FA32E /* Response.swift */,
 				27FDBDD2296969BA008FA32E /* Request.swift */,
+				273F5D7129C966C200C91C24 /* SearchPager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -522,6 +530,7 @@
 				27BB19E4297007BC00851E14 /* Validation.swift */,
 				2763BF982993D4D3008D609A /* Logging.swift */,
 				277F84A0299BA64000109CD3 /* Numbers.swift */,
+				273F5D6D29C95E3B00C91C24 /* Page.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -676,6 +685,7 @@
 				272C3A50299E1EF700316768 /* SimilarMoviesView.swift in Sources */,
 				27FDBDDC296969BA008FA32E /* Response.swift in Sources */,
 				277F846F299A2B1500109CD3 /* ImageCacheRepository.swift in Sources */,
+				273F5D7229C966C200C91C24 /* SearchPager.swift in Sources */,
 				27FDBDE0296969BA008FA32E /* Dimensions.swift in Sources */,
 				27BB19D7296FC83400851E14 /* Date.swift in Sources */,
 				270FC6FF299E3A25004226CD /* MoviePicksView.swift in Sources */,
@@ -711,6 +721,7 @@
 				27FDBD7429696773008FA32E /* Type.swift in Sources */,
 				27FDBDCC296968B0008FA32E /* PickRevealView.swift in Sources */,
 				27FDBDBC29696887008FA32E /* LocalStorage.swift in Sources */,
+				273F5D6E29C95E3B00C91C24 /* Page.swift in Sources */,
 				27C1BD9229A372CA00D81AAA /* LoadingImageView.swift in Sources */,
 				27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */,
 				2763BF5329926899008D609A /* SelectionChipsView.swift in Sources */,
@@ -740,6 +751,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27BB19E929701DC000851E14 /* App_View_Model_Tests.swift in Sources */,
+				273F5D7029C95F7D00C91C24 /* Pager_Tests.swift in Sources */,
 				27FDBD8B29696776008FA32E /* Dictionary_Coder_Tests.swift in Sources */,
 				27BB19DD296FE76A00851E14 /* App_Data_Repository_Tests.swift in Sources */,
 				27BB19E1296FFB3600851E14 /* Array_Tests.swift in Sources */,

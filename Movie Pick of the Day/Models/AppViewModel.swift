@@ -242,9 +242,7 @@ extension AppViewModel {
         movieRepository.pageNoOfSearchMoviesPublisher
             .dropFirst()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.pageNoOfSearchedMovies = $0
-            }
+            .sink { [weak self] in self?.pageNoOfSearchedMovies = $0 }
             .store(in: &subscriptions)
     }
     
@@ -493,7 +491,7 @@ extension AppViewModel {
     }
     
     func didTapSearchOnCommitMovie(_ query: String, onDone: (Bool) -> Void) {
-        guard !query.isEmptyField() else {
+        guard !query.isEmptyField() && hasInternetConnection else {
             onDone(true)
             return
         }

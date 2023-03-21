@@ -42,7 +42,7 @@ struct AppView: View {
                             .transition(.opacity.animation(.easeIn(duration: 0.3)))
                     },
                     item2Content: {
-                        SearchView()
+                        SearchView(searchText: appViewModel.previousSearchQuery)
                             .transition(.opacity.animation(.easeIn(duration: 0.3)))
                     }
                 )

@@ -41,6 +41,7 @@ struct SearchBarView: View {
     // MARK: - Props
     @Binding var text: String
     var placeholder: String
+    var isDisabled: Bool
     var onCommit: Action
     
     // MARK: - UI
@@ -54,12 +55,14 @@ struct SearchBarView: View {
             font: .interSemiBold,
             size: 24
         )
+        .opacity(isDisabled ? 0.3 : 1)
+        .disabled(isDisabled)
         .frame(height: 79)
         .padding(.horizontal, 28)
         .background(
             RoundedRectangle(cornerRadius: 22)
                 .fill(Colors.onBackground.color)
-                .opacity(0.2)
+                .opacity(isDisabled ? 0.05 : 0.2)
         )
         .clipped()
         .cardShadow()
@@ -74,10 +77,23 @@ struct SearchBarView_Previews: PreviewProvider {
         SearchBarView(
             text: .constant(""),
             placeholder: "Search Movie",
+            isDisabled: false,
             onCommit: {}
         )
-            .previewLayout(.sizeThatFits)
-            .padding()
-            .background(Colors.background.color)
+        .previewLayout(.sizeThatFits)
+        .padding()
+        .background(Colors.background.color)
+        .previewDisplayName("Enabled")
+        
+        SearchBarView(
+            text: .constant(""),
+            placeholder: "Search Movie",
+            isDisabled: true,
+            onCommit: {}
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+        .background(Colors.background.color)
+        .previewDisplayName("Disabled")
     }
 }

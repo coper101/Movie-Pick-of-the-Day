@@ -302,7 +302,7 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
             let currentPage = response.page ?? 1
             self.preferredMoviesPage = currentPage
             self.preferredMovies = results
-            Logger.movieRepository.debug("getPreferredMovies - success: \(currentPage), \(results.map(\.title))")
+            Logger.movieRepository.debug("getPreferredMovies - success: \(currentPage), \(results.compactMap(\.id))")
         }
         .store(in: &subscriptions)
     }
@@ -329,12 +329,23 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                         }
                     }
                 case .finished:
+                    self?.searchError = nil
                     Logger.movieRepository.debug("searchMovie - finished")
                 }
             } receiveValue: { [weak self] response in
                 guard let self, let results = response.results else {
                     return
                 }
+                
+                // prevent incrementing page number if no more items
+                guard Pager.hasNewItems(
+                    current: self.pageNoOfSearchMovies,
+                    total: response.totalPages
+                ) else {
+                    Logger.movieRepository.debug("searchMovie - success: no more results")
+                    return
+                }
+                
                 self.pageNoOfSearchMovies = response.page ?? 1
                 
                 if self.pageNoOfSearchMovies > 1 {
@@ -342,8 +353,8 @@ class MovieRepository: MovieRepositoryType, ObservableObject {
                 } else {
                     self.searchedMovies = results
                 }
-                self.searchError = nil
-                Logger.movieRepository.debug("searchMovie - success: \(results.map(\.title))")
+                
+                Logger.movieRepository.debug("searchMovie - success: \(results.compactMap(\.id))")
             }
             .store(in: &subscriptions)
     }

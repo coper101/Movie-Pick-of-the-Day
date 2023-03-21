@@ -22,7 +22,7 @@ struct SearchView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
     
-    @State private var searchText: String = ""
+    @State var searchText: String = ""
     
     let searchBarHeight: CGFloat = 79
     
@@ -116,6 +116,7 @@ struct SearchView: View {
                 SearchBarView(
                     text: $searchText,
                     placeholder: "Search Movie",
+                    isDisabled: searchContent.wrappedValue == .noInternet,
                     onCommit: commitAction
                 )
                 .padding(.horizontal, 24)

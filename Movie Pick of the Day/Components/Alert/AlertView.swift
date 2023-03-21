@@ -43,6 +43,7 @@ struct AlertView: View {
             
             FilledButtonView(
                 title: "Ok",
+                isDisabled: false,
                 action: action
             )
             
