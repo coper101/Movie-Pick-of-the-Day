@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 enum Screen {
     case pickOfTheDay
@@ -17,6 +18,7 @@ struct AppView: View {
     // MARK: - Props
     @EnvironmentObject var appViewModel: AppViewModel
     @Environment(\.dimensions) var dimensions: Dimensions
+    @Environment(\.scenePhase) var scenePhase: ScenePhase
     
     var selectedScreen: Screen {
         appViewModel.screen
@@ -82,6 +84,7 @@ struct AppView: View {
             
         } //: ZStack
         .ignoresSafeArea(.container, edges: .all)
+        .onChange(of: scenePhase, perform: onChangeScenePhase)
     }
     
     // MARK: - Actions
@@ -100,6 +103,12 @@ struct AppView: View {
     func closeAlertAction() {
         withAnimation {
             appViewModel.closeAlert()
+        }
+    }
+    
+    func onChangeScenePhase(scenePhase: ScenePhase) {
+        if scenePhase == .background {
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 }

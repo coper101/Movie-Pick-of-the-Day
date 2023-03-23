@@ -21,6 +21,8 @@ struct GetImage: TMDBImageRequest {
     var posterPath: String
 }
 
+
+
 struct GetGenres: TMDBRequest {
     typealias Response = GetGenresResponse
     var path: String = "/3/genre/movie/list"

@@ -6,5 +6,12 @@
 	<array>
 		<string>MovieDescriptionIntent</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Amaranth-Bold.ttf</string>
+		<string>Inter-Bold.ttf</string>
+		<string>Inter-ExtraBold.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+	</array>
 </dict>
 </plist>

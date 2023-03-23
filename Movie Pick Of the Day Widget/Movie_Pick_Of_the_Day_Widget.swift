@@ -33,7 +33,8 @@ struct Movie_Pick_Of_the_Day_Widget: Widget {
             WidgetView(
                 dayPick: entry.dayPick,
                 hasTitle: entry.hasTitle,
-                hasSummary: entry.hasSummary
+                hasSummary: entry.hasSummary,
+                uiImage: entry.uiImage
             )
         }
         .configurationDisplayName("Today")
@@ -48,7 +49,8 @@ struct Movie_Pick_Of_the_Day_Widget_Previews: PreviewProvider {
         WidgetView(
             dayPick: TestData.sampleMovieDay,
             hasTitle: true,
-            hasSummary: true
+            hasSummary: true,
+            uiImage: UIImage(named: "sample-poster")
         )
         .previewDisplayName("System Small")
         .previewContext(WidgetPreviewContext(family: .systemSmall))
@@ -56,9 +58,10 @@ struct Movie_Pick_Of_the_Day_Widget_Previews: PreviewProvider {
         WidgetView(
             dayPick: TestData.sampleMovieDay,
             hasTitle: true,
-            hasSummary: true
+            hasSummary: true,
+            uiImage: UIImage(named: "sample-poster")
         )
         .previewDisplayName("System Medium")
-        .previewContext(WidgetPreviewContext(family: .systemLarge))
+        .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
 }

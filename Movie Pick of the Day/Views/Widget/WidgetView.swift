@@ -11,9 +11,10 @@ import WidgetKit
 struct WidgetView: View {
     // MARK: - Props
     @Environment(\.widgetFamily) var widgetFamily
-    var dayPick: MovieDay
+    var dayPick: MovieDay?
     var hasTitle: Bool
     var hasSummary: Bool
+    var uiImage: UIImage?
     
     // MARK: - UI
     var body: some View {
@@ -22,19 +23,22 @@ struct WidgetView: View {
             WidgetMovieView(
                 dayPick: dayPick,
                 hasTitle: hasTitle,
-                hasSummary: hasSummary
+                hasSummary: false,
+                uiImage: uiImage
             )
         case .systemMedium:
             WidgetMovieView(
                 dayPick: dayPick,
                 hasTitle: hasTitle,
-                hasSummary: hasSummary
+                hasSummary: hasSummary,
+                uiImage: uiImage
             )
         default:
             WidgetMovieView(
                 dayPick: dayPick,
                 hasTitle: hasTitle,
-                hasSummary: hasSummary
+                hasSummary: hasSummary,
+                uiImage: uiImage
             )
         }
     }

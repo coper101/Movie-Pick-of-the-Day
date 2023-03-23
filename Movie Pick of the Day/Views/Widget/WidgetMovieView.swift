@@ -34,7 +34,7 @@ struct SmallWidgetSize {
 
 struct WidgetMovieView: View {
     // MARK: - Props
-    var dayPick: MovieDay
+    var dayPick: MovieDay?
     var hasTitle: Bool
     var hasSummary: Bool
     var uiImage: UIImage?
@@ -42,20 +42,7 @@ struct WidgetMovieView: View {
     // MARK: - UI
     var background: some View {
         ZStack {
-            
-            // Layer 1: BACKGROUND IMAGE
-//            AsyncImageView(
-//                imageCache: imageCache,
-//                path: posterPath,
-//                resolution: posterResolution,
-//                showLoading: showLoading,
-//                placeholderTitle: movieTitle ?? "",
-//                isResizable: true,
-//                isScaledToFill: true,
-//                scaleEffect: 1.1
-//            )
-//
-            // TESTING
+
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
@@ -63,38 +50,47 @@ struct WidgetMovieView: View {
                     .scaleEffect(1.1)
             }
             
+            BackdropView()
+            
         } //: ZStack
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-
-            // Row 1: TITLE
-            if hasTitle {
+        VStack(alignment: .leading, spacing: 6) {
+            
+            if let dayPick {
                 
-                Text(dayPick.movie?.displayedTitle ?? "")
-                    .textStyle(
-                        font: .interExtraBold,
-                        size: 16,
-                        lineLimit: 2
-                    )
-            }
-
-            // Row 2: DESCRIPTION
-            if hasSummary {
+                // Row 1: TITLE
+                if hasTitle {
+                    
+                    Text(dayPick.movie?.displayedTitle ?? "")
+                        .textStyle(
+                            font: .interExtraBold,
+                            size: 16,
+                            lineLimit: 2,
+                            lineSpacing: 4
+                        )
+                }
                 
-                Text(dayPick.movie?.displayedOverview ?? "")
-                    .textStyle(
-                        font: .interBold,
-                        size: 12,
-                        lineLimit: 2,
-                        lineSpacing: 3
-                    )
-            }
+                // Row 2: DESCRIPTION
+                if hasSummary {
+                    
+                    Text(dayPick.movie?.displayedOverview ?? "")
+                        .textStyle(
+                            font: .interBold,
+                            size: 12,
+                            lineLimit: 2,
+                            lineSpacing: 3
+                        )
+                }
+                
+            } //: if-day-pick
+
 
         } //: VStack
         .fillMaxSize(alignment: .bottom)
-        .padding()
+        .padding(.horizontal, 12)
+        .padding(.bottom, 12)
         .background(background)
     }
     
@@ -124,7 +120,7 @@ struct WidgetMovieView_Previews: PreviewProvider {
             WidgetMovieView(
                 dayPick: TestData.sampleMovieDay,
                 hasTitle: true,
-                hasSummary: true,
+                hasSummary: false,
                 uiImage: UIImage(named: "sample-poster")
             )
             .previewLayout(

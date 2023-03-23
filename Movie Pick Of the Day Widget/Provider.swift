@@ -5,6 +5,7 @@
 //  Created by Wind Versi on 23/3/23.
 //
 
+import SwiftUI
 import WidgetKit
 import Intents
 import OSLog
@@ -23,6 +24,7 @@ struct Provider: IntentTimelineProvider {
         return .init(
             date: .init(),
             dayPick: TestData.sampleMovieDay,
+            uiImage: UIImage(named: "sample-poster"),
             hasTitle: true,
             hasSummary: true
         )
@@ -71,38 +73,40 @@ extension Provider {
         date: Date,
         completion: @escaping (Entry) -> Void
     ) -> Void {
-        let dayPick = widgetViewModel.getMoviePick()
-        
-        switch configuration.movieDescription {
-        case .title:
-            completion(
-                .init(
-                    date: Date(),
-                    dayPick: dayPick,
-                    hasTitle: true,
-                    hasSummary: false
+        widgetViewModel.getMoviePickAndImage { dayPick, uiImage in
+            switch configuration.movieDescription {
+            case .title:
+                completion(
+                    .init(
+                        date: date,
+                        dayPick: dayPick,
+                        uiImage: uiImage,
+                        hasTitle: true,
+                        hasSummary: false
+                    )
                 )
-            )
-        case .summary:
-            completion(
-                .init(
-                    date: Date(),
-                    dayPick: dayPick,
-                    hasTitle: false,
-                    hasSummary: true
+            case .summary:
+                completion(
+                    .init(
+                        date: date,
+                        dayPick: dayPick,
+                        uiImage: uiImage,
+                        hasTitle: false,
+                        hasSummary: true
+                    )
                 )
-            )
-        default:
-            completion(
-                .init(
-                    date: Date(),
-                    dayPick: dayPick,
-                    hasTitle: true,
-                    hasSummary: true
+            default:
+                completion(
+                    .init(
+                        date: date,
+                        dayPick: dayPick,
+                        uiImage: uiImage,
+                        hasTitle: true,
+                        hasSummary: true
+                    )
                 )
-            )
+            }
         }
-        
     }
     
 }
