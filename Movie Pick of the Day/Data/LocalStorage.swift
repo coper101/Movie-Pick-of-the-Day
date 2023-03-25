@@ -8,7 +8,7 @@
 import Foundation
 
 enum AppGroup: String {
-    case main = "group.com.penguinworks.Movie-Pick-Of-The-Day"
+    case main = "group.penguinworks.Movie-Pick-Of-The-Day"
     var groupIdentifier: String {
         self.rawValue
     }

@@ -108,7 +108,7 @@ struct AppView: View {
     
     func onChangeScenePhase(scenePhase: ScenePhase) {
         if scenePhase == .background {
-            WidgetCenter.shared.reloadAllTimelines()
+            WidgetCenter.shared.reloadTimelines(ofKind: WidgetKind.main.name)
         }
     }
 }

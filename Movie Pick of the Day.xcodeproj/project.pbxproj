@@ -33,6 +33,9 @@
 		2740145C29CC9DE9003EF614 /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDAC29696887008FA32E /* LocalStorage.swift */; };
 		2740145D29CC9DFF003EF614 /* Coder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19DA296FE18700851E14 /* Coder.swift */; };
 		2740145E29CCA006003EF614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2759FE4529C98C5300F1819A /* Assets.xcassets */; };
+		2740146729CF1DA2003EF614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 274890CB29CC6462009D16FA /* Assets.xcassets */; };
+		2740146929CF3957003EF614 /* WidgetKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740146829CF3956003EF614 /* WidgetKind.swift */; };
+		2740146A29CF395E003EF614 /* WidgetKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740146829CF3956003EF614 /* WidgetKind.swift */; };
 		274890C229CC6460009D16FA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274890C129CC6460009D16FA /* WidgetKit.framework */; };
 		274890C429CC6460009D16FA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274890C329CC6460009D16FA /* SwiftUI.framework */; };
 		274890C729CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890C629CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift */; };
@@ -195,6 +198,8 @@
 		273F5D7129C966C200C91C24 /* SearchPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPager.swift; sourceTree = "<group>"; };
 		2740144429CC8BF9003EF614 /* BackdropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropView.swift; sourceTree = "<group>"; };
 		2740144C29CC927E003EF614 /* Movie Pick of the Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Movie Pick of the Day.entitlements"; sourceTree = "<group>"; };
+		2740146629CF1550003EF614 /* Movie Pick Of the Day WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Movie Pick Of the Day WidgetExtension.entitlements"; sourceTree = "<group>"; };
+		2740146829CF3956003EF614 /* WidgetKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetKind.swift; sourceTree = "<group>"; };
 		274890BF29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Movie Pick Of the Day WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		274890C129CC6460009D16FA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		274890C329CC6460009D16FA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -516,6 +521,7 @@
 		27FDBD5429696773008FA32E = {
 			isa = PBXGroup;
 			children = (
+				2740146629CF1550003EF614 /* Movie Pick Of the Day WidgetExtension.entitlements */,
 				27FDBD5F29696773008FA32E /* Movie Pick of the Day */,
 				27FDBD8929696776008FA32E /* Movie Pick of the DayTests */,
 				27FDBD9329696776008FA32E /* Movie Pick of the DayUITests */,
@@ -645,6 +651,7 @@
 				27FDBDD1296969BA008FA32E /* Response.swift */,
 				27FDBDD2296969BA008FA32E /* Request.swift */,
 				273F5D7129C966C200C91C24 /* SearchPager.swift */,
+				2740146829CF3956003EF614 /* WidgetKind.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -793,6 +800,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2740146729CF1DA2003EF614 /* Assets.xcassets in Resources */,
 				274890F929CC74D3009D16FA /* Inter-Bold.ttf in Resources */,
 				274890F829CC74D3009D16FA /* Amaranth-Bold.ttf in Resources */,
 				274890FB29CC74D3009D16FA /* Inter-SemiBold.ttf in Resources */,
@@ -837,6 +845,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2740145829CC9886003EF614 /* Genre.swift in Sources */,
+				2740146A29CF395E003EF614 /* WidgetKind.swift in Sources */,
 				274890F729CC748E009D16FA /* Frame.swift in Sources */,
 				274890E229CC68AF009D16FA /* Movie.swift in Sources */,
 				2740144729CC8CCB003EF614 /* BackdropView.swift in Sources */,
@@ -897,6 +906,7 @@
 				270FC6FF299E3A25004226CD /* MoviePicksView.swift in Sources */,
 				2763BF952993A367008D609A /* ChipToggleView.swift in Sources */,
 				274890CF29CC6462009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition in Sources */,
+				2740146929CF3957003EF614 /* WidgetKind.swift in Sources */,
 				274890E529CC69C8009D16FA /* WidgetMovieView.swift in Sources */,
 				27BB19E3296FFBBC00851E14 /* Test.swift in Sources */,
 				2763BF972993A633008D609A /* ChipButtonView.swift in Sources */,
@@ -1005,6 +1015,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
@@ -1033,6 +1044,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KB9D3Y7M29;

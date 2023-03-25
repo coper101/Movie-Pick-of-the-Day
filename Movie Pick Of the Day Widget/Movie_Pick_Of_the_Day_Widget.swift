@@ -9,13 +9,6 @@ import WidgetKit
 import SwiftUI
 import Intents
 
-enum WidgetKind: String {
-    case main = "Movie_Pick_Of_the_Day_Widget"
-    var name: String {
-        self.rawValue
-    }
-}
-
 struct Movie_Pick_Of_the_Day_Widget: Widget {
     // MARK: - Props
     private let supportedFamilies: [WidgetFamily] = {

@@ -88,9 +88,9 @@ struct WidgetMovieView: View {
 
 
         } //: VStack
-        .fillMaxSize(alignment: .bottom)
-        .padding(.horizontal, 12)
-        .padding(.bottom, 12)
+        .fillMaxSize(alignment: .bottomLeading)
+        .padding(.horizontal, 14)
+        .padding(.bottom, 14)
         .background(background)
     }
     

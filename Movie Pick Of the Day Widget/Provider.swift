@@ -38,11 +38,7 @@ struct Provider: IntentTimelineProvider {
     ) {
         Logger.widgetProvider.debug("getSnapshot")
         
-        getNewEntry(
-            for: configuration,
-            date: Date(),
-            completion: completion
-        )
+        getNewEntry(for: configuration, completion: completion)
     }
 
     /// Set the time when the data of widget will be updated
@@ -53,11 +49,7 @@ struct Provider: IntentTimelineProvider {
     ) {
         Logger.widgetProvider.debug("getTimeline")
         
-        let currentDate = Date()
-        getNewEntry(
-            for: configuration,
-            date: currentDate
-        ) { entry in
+        getNewEntry(for: configuration) { entry in
             let timeline = Timeline(entries: [entry], policy: .atEnd)
             Logger.widgetProvider.debug("timeline: \(timeline.entries)")
             completion(timeline)
@@ -70,7 +62,6 @@ extension Provider {
         
     func getNewEntry(
         for configuration: Intent,
-        date: Date,
         completion: @escaping (Entry) -> Void
     ) -> Void {
         widgetViewModel.getMoviePickAndImage { dayPick, uiImage in
@@ -78,7 +69,7 @@ extension Provider {
             case .title:
                 completion(
                     .init(
-                        date: date,
+                        date: Date(),
                         dayPick: dayPick,
                         uiImage: uiImage,
                         hasTitle: true,
@@ -88,7 +79,7 @@ extension Provider {
             case .summary:
                 completion(
                     .init(
-                        date: date,
+                        date: Date(),
                         dayPick: dayPick,
                         uiImage: uiImage,
                         hasTitle: false,
@@ -98,7 +89,7 @@ extension Provider {
             default:
                 completion(
                     .init(
-                        date: date,
+                        date: Date(),
                         dayPick: dayPick,
                         uiImage: uiImage,
                         hasTitle: true,

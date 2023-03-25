@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import OSLog
 
 final class WidgetViewModel {
     
@@ -20,15 +21,13 @@ final class WidgetViewModel {
     
     func getMoviePickAndImage(completion: @escaping (MovieDay?, UIImage?) -> Void) {
         getMoviePickAndImagePublisher()
-            .sink {
-                completion($0, $1)
-                print("getMoviePickAndImage: \($0 == nil), \($1 == nil)")
-            }
+            .sink { completion($0, $1) }
             .store(in: &subscriptions)
     }
     
     func getMoviePickAndImagePublisher() -> AnyPublisher<(MovieDay?, UIImage?), Never> {
-        appDataRepository.moviePicksOfTheWeekPublisher
+        Just(appDataRepository.getMoviePicksOfTheWeek())
+            .eraseToAnyPublisher()
             .flatMap { moviePicks -> AnyPublisher<MovieDay?, Never> in
                 return Just(moviePicks.getTodaysMovieDay(todaysDate: .init()))
                     .eraseToAnyPublisher()
@@ -42,7 +41,7 @@ final class WidgetViewModel {
                     return Just((nil, nil))
                         .eraseToAnyPublisher()
                 }
-                return TMDBService.getUIImage(of: posterPath, with: .original)
+                return TMDBService.getUIImage(of: posterPath, with: .w500)
                     .flatMap { uiImage -> AnyPublisher<(MovieDay?, UIImage?), Never> in
                         Just((movieDay, uiImage))
                             .eraseToAnyPublisher()
