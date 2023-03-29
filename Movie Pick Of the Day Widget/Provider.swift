@@ -50,8 +50,11 @@ struct Provider: IntentTimelineProvider {
         Logger.widgetProvider.debug("getTimeline")
         
         getNewEntry(for: configuration) { entry in
-            let timeline = Timeline(entries: [entry], policy: .atEnd)
-            Logger.widgetProvider.debug("timeline: \(timeline.entries)")
+            let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+            let nextStartDay = Calendar.current.startOfDay(for: nextDay)
+            let timeline = Timeline(entries: [entry], policy: .after(nextStartDay))
+            let entries = timeline.entries
+            Logger.widgetProvider.debug("timeline: \(entries)")
             completion(timeline)
         }
     }
