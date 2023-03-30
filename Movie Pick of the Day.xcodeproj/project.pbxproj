@@ -1017,7 +1017,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Movie Pick Of the Day Widget/Info.plist";
@@ -1046,7 +1046,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Movie Pick Of the Day Widget/Info.plist";
@@ -1190,7 +1190,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Movie Pick of the Day/Movie Pick of the Day.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Movie Pick of the Day/Preview Content\"";
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				ENABLE_PREVIEWS = YES;
@@ -1229,7 +1229,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Movie Pick of the Day/Movie Pick of the Day.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Movie Pick of the Day/Preview Content\"";
 				DEVELOPMENT_TEAM = KB9D3Y7M29;
 				ENABLE_PREVIEWS = YES;
