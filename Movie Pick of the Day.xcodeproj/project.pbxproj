@@ -18,6 +18,54 @@
 		273F5D6E29C95E3B00C91C24 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6D29C95E3B00C91C24 /* Page.swift */; };
 		273F5D7029C95F7D00C91C24 /* Pager_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D6F29C95F7D00C91C24 /* Pager_Tests.swift */; };
 		273F5D7229C966C200C91C24 /* SearchPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273F5D7129C966C200C91C24 /* SearchPager.swift */; };
+		2740144529CC8BF9003EF614 /* BackdropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740144429CC8BF9003EF614 /* BackdropView.swift */; };
+		2740144729CC8CCB003EF614 /* BackdropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740144429CC8BF9003EF614 /* BackdropView.swift */; };
+		2740144D29CC9380003EF614 /* AppDataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDAB29696887008FA32E /* AppDataRepository.swift */; };
+		2740144E29CC9514003EF614 /* Shuffle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19DE296FF41B00851E14 /* Shuffle.swift */; };
+		2740144F29CC9635003EF614 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD5296969BA008FA32E /* Network.swift */; };
+		2740145529CC9869003EF614 /* TMDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDAE29696887008FA32E /* TMDBService.swift */; };
+		2740145629CC9875003EF614 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD2296969BA008FA32E /* Request.swift */; };
+		2740145729CC9876003EF614 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD1296969BA008FA32E /* Response.swift */; };
+		2740145829CC9886003EF614 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD0296969BA008FA32E /* Genre.swift */; };
+		2740145929CC9889003EF614 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDCE296969BA008FA32E /* Language.swift */; };
+		2740145A29CC988B003EF614 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D4296FC67700851E14 /* Preference.swift */; };
+		2740145B29CC989C003EF614 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDAA29696887008FA32E /* Keys.swift */; };
+		2740145C29CC9DE9003EF614 /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDAC29696887008FA32E /* LocalStorage.swift */; };
+		2740145D29CC9DFF003EF614 /* Coder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19DA296FE18700851E14 /* Coder.swift */; };
+		2740145E29CCA006003EF614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2759FE4529C98C5300F1819A /* Assets.xcassets */; };
+		2740146729CF1DA2003EF614 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 274890CB29CC6462009D16FA /* Assets.xcassets */; };
+		2740146929CF3957003EF614 /* WidgetKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740146829CF3956003EF614 /* WidgetKind.swift */; };
+		2740146A29CF395E003EF614 /* WidgetKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2740146829CF3956003EF614 /* WidgetKind.swift */; };
+		274890C229CC6460009D16FA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274890C129CC6460009D16FA /* WidgetKit.framework */; };
+		274890C429CC6460009D16FA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274890C329CC6460009D16FA /* SwiftUI.framework */; };
+		274890C729CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890C629CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift */; };
+		274890C929CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890C829CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.swift */; };
+		274890CE29CC6462009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 274890CA29CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition */; };
+		274890CF29CC6462009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 274890CA29CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition */; };
+		274890D229CC6462009D16FA /* Movie Pick Of the Day WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 274890BF29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		274890DA29CC65C4009D16FA /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890D929CC65C4009D16FA /* WidgetView.swift */; };
+		274890DB29CC65F3009D16FA /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890D929CC65C4009D16FA /* WidgetView.swift */; };
+		274890DF29CC67C5009D16FA /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890DE29CC67C5009D16FA /* WidgetViewModel.swift */; };
+		274890E029CC67D1009D16FA /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890DE29CC67C5009D16FA /* WidgetViewModel.swift */; };
+		274890E129CC68AA009D16FA /* MovieDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D8296FCC0F00851E14 /* MovieDay.swift */; };
+		274890E229CC68AF009D16FA /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDCF296969BA008FA32E /* Movie.swift */; };
+		274890E529CC69C8009D16FA /* WidgetMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890E429CC69C8009D16FA /* WidgetMovieView.swift */; };
+		274890E629CC6A58009D16FA /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890DC29CC6612009D16FA /* Provider.swift */; };
+		274890E729CC6A5E009D16FA /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890D729CC6487009D16FA /* Entry.swift */; };
+		274890EE29CC6BB9009D16FA /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890EC29CC6B7F009D16FA /* TestData.swift */; };
+		274890EF29CC6C14009D16FA /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2763BF982993D4D3008D609A /* Logging.swift */; };
+		274890F029CC6C36009D16FA /* WidgetMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274890E429CC69C8009D16FA /* WidgetMovieView.swift */; };
+		274890F129CC6DCA009D16FA /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277F84A0299BA64000109CD3 /* Numbers.swift */; };
+		274890F229CC6DF7009D16FA /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB19D6296FC83400851E14 /* Date.swift */; };
+		274890F329CC704D009D16FA /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD8296969BA008FA32E /* Text.swift */; };
+		274890F429CC70A3009D16FA /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBD7329696773008FA32E /* Type.swift */; };
+		274890F529CC70A7009D16FA /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBD7729696773008FA32E /* Color.swift */; };
+		274890F629CC70A9009D16FA /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBD6D29696773008FA32E /* Icon.swift */; };
+		274890F729CC748E009D16FA /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDBDD7296969BA008FA32E /* Frame.swift */; };
+		274890F829CC74D3009D16FA /* Amaranth-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD240298A58FA0069DE72 /* Amaranth-Bold.ttf */; };
+		274890F929CC74D3009D16FA /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */; };
+		274890FA29CC74D3009D16FA /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */; };
+		274890FB29CC74D3009D16FA /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */; };
 		2759FE4629C98C5300F1819A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2759FE4529C98C5300F1819A /* Assets.xcassets */; };
 		275D09EF299E18B6000F6169 /* MovieInfoBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */; };
 		276309B7298261BE009392F8 /* TMDB_Service_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */; };
@@ -99,6 +147,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		274890D029CC6462009D16FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27FDBD5529696773008FA32E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 274890BE29CC6460009D16FA;
+			remoteInfo = "Movie Pick Of the Day WidgetExtension";
+		};
 		27FDBD8729696776008FA32E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 27FDBD5529696773008FA32E /* Project object */;
@@ -115,6 +170,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		274890D629CC6462009D16FA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				274890D229CC6462009D16FA /* Movie Pick Of the Day WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		270FC6FE299E3A25004226CD /* MoviePicksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviePicksView.swift; sourceTree = "<group>"; };
 		270FC700299E3BB8004226CD /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
@@ -127,6 +196,24 @@
 		273F5D6D29C95E3B00C91C24 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		273F5D6F29C95F7D00C91C24 /* Pager_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pager_Tests.swift; sourceTree = "<group>"; };
 		273F5D7129C966C200C91C24 /* SearchPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPager.swift; sourceTree = "<group>"; };
+		2740144429CC8BF9003EF614 /* BackdropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropView.swift; sourceTree = "<group>"; };
+		2740144C29CC927E003EF614 /* Movie Pick of the Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Movie Pick of the Day.entitlements"; sourceTree = "<group>"; };
+		2740146629CF1550003EF614 /* Movie Pick Of the Day WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Movie Pick Of the Day WidgetExtension.entitlements"; sourceTree = "<group>"; };
+		2740146829CF3956003EF614 /* WidgetKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetKind.swift; sourceTree = "<group>"; };
+		274890BF29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Movie Pick Of the Day WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		274890C129CC6460009D16FA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		274890C329CC6460009D16FA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		274890C629CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie_Pick_Of_the_Day_WidgetBundle.swift; sourceTree = "<group>"; };
+		274890C829CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie_Pick_Of_the_Day_Widget.swift; sourceTree = "<group>"; };
+		274890CA29CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Movie_Pick_Of_the_Day_Widget.intentdefinition; sourceTree = "<group>"; };
+		274890CB29CC6462009D16FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		274890CD29CC6462009D16FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		274890D729CC6487009D16FA /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		274890D929CC65C4009D16FA /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
+		274890DC29CC6612009D16FA /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		274890DE29CC67C5009D16FA /* WidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViewModel.swift; sourceTree = "<group>"; };
+		274890E429CC69C8009D16FA /* WidgetMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetMovieView.swift; sourceTree = "<group>"; };
+		274890EC29CC6B7F009D16FA /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		2759FE4529C98C5300F1819A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		275D09EE299E18B6000F6169 /* MovieInfoBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfoBoxView.swift; sourceTree = "<group>"; };
 		276309B6298261BE009392F8 /* TMDB_Service_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDB_Service_Tests.swift; sourceTree = "<group>"; };
@@ -165,7 +252,7 @@
 		27EE976C29A622FC00D9D343 /* ResultNoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultNoneView.swift; sourceTree = "<group>"; };
 		27EE976E29A624AB00D9D343 /* NetworkConnectionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConnectionRepository.swift; sourceTree = "<group>"; };
 		27EE977029A6288300D9D343 /* SearchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingView.swift; sourceTree = "<group>"; };
-		27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Movie-Pick-of-the-Day-Info.plist"; sourceTree = SOURCE_ROOT; };
+		27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Movie-Pick-of-the-Day-Info.plist"; path = "Movie Pick of the Day/App/Movie-Pick-of-the-Day-Info.plist"; sourceTree = SOURCE_ROOT; };
 		27FAD23A298A58F20069DE72 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		27FAD23B298A58F20069DE72 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		27FAD23C298A58F20069DE72 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
@@ -212,6 +299,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		274890BC29CC6460009D16FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				274890C429CC6460009D16FA /* SwiftUI.framework in Frameworks */,
+				274890C229CC6460009D16FA /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27FDBD5A29696773008FA32E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -236,6 +332,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		274890C029CC6460009D16FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				274890C129CC6460009D16FA /* WidgetKit.framework */,
+				274890C329CC6460009D16FA /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		274890C529CC6460009D16FA /* Movie Pick Of the Day Widget */ = {
+			isa = PBXGroup;
+			children = (
+				274890C629CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift */,
+				274890C829CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.swift */,
+				274890DC29CC6612009D16FA /* Provider.swift */,
+				274890D729CC6487009D16FA /* Entry.swift */,
+				274890EC29CC6B7F009D16FA /* TestData.swift */,
+				274890CA29CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition */,
+				274890CB29CC6462009D16FA /* Assets.xcassets */,
+				274890CD29CC6462009D16FA /* Info.plist */,
+			);
+			path = "Movie Pick Of the Day Widget";
+			sourceTree = "<group>";
+		};
+		274890E329CC69B7009D16FA /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				274890D929CC65C4009D16FA /* WidgetView.swift */,
+				274890E429CC69C8009D16FA /* WidgetMovieView.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
 		27579AC229C1E43C001A60B8 /* Button */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +401,7 @@
 				277F846C2999FFBF00109CD3 /* AsyncImageView.swift */,
 				27C1BD2E29A23CFB00D81AAA /* NoImageView.swift */,
 				27C1BD9129A372CA00D81AAA /* LoadingImageView.swift */,
+				2740144429CC8BF9003EF614 /* BackdropView.swift */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -379,6 +509,7 @@
 		27FAD24F298A6F0E0069DE72 /* Style */ = {
 			isa = PBXGroup;
 			children = (
+				27FDBDD8296969BA008FA32E /* Text.swift */,
 				27FAD24D298A6F080069DE72 /* Shadow.swift */,
 				2763BF4A29924860008D609A /* Modifier.swift */,
 				270FC700299E3BB8004226CD /* Animation.swift */,
@@ -390,9 +521,12 @@
 		27FDBD5429696773008FA32E = {
 			isa = PBXGroup;
 			children = (
+				2740146629CF1550003EF614 /* Movie Pick Of the Day WidgetExtension.entitlements */,
 				27FDBD5F29696773008FA32E /* Movie Pick of the Day */,
 				27FDBD8929696776008FA32E /* Movie Pick of the DayTests */,
 				27FDBD9329696776008FA32E /* Movie Pick of the DayUITests */,
+				274890C529CC6460009D16FA /* Movie Pick Of the Day Widget */,
+				274890C029CC6460009D16FA /* Frameworks */,
 				27FDBD5E29696773008FA32E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -403,6 +537,7 @@
 				27FDBD5D29696773008FA32E /* Movie Pick of the Day.app */,
 				27FDBD8629696776008FA32E /* Movie Pick of the DayTests.xctest */,
 				27FDBD9029696776008FA32E /* Movie Pick of the DayUITests.xctest */,
+				274890BF29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -410,8 +545,7 @@
 		27FDBD5F29696773008FA32E /* Movie Pick of the Day */ = {
 			isa = PBXGroup;
 			children = (
-				27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */,
-				27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */,
+				2740144C29CC927E003EF614 /* Movie Pick of the Day.entitlements */,
 				27FDBDA329696869008FA32E /* App */,
 				27FAD248298A5E1F0069DE72 /* Components */,
 				27FDBD6029696773008FA32E /* Views */,
@@ -430,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDBDC7296968AF008FA32E /* AppView.swift */,
+				274890E329CC69B7009D16FA /* Widget */,
 				27FAD243298A5BF30069DE72 /* (1) Pick of the Day */,
 				27FAD245298A5C290069DE72 /* (2) Search */,
 			);
@@ -481,6 +616,8 @@
 			isa = PBXGroup;
 			children = (
 				27FDBD7929696773008FA32E /* Movie_Pick_of_the_DayApp.swift */,
+				27FDBD6F29696773008FA32E /* LaunchScreen.storyboard */,
+				27FAD238298A57440069DE72 /* Movie-Pick-of-the-Day-Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -505,6 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				27FDBDD3296969BA008FA32E /* AppViewModel.swift */,
+				274890DE29CC67C5009D16FA /* WidgetViewModel.swift */,
 				27BB19D8296FCC0F00851E14 /* MovieDay.swift */,
 				27BB19D4296FC67700851E14 /* Preference.swift */,
 				27FDBDCE296969BA008FA32E /* Language.swift */,
@@ -513,6 +651,7 @@
 				27FDBDD1296969BA008FA32E /* Response.swift */,
 				27FDBDD2296969BA008FA32E /* Request.swift */,
 				273F5D7129C966C200C91C24 /* SearchPager.swift */,
+				2740146829CF3956003EF614 /* WidgetKind.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -523,7 +662,6 @@
 				27FDBDD5296969BA008FA32E /* Network.swift */,
 				27FDBDD6296969BA008FA32E /* Dimensions.swift */,
 				27FDBDD7296969BA008FA32E /* Frame.swift */,
-				27FDBDD8296969BA008FA32E /* Text.swift */,
 				27BB19D6296FC83400851E14 /* Date.swift */,
 				27BB19DA296FE18700851E14 /* Coder.swift */,
 				27BB19DE296FF41B00851E14 /* Shuffle.swift */,
@@ -538,6 +676,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		274890BE29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 274890D329CC6462009D16FA /* Build configuration list for PBXNativeTarget "Movie Pick Of the Day WidgetExtension" */;
+			buildPhases = (
+				274890BB29CC6460009D16FA /* Sources */,
+				274890BC29CC6460009D16FA /* Frameworks */,
+				274890BD29CC6460009D16FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Movie Pick Of the Day WidgetExtension";
+			productName = "Movie Pick Of the Day WidgetExtension";
+			productReference = 274890BF29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		27FDBD5C29696773008FA32E /* Movie Pick of the Day */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27FDBD9A29696776008FA32E /* Build configuration list for PBXNativeTarget "Movie Pick of the Day" */;
@@ -545,10 +700,12 @@
 				27FDBD5929696773008FA32E /* Sources */,
 				27FDBD5A29696773008FA32E /* Frameworks */,
 				27FDBD5B29696773008FA32E /* Resources */,
+				274890D629CC6462009D16FA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				274890D129CC6462009D16FA /* PBXTargetDependency */,
 			);
 			name = "Movie Pick of the Day";
 			productName = "Movie Pick of the Day";
@@ -601,6 +758,9 @@
 				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					274890BE29CC6460009D16FA = {
+						CreatedOnToolsVersion = 14.2;
+					};
 					27FDBD5C29696773008FA32E = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -628,6 +788,7 @@
 			projectRoot = "";
 			targets = (
 				27FDBD5C29696773008FA32E /* Movie Pick of the Day */,
+				274890BE29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension */,
 				27FDBD8529696776008FA32E /* Movie Pick of the DayTests */,
 				27FDBD8F29696776008FA32E /* Movie Pick of the DayUITests */,
 			);
@@ -635,6 +796,19 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		274890BD29CC6460009D16FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2740146729CF1DA2003EF614 /* Assets.xcassets in Resources */,
+				274890F929CC74D3009D16FA /* Inter-Bold.ttf in Resources */,
+				274890F829CC74D3009D16FA /* Amaranth-Bold.ttf in Resources */,
+				274890FB29CC74D3009D16FA /* Inter-SemiBold.ttf in Resources */,
+				2740145E29CCA006003EF614 /* Assets.xcassets in Resources */,
+				274890FA29CC74D3009D16FA /* Inter-ExtraBold.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27FDBD5B29696773008FA32E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -666,6 +840,46 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		274890BB29CC6460009D16FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2740145829CC9886003EF614 /* Genre.swift in Sources */,
+				2740146A29CF395E003EF614 /* WidgetKind.swift in Sources */,
+				274890F729CC748E009D16FA /* Frame.swift in Sources */,
+				274890E229CC68AF009D16FA /* Movie.swift in Sources */,
+				2740144729CC8CCB003EF614 /* BackdropView.swift in Sources */,
+				274890F329CC704D009D16FA /* Text.swift in Sources */,
+				274890E029CC67D1009D16FA /* WidgetViewModel.swift in Sources */,
+				274890C729CC6460009D16FA /* Movie_Pick_Of_the_Day_WidgetBundle.swift in Sources */,
+				2740145729CC9876003EF614 /* Response.swift in Sources */,
+				274890F529CC70A7009D16FA /* Color.swift in Sources */,
+				274890EF29CC6C14009D16FA /* Logging.swift in Sources */,
+				274890EE29CC6BB9009D16FA /* TestData.swift in Sources */,
+				274890CE29CC6462009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition in Sources */,
+				2740145C29CC9DE9003EF614 /* LocalStorage.swift in Sources */,
+				274890F429CC70A3009D16FA /* Type.swift in Sources */,
+				274890E629CC6A58009D16FA /* Provider.swift in Sources */,
+				2740145629CC9875003EF614 /* Request.swift in Sources */,
+				2740145529CC9869003EF614 /* TMDBService.swift in Sources */,
+				274890DB29CC65F3009D16FA /* WidgetView.swift in Sources */,
+				2740145929CC9889003EF614 /* Language.swift in Sources */,
+				2740145D29CC9DFF003EF614 /* Coder.swift in Sources */,
+				2740144D29CC9380003EF614 /* AppDataRepository.swift in Sources */,
+				2740145B29CC989C003EF614 /* Keys.swift in Sources */,
+				2740145A29CC988B003EF614 /* Preference.swift in Sources */,
+				274890F129CC6DCA009D16FA /* Numbers.swift in Sources */,
+				2740144E29CC9514003EF614 /* Shuffle.swift in Sources */,
+				274890F629CC70A9009D16FA /* Icon.swift in Sources */,
+				274890F229CC6DF7009D16FA /* Date.swift in Sources */,
+				274890E729CC6A5E009D16FA /* Entry.swift in Sources */,
+				274890C929CC6460009D16FA /* Movie_Pick_Of_the_Day_Widget.swift in Sources */,
+				274890E129CC68AA009D16FA /* MovieDay.swift in Sources */,
+				274890F029CC6C36009D16FA /* WidgetMovieView.swift in Sources */,
+				2740144F29CC9635003EF614 /* Network.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27FDBD5929696773008FA32E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -687,9 +901,13 @@
 				277F846F299A2B1500109CD3 /* ImageCacheRepository.swift in Sources */,
 				273F5D7229C966C200C91C24 /* SearchPager.swift in Sources */,
 				27FDBDE0296969BA008FA32E /* Dimensions.swift in Sources */,
+				274890DA29CC65C4009D16FA /* WidgetView.swift in Sources */,
 				27BB19D7296FC83400851E14 /* Date.swift in Sources */,
 				270FC6FF299E3A25004226CD /* MoviePicksView.swift in Sources */,
 				2763BF952993A367008D609A /* ChipToggleView.swift in Sources */,
+				274890CF29CC6462009D16FA /* Movie_Pick_Of_the_Day_Widget.intentdefinition in Sources */,
+				2740146929CF3957003EF614 /* WidgetKind.swift in Sources */,
+				274890E529CC69C8009D16FA /* WidgetMovieView.swift in Sources */,
 				27BB19E3296FFBBC00851E14 /* Test.swift in Sources */,
 				2763BF972993A633008D609A /* ChipButtonView.swift in Sources */,
 				27BB19DF296FF41B00851E14 /* Shuffle.swift in Sources */,
@@ -720,10 +938,12 @@
 				273F5D6C29C71A7E00C91C24 /* InfiniteLazyVGridView.swift in Sources */,
 				27FDBD7429696773008FA32E /* Type.swift in Sources */,
 				27FDBDCC296968B0008FA32E /* PickRevealView.swift in Sources */,
+				274890DF29CC67C5009D16FA /* WidgetViewModel.swift in Sources */,
 				27FDBDBC29696887008FA32E /* LocalStorage.swift in Sources */,
 				273F5D6E29C95E3B00C91C24 /* Page.swift in Sources */,
 				27C1BD9229A372CA00D81AAA /* LoadingImageView.swift in Sources */,
 				27BB19D9296FCC0F00851E14 /* MovieDay.swift in Sources */,
+				2740144529CC8BF9003EF614 /* BackdropView.swift in Sources */,
 				2763BF5329926899008D609A /* SelectionChipsView.swift in Sources */,
 				27FDBDBB29696887008FA32E /* AppDataRepository.swift in Sources */,
 				277F84692999FDC500109CD3 /* ImageRepository.swift in Sources */,
@@ -772,6 +992,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		274890D129CC6462009D16FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 274890BE29CC6460009D16FA /* Movie Pick Of the Day WidgetExtension */;
+			targetProxy = 274890D029CC6462009D16FA /* PBXContainerItemProxy */;
+		};
 		27FDBD8829696776008FA32E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 27FDBD5C29696773008FA32E /* Movie Pick of the Day */;
@@ -785,6 +1010,64 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		274890D429CC6462009D16FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KB9D3Y7M29;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Movie Pick Of the Day Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Movie Pick Of the Day Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.penguinworks.Movie-Pick-of-the-Day.Movie-Pick-Of-the-Day-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		274890D529CC6462009D16FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick Of the Day WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KB9D3Y7M29;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Movie Pick Of the Day Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Movie Pick Of the Day Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.penguinworks.Movie-Pick-of-the-Day.Movie-Pick-Of-the-Day-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		27FDBD9829696776008FA32E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -902,8 +1185,10 @@
 		27FDBD9B29696776008FA32E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick of the Day/Movie Pick of the Day.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Movie Pick of the Day/Preview Content\"";
@@ -939,8 +1224,10 @@
 		27FDBD9C29696776008FA32E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Movie Pick of the Day/Movie Pick of the Day.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Movie Pick of the Day/Preview Content\"";
@@ -1066,6 +1353,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		274890D329CC6462009D16FA /* Build configuration list for PBXNativeTarget "Movie Pick Of the Day WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				274890D429CC6462009D16FA /* Debug */,
+				274890D529CC6462009D16FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		27FDBD5829696773008FA32E /* Build configuration list for PBXProject "Movie Pick of the Day" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -7,10 +7,17 @@
 
 import Foundation
 
+enum AppGroup: String {
+    case main = "group.penguinworks.Movie-Pick-Of-The-Day"
+    var groupIdentifier: String {
+        self.rawValue
+    }
+}
+
 class LocalStorage {
     
     static func getUserDefaults() -> UserDefaults? {
-        .standard
+        .init(suiteName: AppGroup.main.groupIdentifier)
     }
     
     // Data

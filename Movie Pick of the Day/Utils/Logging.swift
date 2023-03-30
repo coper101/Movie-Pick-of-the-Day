@@ -10,7 +10,7 @@ import OSLog
 extension Logger {
     
     enum Category: String {
-        // case widgetProvider = "widgetprovider"
+        case widgetProvider = "widgetprovider"
         case appDataRepository = "appdatarepository"
         case movieRepository = "movierepository"
         case imageRepository = "imagerepository"
@@ -19,7 +19,7 @@ extension Logger {
         case network = "network"
     }
     
-    // static let widgetProvider = createLogger(of: .widgetProvider)
+    static let widgetProvider = createLogger(of: .widgetProvider)
     static let appDataRepository = createLogger(of: .appDataRepository)
     static let movieRepository = createLogger(of: .movieRepository)
     static let imageRepository = createLogger(of: .imageRepository)

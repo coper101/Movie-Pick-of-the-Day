@@ -51,11 +51,7 @@ struct PickCardView: View {
             .scaleEffect(1.05)
             
             // Layer 2: BACKDROP
-            LinearGradient(
-                colors: [.clear, .black],
-                startPoint: .init(x: 0.5, y: 0.3),
-                endPoint: .bottom
-            )
+            BackdropView()
             
         } //: ZStack
     }
