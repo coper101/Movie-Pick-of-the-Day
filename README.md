@@ -17,6 +17,10 @@ Built with:
 - MVVM Design
 - URLSession Data Task Publisher (Networking)
 
+## App Architecture, MVVM
+<img width="800" alt="Movie-Pick-of-the-Day-App-Architecture" src="https://user-images.githubusercontent.com/51541224/230851790-e1cdb113-4ba3-45be-848a-33a920a9fea9.png">
+
+
 ## App Configuration
 Supply an API Key to run the app. The block of code below can be placed in any file. <br />
 E.g. Keys.swift <br />
